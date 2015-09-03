@@ -87,39 +87,7 @@ class Repository
   #returns the blob that represents the given file
   #the given file is the filename + path to the file
   def get_blob_from_branch(file, branch = 'master')
-    begin
-      if @jgit_repo.nil?
-        # Rails.logger.info("JGIT NIL")
-        return nil
-      end
-      last_commit_id = @jgit_repo.resolve(branch)
-      jgit_tree = org.eclipse.jgit.revwalk.RevWalk.new(@jgit_repo).parseCommit(last_commit_id).getTree()
-      path_filter = org.eclipse.jgit.treewalk.filter.PathFilter.create(file)
-      tree_walk = org.eclipse.jgit.treewalk.TreeWalk.new(@jgit_repo)
-      tree_walk.addTree(jgit_tree)
-      tree_walk.setRecursive(true)
-      tree_walk.setFilter(path_filter)
-      if !tree_walk.next()
-        Rails.logger.info("JGIT TREEWALK for #{file} on #{branch}: #{tree_walk}")
-        return nil
-      end
-      # jgit_blob = ""
-      # @jgit_repo.open(tree_walk.getObjectId(0)).copyTo(jgit_blob)
-      # Rails.logger.info("JGIT BLOB: #{jgit_blob}")
-      jgit_blob = ""
-      begin
-        Rails.logger.debug("JGIT Blob ID for #{file} on #{branch} = #{tree_walk.getObjectId(0).name()}")
-        jgit_blob = org.apache.commons.io.IOUtils.toString(@jgit_repo.open(tree_walk.getObjectId(0)).openStream(), "UTF-8")
-      rescue Exception => e
-        Rails.logger.error("JGIT Blob Exception for #{file} on #{branch} in #{path}: #{e.inspect}\n#{e.backtrace.join("\n")}")
-        return nil
-      end
-      Rails.logger.debug("JGIT BLOB for #{file} on #{branch} in #{path}: #{jgit_blob.force_encoding("UTF-8").length}")
-      return jgit_blob
-    rescue Exception => e
-      Rails.logger.error("JGIT Exception: #{e.inspect}\n#{caller.join("\n")}\n#{e.backtrace.join("\n")}")
-      return nil
-    end
+    `#{git_command_prefix} show #{Shellwords.escape(branch)}:#{Shellwords.escape(file)}`
   end
 
   def get_file_from_branch(file, branch = 'master')
@@ -221,7 +189,7 @@ class Repository
 
     if !content
       raise "Rename error: Original file '#{original_path}' does not exist on branch '#{branch}'"
-    elsif !new_blob.nil?
+    elsif !new_blob.blank?
       raise "Rename error: Destination file '#{new_path}' already exists on branch '#{branch}'"
     end
 
