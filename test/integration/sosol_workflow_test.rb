@@ -102,6 +102,7 @@ class SosolWorkflowTest < ActionController::IntegrationTest
         #set up the boards, and vote
         @meta_board = FactoryGirl.create(:hgv_meta_board, :title => "meta")
 
+
         #the board memeber
         @meta_board.users << @board_user
         #@meta_board.users << @board_user_2
@@ -141,6 +142,7 @@ class SosolWorkflowTest < ActionController::IntegrationTest
         @meta_board.rank = 1
         @text_board.rank = 2
         @translation_board.rank = 3
+
       end
 
       teardown do
@@ -200,15 +202,13 @@ class SosolWorkflowTest < ActionController::IntegrationTest
         open_session do |submit_session|
 
           submit_session.post 'publications/' + @publication.id.to_s + '/submit/?test_user_id=' + @creator_user.id.to_s, \
-            :submit_comment => "I made a new pub"
+             :submit_comment => "I made a new pub"
 
           Rails.logger.debug "--flash is: " + submit_session.flash.inspect
         end
         @publication.reload
 
-        #Rails.logger.debug "Publication Community is " + @publication.community.name
-        assert_nil @publication.community, "Community is not NIL but should be for a SOSOL publication"
-        #Rails.logger.debug "Community is " + @test_community.name
+        assert_nil @publication.community, "Community is not NIL but should be set for a SOSOL Publication"
 
         #now meta should have it
         assert_equal "submitted", @publication.status, "Publication status not submitted " + @publication.community_id.to_s + " id "
@@ -450,6 +450,7 @@ class SosolWorkflowTest < ActionController::IntegrationTest
 
         #assert_equal @meta_board.publications.first.origin, @publication, "Meta board does not have publications"
         @publication.destroy
+
       end
     end
   end
