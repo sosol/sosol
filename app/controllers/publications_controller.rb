@@ -40,9 +40,10 @@ class PublicationsController < ApplicationController
     filename = @publication.creator.name + "_" + file_friendly_name + "_" + Time.now.strftime("%a%d%b%Y_%H%M")
     filename = filename.gsub(/[\\\/:."*?<>|\s]+/, "-") + ".zip"
     #raise filename
-    send_file t.path, :type => 'application/zip', :disposition => 'attachment', :filename => filename
+    send_data File.read(t.path), :type => 'application/zip', :filename => filename
 
     t.close
+    t.unlink
   end
 
 
@@ -773,7 +774,7 @@ class PublicationsController < ApplicationController
     address = @publication.creator.email
     if address && address.strip != ""
       begin
-        EmailerMailer.deliver_send_withdraw_note(address, @publication.title )
+        EmailerMailer.withdraw_note(address, @publication.title ).deliver
       rescue Exception => e
         Rails.logger.error("Error sending withdraw email: #{e.class.to_s}, #{e.to_s}")
       end

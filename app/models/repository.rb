@@ -52,7 +52,7 @@ class Repository
   end
 
   def fork_bare(destination_path)
-    `git clone --bare -s #{Shellwords.escape(self.path)} #{Shellwords.escape(destination_path)}`
+    `git clone --bare -q -s #{Shellwords.escape(self.path)} #{Shellwords.escape(destination_path)}`
   end
 
   def create
@@ -68,6 +68,9 @@ class Repository
 
   def repack
     `#{self.git_command_prefix} repack`
+    unless $?.success?
+      Rails.logger.warn("Canonical repack failed")
+    end
   end
 
   def destroy

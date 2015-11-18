@@ -118,6 +118,7 @@ class Board < ActiveRecord::Base
     
     self.decrees.each do |decree|
       if decree.perform_action?(votes)
+        Rails.logger.info("Board#tally_votes success on Board: #{self.inspect}\nFor decree: #{decree.inspect}\nWith votes: #{votes.inspect}")
         return decree.action
       end
     end
@@ -244,7 +245,7 @@ class Board < ActiveRecord::Base
   			addresses.each do |address|
   				if address && address.strip != ""
             begin
-              EmailerMailer.deliver_send_email_out(address, subject_line, body, document_content)   										
+              EmailerMailer.general_email(address, subject_line, body, document_content).deliver
             rescue Exception => e
               Rails.logger.error("Error sending email: #{e.class.to_s}, #{e.to_s}")
             end

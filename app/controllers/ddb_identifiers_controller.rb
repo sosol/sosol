@@ -24,7 +24,7 @@ class DdbIdentifiersController < IdentifiersController
       if fragment_exist?(:action => 'edit', :part => "leiden_plus_#{@identifier.id}")
         @identifier[:leiden_plus] = read_fragment(:action => 'edit', :part => "leiden_plus_#{@identifier.id}")
       else
-        if((!defined?(Sosol::Application.config.xsugar_standalone_enabled).nil?) && Sosol::Application.config.xsugar_standalone_enabled)
+        if(Sosol::Application.config.respond_to?(:xsugar_standalone_enabled) && Sosol::Application.config.xsugar_standalone_enabled)
           original_xml = DDBIdentifier.preprocess(@identifier.xml_content)
 
           # strip xml:id from lb's
@@ -146,13 +146,19 @@ class DdbIdentifiersController < IdentifiersController
   def commentary
     find_identifier
 
-    @identifier[:html_preview] = 
-    JRubyXML.apply_xsl_transform(
-      JRubyXML.stream_from_string(
-        DDBIdentifier.preprocess(@identifier.xml_content)),
-      JRubyXML.stream_from_file(File.join(Rails.root,
-        %w{data xslt ddb commentary.xsl})),
-        {})
+    begin
+      @identifier[:html_preview] = 
+      JRubyXML.apply_xsl_transform(
+        JRubyXML.stream_from_string(
+          DDBIdentifier.preprocess(@identifier.xml_content)),
+        JRubyXML.stream_from_file(File.join(Rails.root,
+          %w{data xslt ddb commentary.xsl})),
+          {})
+    rescue JRubyXML::ParseError => parse_error
+      flash.now[:error] = parse_error.to_str + 
+          ".  This message is because the XML is unable to be transformed by the line-by-line commentary XSLT."
+      @identifier[:html_preview] = ''
+    end
       
     @is_editor_view = true
   end

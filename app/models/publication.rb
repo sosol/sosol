@@ -49,8 +49,9 @@ class Publication < ActiveRecord::Base
     # We do not like it if:
     if value =~ /^\./ ||    # - any path component of it begins with ".", or
        value =~ /\.\./ ||   # - it has double dots "..", or
+       value =~ /\/[.\/]/ ||# - it has path components starting with "/" or "."
        value =~ /[~^: ]/ || # - it has [..], "~", "^", ":" or SP, anywhere, or
-       value =~ /\/$/ ||    # - it ends with a "/".
+       value =~ /[.\/]$/ || # - it ends with a "/" or a "."
        value =~ /\.lock$/   # - it ends with ".lock"
       model.errors.add(attr, "Branch \"#{value}\" contains illegal characters")
     end
@@ -573,16 +574,19 @@ class Publication < ActiveRecord::Base
 
     #check that we are still taking votes
     if self.status != "voting"
+      Rails.logger.warn("Publication#tally_votes for #{self.id} does not have status 'voting'")
       return "" #return nothing and do nothing since the voting is now over
     end
 
     #need to tally votes and see if any action will take place
     if self.owner_type != "Board" # || !self.owner #make sure board still exist...add error message?
+      Rails.logger.warn("Publication#tally_votes for #{self.id} not owned by a Board")
       return "" #another check to make sure only the board is voting on its copy
     else
       decree_action = self.owner.tally_votes(user_votes) #since board has decrees let them figure out the vote results
     end
 
+    Rails.logger.info("Publication#tally_votes for #{self.id} got decree_action #{decree_action}")
 
     # create an event if anything happened
     if !decree_action.nil? && decree_action != ''
@@ -773,26 +777,26 @@ class Publication < ActiveRecord::Base
   #
   def send_to_finalizer(finalizer = nil)
     board_members = self.owner.users
-    if !finalizer
-      #get someone from the board
-#      board_members = self.owner.users
-      # just select a random board member to be the finalizer
+    if finalizer.nil?
+      # select a random board member to be the finalizer
       finalizer = board_members[rand(board_members.length)]
+
+      self.remove_finalizer()
+      finalizing_publication = copy_to_owner(finalizer)
+      # finalizing_publication = clone_to_owner(finalizer)
+      approve_decrees = self.owner.decrees.select {|d| d.action == 'approve'}
+      approve_choices = approve_decrees.map {|d| d.choices.split(' ')}.flatten
+      approve_votes = self.votes.select {|v| approve_choices.include?(v.choice) }
+      approve_members = approve_votes.map {|v| v.user}
+      self.flatten_commits(finalizing_publication, finalizer, approve_members)
+
+      #should we clear the modified flag so we can tell if the finalizer has done anything
+      # that way we will know in the future if we can change finalizersedidd
+      finalizing_publication.change_status('finalizing')
+      finalizing_publication.save!
+    elsif board_members.include?(finalizer)
+      self.change_finalizer(finalizer)
     end
-
-    self.remove_finalizer()
-    finalizing_publication = copy_to_owner(finalizer)
-    # finalizing_publication = clone_to_owner(finalizer)
-    approve_decrees = self.owner.decrees.select {|d| d.action == 'approve'}
-    approve_choices = approve_decrees.map {|d| d.choices.split(' ')}.flatten
-    approve_votes = self.votes.select {|v| approve_choices.include?(v.choice) }
-    approve_members = approve_votes.map {|v| v.user}
-    self.flatten_commits(finalizing_publication, finalizer, approve_members)
-
-    #should we clear the modified flag so we can tell if the finalizer has done anything
-    # that way we will know in the future if we can change finalizersedidd
-    finalizing_publication.change_status('finalizing')
-    finalizing_publication.save!
   end
 
   #Destroys this publication's finalizer's copy.
@@ -816,9 +820,7 @@ class Publication < ActiveRecord::Base
     old_finalizing_publication = self.find_finalizer_publication
 
     if old_finalizing_publication.nil?
-      #some kind of error should be thrown?
-      Rails.logger.error("Attempt to change finalizer on nonexistent finalize publication " + self.title + " .")
-      return false
+      raise("Attempt to change finalizer on nonexistent finalize publication " + self.inspect + " .")
     end
 
     self.transaction do
@@ -827,7 +829,7 @@ class Publication < ActiveRecord::Base
       new_finalizing_publication.owner = new_finalizer
       new_finalizing_publication.creator = old_finalizing_publication.creator
       new_finalizing_publication.title = old_finalizing_publication.title
-      new_finalizing_publication.branch = title_to_ref(new_finalizing_publication.title)
+      new_finalizing_publication.branch = old_finalizing_publication.branch
       new_finalizing_publication.parent = old_finalizing_publication.parent
 
       new_finalizing_publication.save!
@@ -1031,10 +1033,7 @@ class Publication < ActiveRecord::Base
       end
 
       # finalized, try to repack
-      canon.repack
-      unless $?.success?
-        Rails.logger.warn("Canonical repack failed after finalizing publication #{self.origin.id.to_s} (#{self.title})")
-      end
+      RepackCanonical.new.async.perform()
     else
       # nothing under canon control, just say it's committed
       self.change_status('committed')
@@ -1403,6 +1402,7 @@ class Publication < ActiveRecord::Base
     has_text = false
     has_biblio = false
     has_cts = false
+    has_apis = false
 
     self.identifiers.each do |i|
       if i.class.to_s == "BiblioIdentifier"
@@ -1416,6 +1416,9 @@ class Publication < ActiveRecord::Base
       end
       if i.class.to_s =~ /CTSIdentifier/
         has_cts = true
+      end
+      if i.class.to_s == "APISIdentifier"
+        has_apis = true
       end
     end
     if !has_text
@@ -1437,6 +1440,9 @@ class Publication < ActiveRecord::Base
     if has_cts
       creatable_identifiers = []
     end
+    if has_apis
+      creatable_identifiers.delete("APISIdentifier")
+    end
 
     #only let user create new for non-existing
     self.identifiers.each do |i|
@@ -1453,11 +1459,11 @@ class Publication < ActiveRecord::Base
   protected
     #Returns title string in form acceptable to  ".git/refs/"
     def title_to_ref(str)
-      java.text.Normalizer.normalize(str.tr(' ','_'),java.text.Normalizer::Form::NFD).gsub(/\p{M}/,'')
+      java.text.Normalizer.normalize(str.tr(' ','_'),java.text.Normalizer::Form::NFD).gsub(/\p{M}/,'').sub(/\.$/,'')
     end
 
     #Returns identifier string in form acceptable to  ".git/refs/"
     def identifier_to_ref(str)
-      java.text.Normalizer.normalize(str.tr(' ','_'),java.text.Normalizer::Form::NFD).gsub(/\p{M}/,'')
+      java.text.Normalizer.normalize(str.tr(' ','_'),java.text.Normalizer::Form::NFD).gsub(/\p{M}/,'').sub(/\.$/,'')
     end
 end
