@@ -296,8 +296,8 @@ class HGVMetaIdentifier < HGVIdentifier
   #   - +config+ → configuration as read from +hgv.yml+
   # Side effect on +parent+, adds new children
   def set_epidoc_attributes_tree parent, xpath, data, config
-    child_name = xpath[/\A([\w]+)[\w\/\[\]@:=']*\Z/, 1]
-    child_attributes = xpath.scan /@([\w:]+)='([\w]+)'/
+    child_name = xpath[/\A([\w]+)[\w\/\[\]@:='#]*\Z/, 1]
+    child_attributes = xpath.scan /@([\w:]+)='([\w#]+)'/
     index = 1
     data.each { |item|
 
@@ -366,8 +366,8 @@ class HGVMetaIdentifier < HGVIdentifier
     doc = REXML::Document.new self.content
 
     @configuration.scheme.each_pair do |key, config|
-      xpath_parent = config[:xpath][/\A([\w\/\[\]\#_@:=']+)\/([\w\/\[\]\#_@:=']+)\Z/, 1]
-      xpath_child = $2 
+      xpath_parent = config[:xpath][/\A([\w\/\[\]\#_@:=']+)\/(\w[\w\/\[\]\#_@:=']+)\Z/, 1]
+      xpath_child = $2
       next if xpath_parent.nil?
 
       if config[:multiple]

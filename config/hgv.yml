@@ -25,7 +25,7 @@
       :multiple: true
       :attributes:
         :type:
-          :name: type
+          :name: unit
           :pattern: /\Avolume|fascicle|side|numbers|pages|lines|fragments|folio|inventory|number|columns|generic|parts\Z/
     :collectionPlaceName:
       :xpath: /TEI/teiHeader/fileDesc/sourceDesc/msDesc/msIdentifier/placeName/settlement
@@ -41,17 +41,26 @@
       :xpath: /TEI/teiHeader/fileDesc/publicationStmt/idno[@type='TM']
       :pattern: /\A\d+\Z/
     :illustrations:
-      :xpath: /TEI/text/body/div[@type='bibliography'][@subtype='illustrations']/p/bibl[@type='illustration']
+      :xpath: /TEI/text/body/div[@type='bibliography'][@subtype='illustrations']/listBibl/bibl[@type='illustration']
       :multiple: true
     :figures:
-      :xpath: /TEI/text/body/div[@type='figure']/p/figure
+      :xpath: /TEI/text/body/div[@type='bibliography'][@subtype='illustrations']/listBibl/bibl[ptr/@target]
       :children:
         :graphic:
-          :xpath: graphic
+          :xpath: ptr
           :attributes:
             :url:
-              :name: url
+              :name: target
       :multiple: true
+    #:figures:
+    #  :xpath: /TEI/text/body/div[@type='figure']/p/figure
+    #  :children:
+    #    :graphic:
+    #      :xpath: graphic
+    #      :attributes:
+    #        :url:
+    #          :name: url
+    #  :multiple: true
     :sammelbuchBibliography:
       :xpath: /TEI/teiHeader/fileDesc/sourceDesc/listBibl/bibl[@type='SB']
       :children:
@@ -64,7 +73,7 @@
               :optional: false
               :pattern: /\Ahttp:\/\/papyri\.info\/biblio\/.+\Z/
         :pagination:
-          :xpath: biblScope[@type='pp']
+          :xpath: biblScope[@unit='pp']
     :citedLiterature:
       :xpath: /TEI/text/body/div[@type='bibliography'][@subtype='citations']/listBibl/bibl
       :multiple: true
@@ -78,7 +87,7 @@
               :optional: false
               :pattern: /\Ahttp:\/\/papyri\.info\/biblio\/.+\Z/
         :pagination:
-          :xpath: biblScope[@type='pp']
+          :xpath: biblScope[@unit='pp']
     :contentText:
       :xpath: /TEI/teiHeader/profileDesc/textClass/keywords[@scheme='hgv']/term
       :multiple: true
@@ -108,10 +117,10 @@
       :multiple: true
       :children:
         :volume:
-          :xpath: biblScope[@type='volume']
+          :xpath: biblScope[@unit='volume']
           :optional: false
         :page:
-          :xpath: biblScope[@type='pages']
+          :xpath: biblScope[@unit='pages']
           :optional: false
     :notes:
       :xpath: /TEI/text/body/div[@type='commentary'][@subtype='general']/p
@@ -129,14 +138,14 @@
         :comment:
           :xpath: note[@type='comment']
         :date:
-          :xpath: date[@type='mentioned']
+          :xpath: date[@type='mentioned'][@datingMethod='#julian']
           :attributes:
             :when:
-              :name: when
+              :name: when-custom
             :notBefore:
-              :name: notBefore
+              :name: notBefore-custom
             :notAfter:
-              :name: notAfter
+              :name: notAfter-custom
             :certainty:
               :name: cert
           :children:
@@ -193,7 +202,7 @@
       :xpath: /TEI/teiHeader/fileDesc/sourceDesc/msDesc/history/origin/origPlace
 
     :textDate:
-      :xpath: /TEI/teiHeader/fileDesc/sourceDesc/msDesc/history/origin/origDate
+      :xpath: /TEI/teiHeader/fileDesc/sourceDesc/msDesc/history/origin/origDate[@datingMethod='#julian']
       :multiple: true
       :pattern: /\A-?\d\d\d\d(-\d\d(-\d\d)?)?\Z/
       :attributes:
@@ -201,13 +210,13 @@
           :name: xml:id
           :pattern: /\AdateAlternative[XYZ]\Z/
         :when:
-          :name: when
+          :name: when-custom
           :pattern: /\A-?\d\d\d\d(-\d\d(-\d\d)?)?\Z/
         :notBefore:
-          :name: notBefore
+          :name: notBefore-custom
           :pattern: /\A-?\d\d\d\d(-\d\d(-\d\d)?)?\Z/
         :notAfter:
-          :name: notAfter
+          :name: notAfter-custom
           :pattern: /\A-?\d\d\d\d(-\d\d(-\d\d)?)?\Z/
         :certainty:
           :name: cert
@@ -232,7 +241,7 @@
           :attributes:
             :match:
               :name: match
-              :pattern: /\A..\/@(when|notBefore|notAfter))\Z/
+              :pattern: /\A..\/@(when-custom|notBefore-custom|notAfter-custom))\Z/
             :degree:
               :name: degree
               :pattern: /\A0\.[15]\Z/ # 0.3 for low is not accepted
@@ -242,4 +251,4 @@
           :attributes:
             :match:
               :name: match
-              :pattern: /\A..\/(((day|month|year)-from-date\()?@(when|notBefore|notAfter)(\)?)|offset\[@type='(after|before)'\])\Z/
+              :pattern: /\A..\/(((day|month|year)-from-date\()?@(when-custom|notBefore-custom|notAfter-custom)(\)?)|offset\[@type='(after|before)'\])\Z/
