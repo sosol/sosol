@@ -23,3 +23,9 @@ production:
   adapter: <%= jdbc %>mysql
   database: idp2
   username: idp2
+
+travis:
+  adapter: <%= jdbc %>mysql
+  database: sosol_test
+  username: travis
+  encoding: utf8
