@@ -191,6 +191,7 @@ class Publication < ActiveRecord::Base
   # Should check the owner's repo to make sure the branch doesn't exist and halt if so
   before_create do |publication|
     if publication.owner.repository.branches.include?(publication.branch)
+      Rails.logger.debug "Repository already includes branch #{publication.branch}"
       return false
     end
   end
@@ -734,35 +735,37 @@ class Publication < ActiveRecord::Base
     # (happens on the finalizer's repo)
     finalizer.repository.update_master_from_canonical
 
-    jgit_tree = JGit::JGitTree.new()
-    jgit_tree.load_from_repo(finalizing_publication.repository.jgit_repo, 'master')
-    inserter = finalizing_publication.repository.jgit_repo.newObjectInserter()
-    controlled_paths_blobs.each_pair do |path, blob|
-      unless blob.nil?
-        file_id = inserter.insert(org.eclipse.jgit.lib.Constants::OBJ_BLOB, blob.to_java_string.getBytes(java.nio.charset.Charset.forName("UTF-8")))
-        jgit_tree.add_blob(path, file_id.name())
+    finalizing_publication.repository.jgit_repo do |yielded_repo|
+      jgit_tree = JGit::JGitTree.new()
+      jgit_tree.load_from_repo(yielded_repo, 'master')
+      inserter = yielded_repo.newObjectInserter()
+      controlled_paths_blobs.each_pair do |path, blob|
+        unless blob.nil?
+          file_id = inserter.insert(org.eclipse.jgit.lib.Constants::OBJ_BLOB, blob.to_java_string.getBytes(java.nio.charset.Charset.forName("UTF-8")))
+          jgit_tree.add_blob(path, file_id.name())
+        end
       end
+      inserter.flush()
+
+      tree_sha1 = jgit_tree.update_sha
+
+      Rails.logger.info("Wrote tree as SHA1: #{tree_sha1}")
+
+      commit = org.eclipse.jgit.lib.CommitBuilder.new()
+      commit.setTreeId(org.eclipse.jgit.lib.ObjectId.fromString(tree_sha1))
+      commit.setParentId(org.eclipse.jgit.lib.ObjectId.fromString(parent_commit))
+      commit.setAuthor(self.creator.jgit_actor)
+      commit.setCommitter(finalizer.jgit_actor)
+      commit.setEncoding("UTF-8")
+      commit.setMessage(commit_message)
+
+      flattened_commit_sha1 = inserter.insert(commit).name()
+      inserter.flush()
+      inserter.release()
+
+      return finalizing_publication.repository.create_branch(
+        finalizing_publication.branch, flattened_commit_sha1, true)
     end
-    inserter.flush()
-
-    tree_sha1 = jgit_tree.update_sha
-
-    Rails.logger.info("Wrote tree as SHA1: #{tree_sha1}")
-
-    commit = org.eclipse.jgit.lib.CommitBuilder.new()
-    commit.setTreeId(org.eclipse.jgit.lib.ObjectId.fromString(tree_sha1))
-    commit.setParentId(org.eclipse.jgit.lib.ObjectId.fromString(parent_commit))
-    commit.setAuthor(self.creator.jgit_actor)
-    commit.setCommitter(finalizer.jgit_actor)
-    commit.setEncoding("UTF-8")
-    commit.setMessage(commit_message)
-
-    flattened_commit_sha1 = inserter.insert(commit).name()
-    inserter.flush()
-    inserter.release()
-
-    finalizing_publication.repository.create_branch(
-      finalizing_publication.branch, flattened_commit_sha1, true)
 
     # rewrite commits by EB
     # - write a 'Signed-off-by:' line for each Ed. Board member
@@ -866,7 +869,9 @@ class Publication < ActiveRecord::Base
   end
 
   def head
-    self.owner.repository.jgit_repo.resolve(self.branch).name()
+    self.owner.repository.jgit_repo do |yielded_repo|
+      return yielded_repo.resolve(self.branch).name()
+    end
   end
 
   def merge_base(branch = 'master')
@@ -929,18 +934,20 @@ class Publication < ActiveRecord::Base
       end
 =end
 
-    jgit_tree = JGit::JGitTree.new()
-    jgit_tree.load_from_repo(self.origin.owner.repository.jgit_repo, self.origin.branch)
-    inserter = self.origin.owner.repository.jgit_repo.newObjectInserter()
-    controlled_paths_blobs.merge(uncontrolled_paths_blobs).each_pair do |path, blob|
-      unless blob.nil?
-        file_id = inserter.insert(org.eclipse.jgit.lib.Constants::OBJ_BLOB, blob.to_java_string.getBytes(java.nio.charset.Charset.forName("UTF-8")))
-        jgit_tree.add_blob(path, file_id.name())
+    self.origin.owner.repository.jgit_repo do |yielded_repo|
+      jgit_tree = JGit::JGitTree.new()
+      jgit_tree.load_from_repo(yielded_repo, self.origin.branch)
+      inserter = yielded_repo.newObjectInserter()
+      controlled_paths_blobs.merge(uncontrolled_paths_blobs).each_pair do |path, blob|
+        unless blob.nil?
+          file_id = inserter.insert(org.eclipse.jgit.lib.Constants::OBJ_BLOB, blob.to_java_string.getBytes(java.nio.charset.Charset.forName("UTF-8")))
+          jgit_tree.add_blob(path, file_id.name())
+        end
       end
-    end
-    inserter.flush()
+      inserter.flush()
 
-    jgit_tree.commit(commit_comment, committer_user.jgit_actor)
+      jgit_tree.commit(commit_comment, committer_user.jgit_actor)
+    end
 
       #goal is to copy final blobs back to user's original publication (and preserve other blobs in original publication)
      #  origin_index = self.origin.owner.repository.repo.index
@@ -1009,47 +1016,49 @@ class Publication < ActiveRecord::Base
         Rails.logger.info("Controlled Paths => Blobs: #{controlled_paths_blobs.inspect}")
 
         self.owner.repository.update_master_from_canonical
-        jgit_tree = JGit::JGitTree.new()
-        jgit_tree.load_from_repo(self.owner.repository.jgit_repo, 'master')
-        inserter = self.owner.repository.jgit_repo.newObjectInserter()
-        controlled_paths_blobs.each_pair do |path, blob|
-          unless blob.nil?
-            file_id = inserter.insert(org.eclipse.jgit.lib.Constants::OBJ_BLOB, blob.to_java_string.getBytes(java.nio.charset.Charset.forName("UTF-8")))
-            jgit_tree.add_blob(path, file_id.name())
+        self.owner.repository.jgit_repo do |yielded_repo|
+          jgit_tree = JGit::JGitTree.new()
+          jgit_tree.load_from_repo(yielded_repo, 'master')
+          inserter = yielded_repo.newObjectInserter()
+          controlled_paths_blobs.each_pair do |path, blob|
+            unless blob.nil?
+              file_id = inserter.insert(org.eclipse.jgit.lib.Constants::OBJ_BLOB, blob.to_java_string.getBytes(java.nio.charset.Charset.forName("UTF-8")))
+              jgit_tree.add_blob(path, file_id.name())
+            end
           end
+          inserter.flush()
+
+          tree_sha1 = jgit_tree.update_sha
+
+          # roll a tree SHA1 by reading the canonical master tree,
+          # adding controlled path blobs, then writing the modified tree
+          # (happens on the finalizer's repo)
+          #self.owner.repository.update_master_from_canonical
+          #index = self.owner.repository.repo.index
+          #index.read_tree('master')
+          #controlled_paths_blobs.each_pair do |path, blob|
+          #  index.add(path, blob)
+          #end
+
+          #tree_sha1 = index.write_tree(index.tree, index.current_tree)
+          Rails.logger.info("Wrote tree as SHA1: #{tree_sha1}")
+
+          commit_message = "Finalization merge of branch '#{self.branch}' into canonical master"
+
+          # inserter = yielded_rep.newObjectInserter()
+
+          commit = org.eclipse.jgit.lib.CommitBuilder.new()
+          commit.setTreeId(org.eclipse.jgit.lib.ObjectId.fromString(tree_sha1))
+          commit.setParentIds(org.eclipse.jgit.lib.ObjectId.fromString(canonical_sha),org.eclipse.jgit.lib.ObjectId.fromString(publication_sha))
+          commit.setAuthor(self.owner.jgit_actor)
+          commit.setCommitter(self.owner.jgit_actor)
+          commit.setEncoding("UTF-8")
+          commit.setMessage(commit_message)
+
+          finalized_commit_sha1 = inserter.insert(commit).name()
+          inserter.flush()
+          inserter.release()
         end
-        inserter.flush()
-
-        tree_sha1 = jgit_tree.update_sha
-
-        # roll a tree SHA1 by reading the canonical master tree,
-        # adding controlled path blobs, then writing the modified tree
-        # (happens on the finalizer's repo)
-        #self.owner.repository.update_master_from_canonical
-        #index = self.owner.repository.repo.index
-        #index.read_tree('master')
-        #controlled_paths_blobs.each_pair do |path, blob|
-        #  index.add(path, blob)
-        #end
-
-        #tree_sha1 = index.write_tree(index.tree, index.current_tree)
-        Rails.logger.info("Wrote tree as SHA1: #{tree_sha1}")
-
-        commit_message = "Finalization merge of branch '#{self.branch}' into canonical master"
-
-        inserter = self.owner.repository.jgit_repo.newObjectInserter()
-
-        commit = org.eclipse.jgit.lib.CommitBuilder.new()
-        commit.setTreeId(org.eclipse.jgit.lib.ObjectId.fromString(tree_sha1))
-        commit.setParentIds(org.eclipse.jgit.lib.ObjectId.fromString(canonical_sha),org.eclipse.jgit.lib.ObjectId.fromString(publication_sha))
-        commit.setAuthor(self.owner.jgit_actor)
-        commit.setCommitter(self.owner.jgit_actor)
-        commit.setEncoding("UTF-8")
-        commit.setMessage(commit_message)
-
-        finalized_commit_sha1 = inserter.insert(commit).name()
-        inserter.flush()
-        inserter.release()
 
         Rails.logger.info("commit_to_canon: Wrote finalized commit merge as SHA1: #{finalized_commit_sha1}")
 
