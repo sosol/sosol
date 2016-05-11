@@ -8,12 +8,15 @@ jdk:
   - openjdk7
 rvm:
   - jruby
+services: mysql
 before_script:
   - gem pristine executable-hooks
   - gem pristine gem-wrappers
   - gem pristine jruby-launcher
   - gem --version
+  - mysql -e 'create database sosol_test;'
   - bundle exec cap local externals:setup
   - touch config/environments/test_secret.rb
   - bundle exec rake git:db:canonical:clone
-  - bundle exec rake db:migrate
+  - bundle exec rake db:migrate RAILS_ENV=travis
+script: bundle exec rake RAILS_ENV=travis

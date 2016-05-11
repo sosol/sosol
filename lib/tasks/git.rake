@@ -18,7 +18,7 @@ namespace :git do
       task :clone => :environment do
         require 'config/boot'
         
-        if ENV['RAILS_ENV'] == "test"
+        if (ENV['RAILS_ENV'] == "test") || (ENV['RAILS_ENV'] == "travis")
           CANONICAL_CLONE_URL = "git://github.com/ryanfb/idp.data.test.git"
         else
           CANONICAL_CLONE_URL = "git://github.com/papyri/idp.data.git"
