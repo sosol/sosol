@@ -2,6 +2,8 @@
 # - contains methods common to these identifiers
 class IdentifiersController < ApplicationController
   rescue_from Exceptions::CommitError, :with => :commit_failed
+  rescue_from Exceptions::GetBlobError, :with => :get_blob_failed
+
   # - GET /publications/1/xxx_identifiers/1/editxml
   # - edit the XML file from the repository of the associated identifier
   def editxml
@@ -181,11 +183,17 @@ class IdentifiersController < ApplicationController
     end
 
     def commit_failed(e)
+      env["airbrake.error_id"] = notify_airbrake(e)
       flash[:error] = e.message
       flash.keep
       redirect_to polymorphic_path([@identifier.publication,@identifier],
                               :action => :edit) and return
-    
+    end
+
+    def get_blob_failed(e)
+      env["airbrake.error_id"] = notify_airbrake(e)
+      flash[:error] = "Error fetching file from Git repository."
+      redirect_to dashboard_url and return
     end
 
 end
