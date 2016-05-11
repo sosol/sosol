@@ -138,7 +138,7 @@ class Repository
       return jgit_blob
     rescue Exception => e
       Rails.logger.error("JGIT Exception: #{e.inspect}\n#{caller.join("\n")}\n#{e.backtrace.join("\n")}")
-      raise Exceptions::GetBlobError.new("#{e.class.to_s}: #{e.message}", file, branch, path)
+      raise Exceptions::GetBlobError.new("#{e.class.to_s}: #{e.message} for #{file} on #{branch} in #{path}", file, branch, path)
     end
   end
 
