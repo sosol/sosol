@@ -287,6 +287,7 @@ class DDBIdentifier < Identifier
     begin
       return reprinted_in.nil? ? false : true
     rescue Exceptions::GetBlobError => e
+      Airbrake.notify(e)
       return true
     end
   end
