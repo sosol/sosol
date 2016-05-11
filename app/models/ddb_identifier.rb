@@ -284,7 +284,11 @@ class DDBIdentifier < Identifier
   end
   
   def is_reprinted?
-    return reprinted_in.nil? ? false : true
+    begin
+      return reprinted_in.nil? ? false : true
+    rescue Exceptions::GetBlobError => e
+      return true
+    end
   end
   
   # Override REXML::Attribute#to_string so that attributes are defined
