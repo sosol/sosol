@@ -137,7 +137,7 @@ class Repository
   end
 
   def repack
-    self.class.run_command("#{self.git_command_prefix} repack")
+    self.class.run_command("#{self.git_command_prefix} repack 2>&1")
     unless $?.success?
       Rails.logger.warn("Canonical repack failed")
     end
@@ -217,6 +217,10 @@ class Repository
 
   def update_master_from_canonical
     self.update_ref('master',Repository.new.get_head('master'))
+  end
+
+  def rename_branch(old_name, new_name)
+    return self.class.run_command("#{self.git_command_prefix} branch -m #{Shellwords.escape(old_name)} #{Shellwords.escape(new_name)}")
   end
 
   def create_branch(name, source_name = 'master', force = false)
