@@ -46,7 +46,8 @@ class CTSIdentifier < Identifier
       raise Exception.new("Creating a new version from a version URN is not yet supported")
     end
     id = self::next_temporary_identifier(self::TEMPORARY_COLLECTION,urn,pubtype,lang)
-    content.gsub(/\b#{workUrn}\b/,id.urn_attribute)
+    workUrn = "urn:cts:" + urnObj.getTextGroup(true) + "." + urnObj.getWork(false)
+    content.gsub!(/\b#{workUrn}\b/,id.urn_attribute)
     return id,content
   end
 
