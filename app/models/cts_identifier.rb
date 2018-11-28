@@ -47,7 +47,9 @@ class CTSIdentifier < Identifier
     end
     id = self::next_temporary_identifier(self::TEMPORARY_COLLECTION,urn,pubtype,lang)
     workUrn = "urn:cts:" + urnObj.getTextGroup(true) + "." + urnObj.getWork(false)
-    content.gsub!(/\b#{workUrn}\b/,id.urn_attribute)
+    urn_attribute = self.new(:name => id).urn_attribute
+
+    content.gsub!(/\b#{workUrn}\b/, urn_attribute)
     return id,content
   end
 
