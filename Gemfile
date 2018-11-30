@@ -13,7 +13,6 @@ end
 
 group :test do
   gem 'rake'
-  gem 'mocha', "= 1.1.0" # later versions of mocha cause stubbing to fail under jruby-1.7.26 in 2.0 mode
   gem 'timecop'
 end
 
