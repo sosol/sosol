@@ -101,7 +101,7 @@ module JRubyXML
         org.iso_relax.verifier.VerifierFactory.newInstance(
           "http://relaxng.org/ns/structure/1.0")
       @schema = verifier_factory.compileSchema(
-    "http://www.w3.org/TR/REC-rdf-syntax/rdfxml.rng")
+    "https://www.w3.org/TR/REC-rdf-syntax/rdfxml.rng")
     end
   end 
   
@@ -132,7 +132,7 @@ module JRubyXML
     def initialize
       @verifier_factory = 
         org.iso_relax.verifier.VerifierFactory.newInstance(
-          "http://www.w3.org/XML/1998/namespace")
+          "https://www.w3.org/XML/1998/namespace")
       @schema = verifier_factory.compileSchema(
         "http://www.stoa.org/epidoc/dtd/6/tei-epidoc.dtd")
     end
@@ -161,10 +161,8 @@ module JRubyXML
   class PerseusTreebankValidator < JARVValidator
     def initialize
     @verifier_factory = 
-        org.iso_relax.verifier.VerifierFactory.newInstance(
-          "http://www.w3.org/2001/XMLSchema")
-      @schema = verifier_factory.compileSchema(
-        "https://raw.githubusercontent.com/alpheios-project/schemas/master/xsd/treebank-1.7.xsd")
+        org.iso_relax.verifier.VerifierFactory.newInstance("https://www.w3.org/2001/XMLSchema")
+      @schema = verifier_factory.compileSchema("https://raw.githubusercontent.com/alpheios-project/schemas/master/xsd/treebank-1.7.xsd")
     end
   end
   
@@ -172,7 +170,7 @@ module JRubyXML
     def initialize
     @verifier_factory = 
         org.iso_relax.verifier.VerifierFactory.newInstance(
-          "http://www.w3.org/2001/XMLSchema")
+          "https://www.w3.org/2001/XMLSchema")
       @schema = verifier_factory.compileSchema(
         "#{Rails.root}/data/templates/alpheios-aligned-text.xsd")
     end
