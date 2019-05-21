@@ -48,4 +48,5 @@ Sosol::Application.configure do
   # config.site_api_contact_email="perseids@tufts.edu"
   # config.site_api_contact_name="Bridget Almas, The Perseids Project, Perseus Digital Library, Tufts University"
   # config.action_mailer.default_url_options= { host: 'sosol.perseids.org/sosol', protocol: 'https' }
+  # config.i18n.load_path += Dir[Rails.root.join('config', 'locales_perseids', '*.{rb,yml}')]
 end
