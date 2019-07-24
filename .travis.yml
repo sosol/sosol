@@ -9,6 +9,10 @@ env:
     - TEST_SUITE=functionals
     - TEST_SUITE=integration
 script: "bundle exec rake test:$TEST_SUITE"
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
 jdk:
   - oraclejdk8
   - openjdk7
