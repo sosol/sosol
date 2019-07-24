@@ -2,7 +2,13 @@ language: ruby
 cache: bundler
 sudo: false
 env:
-  - JRUBY_OPTS="-J-Xmx1g --2.0"
+  global:
+    - JRUBY_OPTS="-J-Xmx1g --2.0"
+  matrix:
+    - TEST_SUITE=units
+    - TEST_SUITE=functionals
+    - TEST_SUITE=integration
+script: "bundle exec rake test:$TEST_SUITE"
 jdk:
   - oraclejdk8
   - openjdk7
