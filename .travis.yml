@@ -8,10 +8,12 @@ sudo: false
 env:
   global:
     - JRUBY_OPTS="-J-Xmx1g --2.0"
+    - CC_TEST_REPORTER_ID="2b10927b7a2a4686f655b304c477803d33f8a3e406b1820ccc432306ededf0c3"
+    - CI_NODE_TOTAL=3
   matrix:
-    - TEST_SUITE=units
-    - TEST_SUITE=functionals
-    - TEST_SUITE=integration
+    - CI_NODE_INDEX=0 TEST_SUITE=units
+    - CI_NODE_INDEX=1 TEST_SUITE=functionals
+    - CI_NODE_INDEX=2 TEST_SUITE=integration
 script: "bundle exec rake test:$TEST_SUITE"
 addons:
   apt:
@@ -25,6 +27,8 @@ rvm:
 before_install:
   - gem install bundler --version '<2.0'
 before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
   - gem pristine executable-hooks
   - gem pristine gem-wrappers
   - gem pristine jruby-launcher
@@ -35,3 +39,6 @@ before_script:
   - bundle exec rake db:migrate
 after_failure:
   - curl --upload-file log/test.log https://transfer.sh/test.log
+after_script:
+  - if [[ "$TRAVIS_TEST_RESULT" == 0 ]]; then ./cc-test-reporter format-coverage -t simplecov -o ./coverage/codeclimate.$CI_NODE_INDEX.json ./coverage/spec/.resultset.json; fi
+  - if [[ "$TRAVIS_TEST_RESULT" == 0 ]]; then ./cc-test-reporter sum-coverage --output - --parts $CI_NODE_TOTAL coverage/codeclimate.*.json | ./cc-test-reporter upload-coverage --input -; fi
