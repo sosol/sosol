@@ -26,9 +26,10 @@ rvm:
   - jruby-1.7.26
 before_install:
   - gem install bundler --version '<2.0'
-before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
+before_script:
+  - ./cc-test-reporter before-build
   - gem pristine executable-hooks
   - gem pristine gem-wrappers
   - gem pristine jruby-launcher
