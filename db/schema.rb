@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20181107152354) do
+ActiveRecord::Schema.define(:version => 20201008150635) do
 
   create_table "assignments", :force => true do |t|
     t.integer  "user_id"
@@ -212,8 +212,10 @@ ActiveRecord::Schema.define(:version => 20181107152354) do
   create_table "user_identifiers", :force => true do |t|
     t.string   "identifier"
     t.integer  "user_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+    t.datetime "last_signed_in_at"
+    t.string   "edu_person_principal_name"
   end
 
   create_table "users", :force => true do |t|

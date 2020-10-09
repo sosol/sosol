@@ -27,7 +27,7 @@ class ShibController < ApplicationController
       if (params[:commit] == 'Cancel')
         flash[:notice] = "Associate cancelled. No change made to your account"        
       elsif (session[:pending_id]) 
-        @current_user.user_identifiers << UserIdentifier.create(:identifier => session[:pending_id])
+        @current_user.user_identifiers << UserIdentifier.create(:identifier => session[:pending_id], :edu_person_principal_name => session[:edu_person_principal_name], :last_signed_in_at => Time.now)
         flash[:notice] = "#{session[:pending_id]} added to your account"
       else
         flash[:error] = "No pending association for this session"
@@ -67,6 +67,7 @@ class ShibController < ApplicationController
         response.settings = saml_settings(idp)
         if idp && response.is_valid? 
           scoped_targeted_id = response.attributes.single('urn:oid:1.3.6.1.4.1.5923.1.1.1.10')
+          edu_person_principal_name = response.attributes.single('urn:oid:1.3.6.1.4.1.5923.1.1.1.6')
           unless scoped_targeted_id
              flash[:error] = "Missing required attributes from Identity Provider"
              redirect_to :controller => "signin", :action => "index" and return
@@ -77,6 +78,10 @@ class ShibController < ApplicationController
           # User Identifier already exists for this identity and no current user session so 
           # login and redirect to index or pending entry url
           if !@current_user && user_identifier
+            user_identifier.last_signed_in_at = Time.now
+            user_identifier.edu_person_principal_name = edu_person_principal_name
+            user_identifier.save
+
             user = user_identifier.user
             session[:user_id] = user.id
             if !session[:entry_url].blank?
@@ -94,6 +99,7 @@ class ShibController < ApplicationController
           if @current_user && user_identifier.nil?
             # only can add a shibboleth identity to an account if there isn't already one for it 
             session[:pending_id] = scoped_targeted_id
+            session[:edu_person_principal_name] = edu_person_principal_name
             @display_id = get_displayid(response.attributes,idp) || session[:pending_id] 
             @identifiers = @current_user.user_identifiers
             render :action => "associate" and return
@@ -116,6 +122,7 @@ class ShibController < ApplicationController
           # fall through behavior: no current session and a sosol id for this identity wasn't found so 
           # this is the first login with this identifier - let the user supply their details and consume
           session[:identifier] = scoped_targeted_id
+          session[:edu_person_principal_name] = edu_person_principal_name
           @display_id = get_displayid(response.attributes,idp) || session[:identifier]
           @email = guess_email(response.attributes, idp)
           @name = guess_nickname(response.attributes, idp)
@@ -159,6 +166,7 @@ class ShibController < ApplicationController
     # copied verbatim from the rpx_controller
     def create_submit
       identifier = session[:identifier]
+      edu_person_principal_name = session[:edu_person_principal_name]
       @name = params[:new_user][:name]
       @email = params[:new_user][:email]
       @full_name = params[:new_user][:full_name]
@@ -184,7 +192,7 @@ class ShibController < ApplicationController
         # be sure to recover from it and roll back any changes made up
         # to this point.  Otherwise, the user account will have been
         # created with no identifier associated with it.
-        user.user_identifiers << UserIdentifier.create(:identifier => identifier)
+        user.user_identifiers << UserIdentifier.create(:identifier => identifier, :edu_person_principal_name => edu_person_principal_name, :last_signed_in_at => Time.now)
         user.save!
         rescue Exception => e
           user.destroy
@@ -195,6 +203,7 @@ class ShibController < ApplicationController
   
       session[:user_id] = user.id
       session[:identifier] = nil
+      session[:edu_person_principal_name] = nil
       
       if !session[:entry_url].blank?
         redirect_to session[:entry_url]

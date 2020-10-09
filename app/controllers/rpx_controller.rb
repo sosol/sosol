@@ -108,7 +108,7 @@ class RpxController < ApplicationController
         unless guess_email(data) == '' # some providers don't return email addresses
           user = User.find_by_email(guess_email(data))
           if user
-            user_identifier = UserIdentifier.create(:identifier => identifier)
+            user_identifier = UserIdentifier.create(:identifier => identifier, :last_signed_in_at => Time.now)
             user.user_identifiers << user_identifier
             user.save!
           end
@@ -124,6 +124,8 @@ class RpxController < ApplicationController
     if user_identifier
       # User Identifier exists, login and redirect to index
       user = user_identifier.user
+      user_identifier.last_signed_in_at = Time.now
+      user_identifier.save
       session[:user_id] = user.id
       #redirect_to :controller => "welcome", :action => "index"
       #redirect to dashboard
@@ -171,7 +173,7 @@ class RpxController < ApplicationController
       # be sure to recover from it and roll back any changes made up
       # to this point.  Otherwise, the user account will have been
       # created with no identifier associated with it.
-      user.user_identifiers << UserIdentifier.create(:identifier => identifier)
+      user.user_identifiers << UserIdentifier.create(:identifier => identifier, :last_signed_in_at => Time.now)
       user.save!
     rescue Exception => e
       user.destroy
