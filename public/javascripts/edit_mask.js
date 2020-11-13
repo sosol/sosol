@@ -109,8 +109,8 @@ function showExpansions(){
 Event.observe(window, 'load', function() {
   showExpansions();
   jQuery('.category').each(function(e){e.observe('click', toggleCatgory);});
-  jQuery('#expandAll').observe('click', function(e){jQuery('.category').each(function(e){e.next().show();});});
-  jQuery('#collapseAll').observe('click', function(e){jQuery('.category').each(function(e){e.next().hide();});});
+  jQuery('#expandAll').bind('click', function(e){jQuery('.category').each(function(e){e.next().show();});});
+  jQuery('#collapseAll').bind('click', function(e){jQuery('.category').each(function(e){e.next().hide();});});
 });
 
 // todo: if an item has been moved the »observeChange« alert needs to be triggered

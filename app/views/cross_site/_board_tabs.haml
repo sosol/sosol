@@ -28,10 +28,10 @@
   }
   
   
-  Event.observe(document.body, 'click',
+  jQuery('body').bind('click',
     function windowClick(e)
     {
-      var clicked = $(Event.element(e));
+      var clicked = e.target;
       if (clicked.id != 'board_menu')
       { 
         if (jQuery('#board_list')) 

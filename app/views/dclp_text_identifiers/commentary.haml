@@ -10,16 +10,16 @@
     var rangeIE = document.body.createTextRange(); //temporary - selectText function sets for real
   }
 
-  document.observe("dom:loaded", function() {
+  documentjQuery(document).ready( function() {
     jQuery('.commentary#edition li').invoke('observe','click',addCommentary);
     jQuery('.commentary#edition li').each(loadExistingCommentary);
     if (jQuery('#frontmatter_commentary_add')) //only one or the other will exist
       {
-        jQuery('#frontmatter_commentary_add').observe('click',addFrontmatterCommentary);
+        jQuery('#frontmatter_commentary_add').bind('click',addFrontmatterCommentary);
       }
     else 
       {
-        jQuery('#frontmatter_commentary').observe('click',transformExistingFrontmatterCommentary);
+        jQuery('#frontmatter_commentary').bind('click',transformExistingFrontmatterCommentary);
       }
     if (#{!@identifier.mutable?}) {removeAllClickable();}
   });
@@ -32,7 +32,7 @@
     
     if (jQuery('#fm_sugar_content')) //if front matter commentary form is there
       {
-        jQuery('#fm_sugar_content').observe('select', selectText);
+        jQuery('#fm_sugar_content').bind('select', selectText);
 
         //if(Prototype.Browser.IE){
           document.detachEvent('onclick', addObs);
@@ -41,7 +41,7 @@
     
     if (jQuery('#com_sugar_content')) //if line by line commentary form is there
       {
-        jQuery('#com_sugar_content').observe('select', selectText);
+        jQuery('#com_sugar_content').bind('select', selectText);
 
         //if(Prototype.Browser.IE){
           document.detachEvent('onclick', addObs);
@@ -103,11 +103,11 @@
       originalxml = originalxmls[0].value;
     }
     
-    comment_div_container = comment_li.childElements().first();
+    comment_div_container = comment_li.children().first();
     
-    comment_div = comment_div_container.childElements().first();
+    comment_div = comment_div_container.children().first();
     
-    nval_node = comment_div.childElements().first();
+    nval_node = comment_div.children().first();
     nval = nval_node.innerHTML;
     nval_node.remove();
     
@@ -342,12 +342,12 @@
       wrapped_content = "<W:\n\n" + originalleiden.replace(/&/g,'%26') + ":W>";
     }
     
-    new Ajax.Request(request_url, {
-      method: 'post',
-      parameters: $H({content: wrapped_content, type: 'commentary', direction: 'nonxml2xml'}),
-      onSuccess: function(response) {
-        json = response.responseText.evalJSON();
-      
+    fetch(request_url, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'}
+      body: JSON.stringify({content: wrapped_content, type: 'commentary', direction: 'nonxml2xml'})})
+      .then(response => response.json())
+      .then(json => {
         if ("exception" in json) {
           if (jQuery('#notice_notice')) //update if already there, add if not
           {
@@ -394,12 +394,11 @@
           Form.Element.disable('com_sugar_content');
           Form.Element.disable('save_com');
         }
-      },
-      onFailure: function(response) {
+      })
+      .catch(error => {
         // reload after 10 seconds if we failed, should ONLY be used if JCS cache is working
         setTimeout("validateComSugar(" + wrapped_content + ")",10000);
-      }
-    });
+      });
   }
 
   //###########################################################################################
@@ -433,12 +432,12 @@
       wrapped_content = "<W:\n\n" + originalleiden.replace(/&/g,'%26') + ":W>";
     }
     
-    new Ajax.Request(request_url, {
-      method: 'post',
-      parameters: $H({content: wrapped_content, type: 'commentary', direction: 'nonxml2xml'}),
-      onSuccess: function(response) {
-        json = response.responseText.evalJSON();
-      
+    fetch(request_url, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'}
+      body: JSON.stringify({content: wrapped_content, type: 'commentary', direction: 'nonxml2xml'})})
+      .then(response => response.json())
+      .then(json => {
         if ("exception" in json) {
           if (jQuery('#notice_notice')) //update if already there, add if not
           {
@@ -484,12 +483,11 @@
           Form.Element.disable('fm_sugar_content');
           Form.Element.disable('save_fm');
         }
-      },
-      onFailure: function(response) {
+      })
+      catch(error => {
         // reload after 10 seconds if we failed, should ONLY be used if JCS cache is working
         setTimeout("validateFMSugar(" + wrapped_content + ")",10000);
-      }
-    });
+      });
   }
 
   //###########################################################################################
@@ -515,11 +513,12 @@
     // hack for ampersand in URL's - change to encoding to go through xsugar grammar
     wrapped_content = "<wrap>" + originalxml.replace(/&/g,'%26').strip() + "</wrap>";
 
-    new Ajax.Request(request_url, {
-      method: 'post',
-      parameters: $H({content: wrapped_content, type: 'commentary', direction: 'xml2nonxml'}),
-      onSuccess: function(response) {
-        json = response.responseText.evalJSON();
+    fetch(request_url, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'}
+      body: JSON.stringify({content: wrapped_content, type: 'commentary', direction: 'xml2nonxml'})})
+      .then(response => response.json())
+      .then(json => {
       
         if ("exception" in json) {
           if (jQuery('#notice_notice')) //update if already there, add if not
@@ -588,12 +587,11 @@
               Form.Element.enable('save_com');
             }
         }
-      },
-      onFailure: function(response) {
+      })
+      .catch(error => {
         // reload after 10 seconds if we failed, should ONLY be used if JCS cache is working
         setTimeout("getSugar(" + originalxml + ")",10000);
-      }
-    });
+      });
   }
 
   //###########################################################################################

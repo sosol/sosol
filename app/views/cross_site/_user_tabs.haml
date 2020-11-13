@@ -29,10 +29,10 @@
     
   }
 
-  Event.observe(document.body, 'click',
+  jQuery(body).bind('click',
     function windowClick(e)
     {
-      var clicked = $(Event.element(e));
+      var clicked = e.target;
       if (clicked.id != 'community_menu')
       { 
         if (jQuery('#community_list')) 

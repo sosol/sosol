@@ -176,7 +176,7 @@ function multiAddProvenanceRaw(e){
   multiUpdate('provenance', item);
 
   Sortable.create('multiItems_' + geoPlaceKey, {overlap: 'horizontal', constraint: false, handle: 'move'});
-  $(addPlaceKey).observe('click', function(ev){ multiAddPlaceRaw(this); });
+  $(addPlaceKey).bind('click', function(ev){ multiAddPlaceRaw(this); });
 }
 
 function geoUpdateExcludeLists(key){
@@ -636,13 +636,13 @@ Event.observe(window, 'load', function() {
   hideDateTabs();
 
   // submit
-  jQuery('#identifier_submit').observe('click', function(e){checkNotAddedMultiples(); geoReferenceWizard(); rememberToggledView(); set_conf_false();});
+  jQuery('#identifier_submit').bind('click', function(e){checkNotAddedMultiples(); geoReferenceWizard(); rememberToggledView(); set_conf_false();});
 
   jQuery('.quickSave').each(function(e){e.observe('click', function(e){checkNotAddedMultiples(); geoReferenceWizard(); rememberToggledView(); set_conf_false(); jQuery('div#edit form')[0].submit();});});
 
-  jQuery('#identifier_submit').observe('click', geoReferenceWizard);
+  jQuery('#identifier_submit').bind('click', geoReferenceWizard);
 
-  jQuery('#toggleReferenceList').observe('click', toggleReferenceList);
+  jQuery('#toggleReferenceList').bind('click', toggleReferenceList);
 
   jQuery('.addPlace').each(function(el){el.observe('click', function(ev){ multiAddPlaceRaw(el); });});
   jQuery('.addProvenance').each(function(el){el.observe('click', function(ev){ multiAddProvenanceRaw(el); });});

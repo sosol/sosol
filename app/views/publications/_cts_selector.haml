@@ -34,11 +34,11 @@
   
   
   function clear_selector(select_element) {
-    select_element.childElements().each(Element.remove);
+    select_element.children().each(Element.remove);
   }
   
   function populate_selector(select_element,options) {
-    select_element.childElements().each(Element.remove);
+    select_element.children().each(Element.remove);
     
     var count = 0;
     for (var i in options)
@@ -114,7 +114,7 @@
 
   }
   
-  document.observe("dom:loaded", function() {    
+  documentjQuery(document).ready( function() {    
     get_inventory();
   });
   

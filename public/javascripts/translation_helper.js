@@ -31,7 +31,7 @@ function init()
   //add anything you need for initial page load here
   }
   
-document.observe("dom:loaded", init);
+documentjQuery(document).ready( init);
 
 function closeHelper()
 {  

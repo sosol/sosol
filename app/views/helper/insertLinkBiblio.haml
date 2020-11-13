@@ -4,7 +4,7 @@
   var sendBack = "";
   
   function reset_selector(select_element) {
-    select_element.childElements().each(Element.remove);
+    select_element.children().each(Element.remove);
   }
   
   function setFulltext(selected) {
@@ -36,8 +36,8 @@
             select_element.insert("<option value=\"" + v.id + "\" style=\"width:90em\;\">" + v.display + "</option>");
           });
         }
-        select_element.childElements()[0].selected = true;
-        setFulltext(select_element.childElements()[0].innerHTML);
+        select_element.children()[0].selected = true;
+        setFulltext(select_element.children()[0].innerHTML);
         //}
       },
       onFailure: function(response) {

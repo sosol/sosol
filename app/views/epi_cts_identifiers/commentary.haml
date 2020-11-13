@@ -10,16 +10,16 @@
     var rangeIE = document.body.createTextRange(); //temporary - selectText function sets for real
   }
 
-  document.observe("dom:loaded", function() {
+  documentjQuery(document).ready( function() {
     jQuery('.commentary#edition li').invoke('observe','click',addCommentary);
     jQuery('.commentary#edition li').each(loadExistingCommentary);
     if (jQuery('#frontmatter_commentary_add')) //only one or the other will exist
       {
-        jQuery('#frontmatter_commentary_add').observe('click',addFrontmatterCommentary);
+        jQuery('#frontmatter_commentary_add').bind('click',addFrontmatterCommentary);
       }
     else 
       {
-        jQuery('#frontmatter_commentary').observe('click',transformExistingFrontmatterCommentary);
+        jQuery('#frontmatter_commentary').bind('click',transformExistingFrontmatterCommentary);
       }
     if (#{!@identifier.mutable?}) {removeAllClickable();}
   });
@@ -32,7 +32,7 @@
     
     if (jQuery('#fm_sugar_content')) //if front matter commentary form is there
       {
-        jQuery('#fm_sugar_content').observe('select', selectText);
+        jQuery('#fm_sugar_content').bind('select', selectText);
 
         //if(Prototype.Browser.IE){
           document.detachEvent('onclick', addObs);
@@ -41,7 +41,7 @@
     
     if (jQuery('#com_sugar_content')) //if line by line commentary form is there
       {
-        jQuery('#com_sugar_content').observe('select', selectText);
+        jQuery('#com_sugar_content').bind('select', selectText);
 
         //if(Prototype.Browser.IE){
           document.detachEvent('onclick', addObs);
@@ -103,11 +103,11 @@
       originalxml = originalxmls[0].value;
     }
     
-    comment_div_container = comment_li.childElements().first();
+    comment_div_container = comment_li.children().first();
     
-    comment_div = comment_div_container.childElements().first();
+    comment_div = comment_div_container.children().first();
     
-    nval_node = comment_div.childElements().first();
+    nval_node = comment_div.children().first();
     nval = nval_node.innerHTML;
     nval_node.remove();
     
