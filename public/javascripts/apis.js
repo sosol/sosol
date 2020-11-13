@@ -3,76 +3,76 @@
 function provenanceOrigPlaceUnknownToggle(unknown){
   if(unknown.checked){
     
-    if(($$('#multiItems_provenance li.provenance').length == 0) || confirm('Delete all provenance entries?')){
+    if((jQuery('#multiItems_provenance li.provenance').length == 0) || confirm('Delete all provenance entries?')){
       // set value
-      $('geoPreview').innerHMTL = 'unbekannt';
+      jQuery('#geoPreview').innerHMTL = 'unbekannt';
 
       // hide data pane
-      $('multi_provenance').hide();
+      jQuery('#multi_provenance').hide();
 
       // delete geo data
-      $('multiItems_provenance').innerHTML = '';
+      jQuery('#multiItems_provenance').innerHTML = '';
     } else {
       unknown.checked = false;
     }
 
   } else {
    // reset value
-   $('geoPreview').innerHMTL = '';
+   jQuery('#geoPreview').innerHMTL = '';
    
    // show data pane
-   $('multi_provenance').show();
+   jQuery('#multi_provenance').show();
   }
 }
 
 /**** publication ****/
 
 function publicationPreview(){
-  preview = $('apis_identifier_publicationTitle').getValue() + ' ' + 
-            $('apis_identifier_publicationExtra_0_value').getValue() + ' ' +
-            $('apis_identifier_publicationExtra_1_value').getValue() + ' ' +
-            $('apis_identifier_publicationExtra_2_value').getValue() + ' ' +
-            $('apis_identifier_publicationExtra_3_value').getValue() + ' ';
+  preview = jQuery('#apis_identifier_publicationTitle').getValue() + ' ' + 
+            jQuery('#apis_identifier_publicationExtra_0_value').getValue() + ' ' +
+            jQuery('#apis_identifier_publicationExtra_1_value').getValue() + ' ' +
+            jQuery('#apis_identifier_publicationExtra_2_value').getValue() + ' ' +
+            jQuery('#apis_identifier_publicationExtra_3_value').getValue() + ' ';
 
-  $('multiItems_publicationExtra').select('input').each(function(input){
+  jQuery('#multiItems_publicationExtra').select('input').each(function(input){
    
     if(input.type.toLowerCase() != 'hidden'){
       preview += input.getValue() + ' ';
     }
   });
   
-  $('publicationExtraFullTitle').innerHTML = preview;
+  jQuery('#publicationExtraFullTitle').innerHTML = preview;
 }
 
 /**** date ****/
 
 function hideDateTabs(){
-  if($($('apis_identifier_textDate_1_attributes_id').parentNode).getElementsBySelector('span')[0].innerHTML.indexOf('(') >= 0){
+  if($(jQuery('#apis_identifier_textDate_1_attributes_id').parentNode).getElementsBySelector('span')[0].innerHTML.indexOf('(') >= 0){
     
     // hide date tabs
-    $$('div#dateContainer div.dateItem div.dateTab').each(function(e){e.hide();});
+    jQuery('div#dateContainer div.dateItem div.dateTab').each(function(e){e.hide();});
     
     // activate show-button
-    $$('.showDateTabs').each(function(e){e.observe('click', function(ev){showDateTabs();});});
+    jQuery('.showDateTabs').each(function(e){e.observe('click', function(ev){showDateTabs();});});
 
   } else {
 
     // hide show-button
-    $$('.showDateTabs').each(function(e){e.hide();});
+    jQuery('.showDateTabs').each(function(e){e.hide();});
   }
 }
 
 function showDateTabs(){
-  $$('div#dateContainer div.dateItem div.dateTab').each(function(e){e.show();});
-  $$('.showDateTabs').each(function(e){e.hide();});
+  jQuery('div#dateContainer div.dateItem div.dateTab').each(function(e){e.show();});
+  jQuery('.showDateTabs').each(function(e){e.hide();});
 }
 
 function openDateTab(dateId)
 {
-  $$('div#edit div#dateContainer div.dateItem').each(function(dateItem){
+  jQuery('div#edit div#dateContainer div.dateItem').each(function(dateItem){
     dateItem.removeClassName('dateItemActive');
   });
-  $$('div#edit div#dateContainer div.dateItem' + dateId).each(function(dateItem){
+  jQuery('div#edit div#dateContainer div.dateItem' + dateId).each(function(dateItem){
     dateItem.addClassName('dateItemActive');
   });
   
@@ -80,7 +80,7 @@ function openDateTab(dateId)
 }
 
 function toggleMentionedDates(dateId){
-  $$('ul#multiItems_mentionedDate > li').each(function(li, index){
+  jQuery('ul#multiItems_mentionedDate > li').each(function(li, index){
       value = li.select('select.dateId')[0].value;
       if(value == dateId || value == ''){
         li.style.display = 'block';
@@ -89,14 +89,14 @@ function toggleMentionedDates(dateId){
         li.style.display = 'none';
       }
   });
-  $('mentionedDate_dateId').value = dateId;
+  jQuery('#mentionedDate_dateId').value = dateId;
 }
 
 /**** multi ****/
 
 function multiAdd(id)
 {
-  var value = $$('#multiPlus_' + id + ' > input')[0].value;
+  var value = jQuery('#multiPlus_' + id + ' > input')[0].value;
 
   var index = multiGetNextIndex(id);
 
@@ -108,12 +108,12 @@ function multiAdd(id)
              '</li>';
 
   multiUpdate(id, item);
-  $$('#multiPlus_' + id + ' > input')[0].value = "";
+  jQuery('#multiPlus_' + id + ' > input')[0].value = "";
 }
 
 function multiAddTextarea(id)
 {
-  var value = $$('#multiPlus_' + id + ' > textarea')[0].value;
+  var value = jQuery('#multiPlus_' + id + ' > textarea')[0].value;
 
   var index = multiGetNextIndex(id);
 
@@ -125,12 +125,12 @@ function multiAddTextarea(id)
              '</li>';
 
   multiUpdate(id, item);
-  $$('#multiPlus_' + id + ' > textarea')[0].value = "";
+  jQuery('#multiPlus_' + id + ' > textarea')[0].value = "";
 }
 
 function multiAddGenre()
 {
-  var value = $$('#multiPlus_genre > input')[0].value;
+  var value = jQuery('#multiPlus_genre > input')[0].value;
 
   var index = multiGetNextIndex('genre');
 
@@ -142,7 +142,7 @@ function multiAddGenre()
              '</li>';
 
   multiUpdate('genre', item);
-  $$('#multiPlus_genre > input')[0].value = "";
+  jQuery('#multiPlus_genre > input')[0].value = "";
 }
 
 function multiAddCitation() {
@@ -214,8 +214,8 @@ function multiUpdate(id, newItem)
 {
   jQuery('#multiItems_' + id).append(newItem);
   var foo = jQuery('#multiItems_' + id);
-  $$('#multiPlus_' + id + ' > input').each(function(item){item.clear();});
-  $$('#multiPlus_' + id + ' > select').each(function(item){item.clear();});
+  jQuery('#multiPlus_' + id + ' > input').each(function(item){item.clear();});
+  jQuery('#multiPlus_' + id + ' > select').each(function(item){item.clear();});
 
   Sortable.create('multiItems_' + id, {overlap: 'horizontal', constraint: false, handle: 'move'});
 }
@@ -232,17 +232,17 @@ function multiRemove(item)
 function mentionedDateNewDate(dateinput)
 {
   var index = dateinput.id.match(/\d+/)[0];
-  var date1 = $('apis_identifier_mentionedDate_' + index + '_date1').value;
-  var date2 = $('apis_identifier_mentionedDate_' + index + '_date2').value;
+  var date1 = jQuery('#apis_identifier_mentionedDate_' + index + '_date1').value;
+  var date2 = jQuery('#apis_identifier_mentionedDate_' + index + '_date2').value;
   
   if(date2 && date2 != ''){
-    $('apis_identifier_mentionedDate_' + index + '_children_date_attributes_notBefore').value = date1;
-    $('apis_identifier_mentionedDate_' + index + '_children_date_attributes_notAfter').value  = date2;
+    jQuery('#apis_identifier_mentionedDate_' + index + '_children_date_attributes_notBefore').value = date1;
+    jQuery('#apis_identifier_mentionedDate_' + index + '_children_date_attributes_notAfter').value  = date2;
   } else {
-    $('apis_identifier_mentionedDate_' + index + '_children_date_attributes_when').value      = date1;
+    jQuery('#apis_identifier_mentionedDate_' + index + '_children_date_attributes_when').value      = date1;
   }
 
-  mentionedDateNewCertainty($('apis_identifier_mentionedDate_' + index + '_certaintyPicker')); // update certainties as well
+  mentionedDateNewCertainty(jQuery('#apis_identifier_mentionedDate_' + index + '_certaintyPicker')); // update certainties as well
 }
 
 function mentionedDateGetDateTyes(index){
@@ -251,7 +251,7 @@ function mentionedDateGetDateTyes(index){
 
   var dateTypeIndex = 0;
   for(dateTypeIndex = 0; dateTypeIndex < dateTypes.length; dateTypeIndex++){
-    var dateType = $('apis_identifier_mentionedDate_' + index + '_children_date_attributes_' +  dateTypes[dateTypeIndex]);
+    var dateType = jQuery('#apis_identifier_mentionedDate_' + index + '_children_date_attributes_' +  dateTypes[dateTypeIndex]);
     if(dateType && dateType.value && dateType.value.length){
       result[result.length] = dateTypes[dateTypeIndex];
     }
@@ -272,7 +272,7 @@ function checkNotAddedMultiples(){
 }
 
 function toggleReferenceList(){
-  actionElement = $('toggleReferenceList');
+  actionElement = jQuery('#toggleReferenceList');
   
   var display = '';
   
@@ -288,7 +288,7 @@ function toggleReferenceList(){
     display = 'none';
   }
 
-  $$('div.geoReferenceContainer').each(function(e){ e.setStyle( {'display' : display } ); });
+  jQuery('div.geoReferenceContainer').each(function(e){ e.setStyle( {'display' : display } ); });
 
 }
 

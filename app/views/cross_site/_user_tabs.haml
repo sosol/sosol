@@ -2,9 +2,9 @@
   function showCommunityDialog(e)
   {
     
-    var community_list = $('community_list');
+    var community_list = jQuery('#community_list');
     var body = document.body;
-    var community_menu = $('community_menu');
+    var community_menu = jQuery('#community_menu');
     
     body.appendChild(community_list);
     
@@ -35,9 +35,9 @@
       var clicked = $(Event.element(e));
       if (clicked.id != 'community_menu')
       { 
-        if ($('community_list')) 
+        if (jQuery('#community_list')) 
           {
-            $('community_list').style.display = "none";
+            jQuery('#community_list').style.display = "none";
           }
       }
     }

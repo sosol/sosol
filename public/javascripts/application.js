@@ -25,7 +25,7 @@ function showHide(id)
 
 Ajax.Responders.register({
   onCreate: function(request) {
-    var csrf_meta_tag = $$('meta[name=csrf-token]')[0];
+    var csrf_meta_tag = jQuery('meta[name=csrf-token]')[0];
 
     if (csrf_meta_tag) {
       var header = 'X-CSRF-Token',

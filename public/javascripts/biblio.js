@@ -2,8 +2,8 @@
 
 function multiAddNote()
 {
-  var responsibility = $$('#multiPlus_note > textarea')[0].value;
-  var annotation     = $$('#multiPlus_note > textarea')[1].value
+  var responsibility = jQuery('#multiPlus_note > textarea')[0].value;
+  var annotation     = jQuery('#multiPlus_note > textarea')[1].value
 
   var index = multiGetNextIndex('note');
 
@@ -19,8 +19,8 @@ function multiAddNote()
 
 function multiAddShortTitleList(type)
 {
-  var title          = $$('#multiPlus_' + type + ' > input')[0].value;
-  var responsibility = $$('#multiPlus_' + type + ' > select')[0].value;
+  var title          = jQuery('#multiPlus_' + type + ' > input')[0].value;
+  var responsibility = jQuery('#multiPlus_' + type + ' > select')[0].value;
 
   var index = multiGetNextIndex(type);
 
@@ -39,7 +39,7 @@ function multiAddShortTitleList(type)
 
 function multiAddRelatedList(type)
 {
-  var pointer = $$('#multiPlus_' + type + ' > input')[0].value.replace(/\s+/, '');
+  var pointer = jQuery('#multiPlus_' + type + ' > input')[0].value.replace(/\s+/, '');
 
   if(pointer.indexOf('http://papyri.info/biblio/') != 0){
     pointer = 'http://papyri.info/biblio/' +  pointer;
@@ -58,9 +58,9 @@ function multiAddRelatedList(type)
 
 function multiAddNameList(type)
 {
-  var firstName = $$('#multiPlus_' + type + ' > input')[0].value;
-  var lastName  = $$('#multiPlus_' + type + ' > input')[1].value;
-  var name      = $$('#multiPlus_' + type + ' > input')[2].value;
+  var firstName = jQuery('#multiPlus_' + type + ' > input')[0].value;
+  var lastName  = jQuery('#multiPlus_' + type + ' > input')[1].value;
+  var name      = jQuery('#multiPlus_' + type + ' > input')[2].value;
 
   var index = multiGetNextIndex(type);
 
@@ -77,8 +77,8 @@ function multiAddNameList(type)
 
 function multiAddPublisherList()
 {
-  var publisherType  = $$('#multiPlus_publisherList > select')[0].value;
-  var value          = $$('#multiPlus_publisherList > input')[0].value;
+  var publisherType  = jQuery('#multiPlus_publisherList > select')[0].value;
+  var value          = jQuery('#multiPlus_publisherList > input')[0].value;
 
   var index = multiGetNextIndex('publisherList');
 
@@ -97,12 +97,12 @@ function multiAddPublisherList()
 
 function multiAddRelatedArticleList()
 {
-  var series    = $$('#multiPlus_relatedArticleList > input')[0].value;
-  var volume    = $$('#multiPlus_relatedArticleList > input')[1].value;
-  var number    = $$('#multiPlus_relatedArticleList > input')[2].value;
-  var ddb       = $$('#multiPlus_relatedArticleList > input')[3].value;
-  var tm        = $$('#multiPlus_relatedArticleList > input')[4].value;
-  var inventory = $$('#multiPlus_relatedArticleList > input')[5].value;
+  var series    = jQuery('#multiPlus_relatedArticleList > input')[0].value;
+  var volume    = jQuery('#multiPlus_relatedArticleList > input')[1].value;
+  var number    = jQuery('#multiPlus_relatedArticleList > input')[2].value;
+  var ddb       = jQuery('#multiPlus_relatedArticleList > input')[3].value;
+  var tm        = jQuery('#multiPlus_relatedArticleList > input')[4].value;
+  var inventory = jQuery('#multiPlus_relatedArticleList > input')[5].value;
 
   var index = multiGetNextIndex('relatedArticleList');
 
@@ -123,50 +123,50 @@ function multiAddRelatedArticleList()
 /**** check ****/
 
 function checkNotAddedMultiples(){
-  if($('authorList_firstName').value.match(/.+/) || $('authorList_lastName').value.match(/.+/) || $('authorList_name').value.match(/.+/)){
+  if(jQuery('#authorList_firstName').value.match(/.+/) || jQuery('#authorList_lastName').value.match(/.+/) || jQuery('#authorList_name').value.match(/.+/)){
     multiAddNameList('authorList');
   }
 
-  if($('editorList_firstName').value.match(/.+/) || $('editorList_lastName').value.match(/.+/) || $('editorList_name').value.match(/.+/)){
+  if(jQuery('#editorList_firstName').value.match(/.+/) || jQuery('#editorList_lastName').value.match(/.+/) || jQuery('#editorList_name').value.match(/.+/)){
     multiAddNameList('editorList');
   }
 
-  if($('journalTitleShort_title').value.match(/.+/)){
+  if(jQuery('#journalTitleShort_title').value.match(/.+/)){
     multiAddShortTitleList('journalTitleShort');
   }
 
-  if($('bookTitleShort_title').value.match(/.+/)){
+  if(jQuery('#bookTitleShort_title').value.match(/.+/)){
     multiAddShortTitleList('bookTitleShort');
   }
 
-  if($('papyrologicalSeriesTitleShort_title').value.match(/.+/)){
+  if(jQuery('#papyrologicalSeriesTitleShort_title').value.match(/.+/)){
     multiAddShortTitleList('papyrologicalSeriesTitleShort');
   }
 
-  if($('note_responsibility').value.match(/.+/) && $('note_annotation').value.match(/.+/)){
+  if(jQuery('#note_responsibility').value.match(/.+/) && jQuery('#note_annotation').value.match(/.+/)){
     multiAddNote();
   }
 
-  if($('containerList_pointer').value.match(/.+/)){
+  if(jQuery('#containerList_pointer').value.match(/.+/)){
     multiAddRelatedList('containerList');
   }
 
-  if($('revieweeList_pointer').value.match(/.+/)){
+  if(jQuery('#revieweeList_pointer').value.match(/.+/)){
     multiAddRelatedList('revieweeList');
   }
 
-  if($('publisherList_publisherType').value.match(/.+/) && $('publisherList_value').value.match(/.+/)){
+  if(jQuery('#publisherList_publisherType').value.match(/.+/) && jQuery('#publisherList_value').value.match(/.+/)){
     multiAddPublisherList();
   }
 
-  if($('relatedArticleList_series').value.match(/.+/) || $('relatedArticleList_inventory').value.match(/.+/)){
+  if(jQuery('#relatedArticleList_series').value.match(/.+/) || jQuery('#relatedArticleList_inventory').value.match(/.+/)){
     multiAddRelatedArticleList();
   }
 }
 
 Event.observe(window, 'load', function() {
 
-  $$('.quickSave').each(function(e){e.observe('click', function(e){checkNotAddedMultiples(); rememberToggledView(); set_conf_false(); $$('form.edit_biblio_identifier')[0].submit();});});
-  $('identifier_submit').observe('click', checkNotAddedMultiples);
+  jQuery('.quickSave').each(function(e){e.observe('click', function(e){checkNotAddedMultiples(); rememberToggledView(); set_conf_false(); jQuery('form.edit_biblio_identifier')[0].submit();});});
+  jQuery('#identifier_submit').observe('click', checkNotAddedMultiples);
 
 });

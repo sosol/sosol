@@ -4,30 +4,30 @@
   }
   function get_collection_prefix() {
     var prefix = get_proxy_prefix() + "#{request.domain == 'papyri.info' ? '' : '/papyri.info'}";
-    if($F('IdentifierClass') == 'DDBIdentifier') {
-      return prefix + '/ddbdp/' + $F('DDBIdentifierCollectionSelect');
+    if(jQuery('#IdentifierClass').val() == 'DDBIdentifier') {
+      return prefix + '/ddbdp/' + jQuery('#DDBIdentifierCollectionSelect').val();
     }
     else {
-      if($F('IdentifierClass') == 'HGVIdentifier') {
-        return prefix + '/hgv/' + $F('HGVIdentifierCollectionSelect');
+      if(jQuery('#IdentifierClass').val() == 'HGVIdentifier') {
+        return prefix + '/hgv/' + jQuery('#HGVIdentifierCollectionSelect').val();
       }
       else {
-        return prefix + '/apis/' + $F('APISIdentifierCollectionSelect');
+        return prefix + '/apis/' + jQuery('#APISIdentifierCollectionSelect').val();
       }
     }
   }
   
   function get_collection_uri() {
     var prefix = "http://papyri.info";
-    if($F('IdentifierClass') == 'DDBIdentifier') {
-      return prefix + '/ddbdp/' + $F('DDBIdentifierCollectionSelect');
+    if(jQuery('#IdentifierClass').val() == 'DDBIdentifier') {
+      return prefix + '/ddbdp/' + jQuery('#DDBIdentifierCollectionSelect').val();
     }
     else {
-      if($F('IdentifierClass') == 'HGVIdentifier') {
-        return prefix + '/hgv/' + $F('HGVIdentifierCollectionSelect');
+      if(jQuery('#IdentifierClass').val() == 'HGVIdentifier') {
+        return prefix + '/hgv/' + jQuery('#HGVIdentifierCollectionSelect').val();
       }
       else {
-        return prefix + '/apis/' + $F('APISIdentifierCollectionSelect');
+        return prefix + '/apis/' + jQuery('#APISIdentifierCollectionSelect').val();
       }
     }
   }
@@ -73,7 +73,7 @@
       request_url = get_collection_prefix();
     }
     if(!(volume_number === undefined)) {
-      if($F('IdentifierClass') == 'DDBIdentifier') {
+      if(jQuery('#IdentifierClass').val() == 'DDBIdentifier') {
         request_url = request_url + ';' + volume_number + "#{request.domain == 'papyri.info' ? '/json' : ''}";
       }
       else {
@@ -81,7 +81,7 @@
         request_url = construct_hgv_sparql_query(volume_reference);
       }
     }
-    else if(!(($F('IdentifierClass') == 'HGVIdentifier') && (disable_volume == true))) {
+    else if(!((jQuery('#IdentifierClass').val() == 'HGVIdentifier') && (disable_volume == true))) {
       request_url = request_url + "#{request.domain == 'papyri.info' ? '/json' : ''}";
     }
     new Ajax.Request(request_url, {
@@ -95,7 +95,7 @@
         var is_hgv_identifier = false;
         var subject;
         if (volume_number) {
-          if($F('IdentifierClass') == 'HGVIdentifier') {
+          if(jQuery('#IdentifierClass').val() == 'HGVIdentifier') {
             subject = get_collection_uri() + "_" + volume_number;
           }
           else {
@@ -106,22 +106,22 @@
         }
         var parts = json[subject]['http://purl.org/dc/terms/hasPart'];
         var values = parts.collect(function(p) {
-          if($F('IdentifierClass') == 'HGVIdentifier') {
+          if(jQuery('#IdentifierClass').val() == 'HGVIdentifier') {
             // for HGV if we get HGV id's back immediately (i.e. no vols)
             // we want to re-run the query with SPARQL
             if((!disable_volume) && p['value'].match(/hgv\/\d+\D*\/source$/)) {
               disable_volume = true;
               reset_selector(select_element);
               is_hgv_identifier = true;
-              sparql_query = construct_hgv_sparql_query($F('HGVIdentifierCollectionSelect'));
-              get_allowed_values($('document_number'), undefined,
+              sparql_query = construct_hgv_sparql_query(jQuery('#HGVIdentifierCollectionSelect').val());
+              get_allowed_values(jQuery('#document_number'), undefined,
                 sparql_query,
                 disable_volume);
               toggle_availability();
             }
           }
           else if(!disable_volume && p['value'].match(/;;/)) {
-            select_element = $('document_number');
+            select_element = jQuery('#document_number');
             reset_selector(select_element);
             disable_volume = true;
           }
@@ -130,10 +130,10 @@
             // ; for DDB and _ for HGV
             var elements = p['value'].split(/[;_]/);
             var lastpart;
-            if($F('IdentifierClass') == 'HGVIdentifier') {
-              lastpart = p['value'].sub(new RegExp('^.*\\/' + $F('HGVIdentifierCollectionSelect') + '_'),'');
-              if(select_element == $('document_number') && !disable_volume) {
-                lastpart = lastpart.sub(new RegExp($F('volume_number')+ '_'),'');
+            if(jQuery('#IdentifierClass').val() == 'HGVIdentifier') {
+              lastpart = p['value'].sub(new RegExp('^.*\\/' + jQuery('#HGVIdentifierCollectionSelect').val() + '_'),'');
+              if(select_element == jQuery('#document_number') && !disable_volume) {
+                lastpart = lastpart.sub(new RegExp(jQuery('#volume_number').val()+ '_'),'');
               }
             }
             else {
@@ -155,10 +155,10 @@
           select_element.childElements()[0].selected = true;
           toggle_availability();
           if(disable_volume) {
-            $('volume_number').disabled = true;
+            jQuery('#volume_number').disabled = true;
           }
-          else if(select_element == $('volume_number')) {
-            $('document_number').disabled = true;
+          else if(select_element == jQuery('#volume_number')) {
+            jQuery('#document_number').disabled = true;
           }
         }
       } //end on success function
@@ -172,8 +172,8 @@
 
   function get_apis_documents() {
 
-    reset_selector($('document_number'));
-    select_element = $('document_number')
+    reset_selector(jQuery('#document_number'));
+    select_element = jQuery('#document_number')
 
     request_url = get_collection_prefix();
 
@@ -186,7 +186,7 @@
 
         is_hgv_identifier = false;
         
-        parts = json["http://papyri.info/apis/" + $F('APISIdentifierCollectionSelect')]['http://purl.org/dc/terms/hasPart'];
+        parts = json["http://papyri.info/apis/" + jQuery('#APISIdentifierCollectionSelect').val()]['http://purl.org/dc/terms/hasPart'];
 
         values = parts.collect(function(p) {
 
@@ -210,18 +210,18 @@
   } //end get_apis_documents
   
   function update_volumes() {
-    get_allowed_values($('volume_number'));
+    get_allowed_values(jQuery('#volume_number'));
   }
   function update_documents() {
-    get_allowed_values($('document_number'),$F('volume_number'));
+    get_allowed_values(jQuery('#document_number'),jQuery('#volume_number').val());
   }
   
   function reset_vol_doc_em() {
-    reset_selector($('volume_number'));
-    reset_selector($('document_number'));
-    $('volume_number').disabled=true;
-    $('document_number').disabled=true;
-    $('emend_button').disabled=true;
+    reset_selector(jQuery('#volume_number'));
+    reset_selector(jQuery('#document_number'));
+    jQuery('#volume_number').disabled=true;
+    jQuery('#document_number').disabled=true;
+    jQuery('#emend_button').disabled=true;
   }
 
   function IDClassChange(class_selected) {
@@ -229,19 +229,19 @@
     switch(class_selected)
     {
     case "DDBIdentifier":
-      $('DDBIdentifierCollectionSelect').removeClassName('invisible');
-      $('HGVIdentifierCollectionSelect').addClassName('invisible');
-      $('APISIdentifierCollectionSelect').addClassName('invisible');
+      jQuery('#DDBIdentifierCollectionSelect').removeClassName('invisible');
+      jQuery('#HGVIdentifierCollectionSelect').addClassName('invisible');
+      jQuery('#APISIdentifierCollectionSelect').addClassName('invisible');
       break;
     case "HGVIdentifier":
-      $('DDBIdentifierCollectionSelect').addClassName('invisible');
-      $('HGVIdentifierCollectionSelect').removeClassName('invisible');
-      $('APISIdentifierCollectionSelect').addClassName('invisible');
+      jQuery('#DDBIdentifierCollectionSelect').addClassName('invisible');
+      jQuery('#HGVIdentifierCollectionSelect').removeClassName('invisible');
+      jQuery('#APISIdentifierCollectionSelect').addClassName('invisible');
       break;
     case "APISIdentifier":
-      $('DDBIdentifierCollectionSelect').addClassName('invisible');
-      $('HGVIdentifierCollectionSelect').addClassName('invisible');
-      $('APISIdentifierCollectionSelect').removeClassName('invisible');
+      jQuery('#DDBIdentifierCollectionSelect').addClassName('invisible');
+      jQuery('#HGVIdentifierCollectionSelect').addClassName('invisible');
+      jQuery('#APISIdentifierCollectionSelect').removeClassName('invisible');
       break;
     default: 
       alert("The following value needs to be added to the IDClassChange Javascript function - " + class_selected);
@@ -251,17 +251,17 @@
   }
   
   document.observe("dom:loaded", function() {
-    $('IdentifierClass').childElements()[0].selected = true;
-    $('DDBIdentifierCollectionSelect').childElements()[0].selected = true;
-    $('HGVIdentifierCollectionSelect').childElements()[0].selected = true;
+    jQuery('#IdentifierClass').childElements()[0].selected = true;
+    jQuery('#DDBIdentifierCollectionSelect').childElements()[0].selected = true;
+    jQuery('#HGVIdentifierCollectionSelect').childElements()[0].selected = true;
     
-    $('DDBIdentifierCollectionSelect').removeClassName('invisible');
-    $('HGVIdentifierCollectionSelect').addClassName('invisible');
+    jQuery('#DDBIdentifierCollectionSelect').removeClassName('invisible');
+    jQuery('#HGVIdentifierCollectionSelect').addClassName('invisible');
 
-    if ($('APISIdentifierCollectionSelect')) //only when used in helper pop up
+    if (jQuery('#APISIdentifierCollectionSelect')) //only when used in helper pop up
       {
-        $('APISIdentifierCollectionSelect').childElements()[0].selected = true;
-        $('APISIdentifierCollectionSelect').addClassName('invisible');
+        jQuery('#APISIdentifierCollectionSelect').childElements()[0].selected = true;
+        jQuery('#APISIdentifierCollectionSelect').addClassName('invisible');
       }
     
     reset_vol_doc_em();
@@ -272,14 +272,14 @@
   = form_tag :controller => 'publications', :action => "create_from_selector" do
     -if emend == :helper
       = select_tag('IdentifierClass', options_for_select([%w{DDB DDBIdentifier},%w{HGV HGVIdentifier},%w{APIS APISIdentifier}]), :onchange => "IDClassChange(this.options[this.selectedIndex].value);".html_safe)
-      = select_tag("APISIdentifierCollectionSelect", options_for_select([['','']] + APISIdentifier.collection_names_hash.sort), :class => 'invisible', :onchange => "reset_selector($('document_number'));$('volume_number').disabled=true;$('document_number').disabled='';$('emend_button').disabled='';get_apis_documents();if(this.options[0].value==''){this.remove(0)}".html_safe)
+      = select_tag("APISIdentifierCollectionSelect", options_for_select([['','']] + APISIdentifier.collection_names_hash.sort), :class => 'invisible', :onchange => "reset_selector(jQuery('#document_number'));jQuery('#volume_number').disabled=true;jQuery('#document_number').disabled='';jQuery('#emend_button').disabled='';get_apis_documents();if(this.options[0].value==''){this.remove(0)}".html_safe)
     -else
       = select_tag('IdentifierClass', options_for_select([%w{DDB DDBIdentifier},%w{HGV HGVIdentifier},%w{APIS APISIdentifier}]), 
-        :onchange => "['DDB','HGV','APIS'].each(function(i){if ($('IdentifierClass').getValue() == i + 'Identifier') {$(i + 'IdentifierCollectionSelect').removeClassName('invisible')} else {$(i + 'IdentifierCollectionSelect').addClassName('invisible')}}); reset_vol_doc_em();".html_safe)
+        :onchange => "['DDB','HGV','APIS'].each(function(i){if (jQuery('#IdentifierClass').getValue() == i + 'Identifier') {$(i + 'IdentifierCollectionSelect').removeClassName('invisible')} else {$(i + 'IdentifierCollectionSelect').addClassName('invisible')}}); reset_vol_doc_em();".html_safe)
     - [DDBIdentifier, HGVIdentifier].each do |identifier_class|
-      = select_tag("#{identifier_class}CollectionSelect", options_for_select([['','']] + identifier_class.collection_names_hash.invert.sort), :class => identifier_class == DDBIdentifier ? '' : 'invisible', :onchange => "reset_selector($('document_number'));$('volume_number').disabled='';update_volumes();$('document_number').disabled=true;$('emend_button').disabled='';if(this.options[0].value==''){this.remove(0)}".html_safe)
-    = select_tag("APISIdentifierCollectionSelect", options_for_select([['','']] + APISIdentifier.collection_names_hash.sort), :class => 'invisible', :onchange => "reset_selector($('document_number')); $('volume_number').disabled=true; $('document_number').disabled=''; $('emend_button').disabled=''; get_apis_documents(); if(this.options[0].value==''){this.remove(0)}".html_safe)
-    = select_tag 'volume_number', nil, :disabled => true, :style => 'min-width: 5em;', :onchange => "$('document_number').disabled='';update_documents();if(this.options[0].value==''){this.remove(0)}".html_safe
+      = select_tag("#{identifier_class}CollectionSelect", options_for_select([['','']] + identifier_class.collection_names_hash.invert.sort), :class => identifier_class == DDBIdentifier ? '' : 'invisible', :onchange => "reset_selector(jQuery('#document_number'));jQuery('#volume_number').disabled='';update_volumes();jQuery('#document_number').disabled=true;jQuery('#emend_button').disabled='';if(this.options[0].value==''){this.remove(0)}".html_safe)
+    = select_tag("APISIdentifierCollectionSelect", options_for_select([['','']] + APISIdentifier.collection_names_hash.sort), :class => 'invisible', :onchange => "reset_selector(jQuery('#document_number')); jQuery('#volume_number').disabled=true; jQuery('#document_number').disabled=''; jQuery('#emend_button').disabled=''; get_apis_documents(); if(this.options[0].value==''){this.remove(0)}".html_safe)
+    = select_tag 'volume_number', nil, :disabled => true, :style => 'min-width: 5em;', :onchange => "jQuery('#document_number').disabled='';update_documents();if(this.options[0].value==''){this.remove(0)}".html_safe
     = select_tag 'document_number', nil, :disabled => true, :style => 'min-width: 5em;', :onchange => "if(this.options[0].value==''){this.remove(0)};".html_safe
     -if emend == :showemend
       = submit_tag "Emend", :disabled => true, :id => 'emend_button'

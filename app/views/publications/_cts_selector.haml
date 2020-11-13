@@ -11,7 +11,7 @@
   
   function get_inventory()
   {
-      var inventory = $F('CTSIdentifierCollectionSelect');
+      var inventory = jQuery('#CTSIdentifierCollectionSelect').val();
       
       // if we don't already have this inventory's data, retrieve it and ppopulate the selector
       
@@ -62,53 +62,53 @@
   }
   
   function update_group_urns() {
-    $('emend_button').disabled = true;
-    $('create_button').disabled = true;
-    clear_selector($('edition_urn'));
-    clear_selector($('work_urn'));
-    var inventory = $F('CTSIdentifierCollectionSelect');
+    jQuery('#emend_button').disabled = true;
+    jQuery('#create_button').disabled = true;
+    clear_selector(jQuery('#edition_urn'));
+    clear_selector(jQuery('#work_urn'));
+    var inventory = jQuery('#CTSIdentifierCollectionSelect').val();
     //  populate the textgroup selector
     var groups = inventories[inventory];
-    populate_selector($('group_urn'),groups);
+    populate_selector(jQuery('#group_urn'),groups);
     update_work_urns();
   }
   
   function update_work_urns() {
-    $('emend_button').disabled = true;
-    $('create_button').disabled = true;
-    clear_selector($('edition_urn'));
+    jQuery('#emend_button').disabled = true;
+    jQuery('#create_button').disabled = true;
+    clear_selector(jQuery('#edition_urn'));
     // get the works for the selected textgroup and populate the work selector
-    var inventory = $F('CTSIdentifierCollectionSelect');
-    var textgroup = $F('group_urn');
+    var inventory = jQuery('#CTSIdentifierCollectionSelect').val();
+    var textgroup = jQuery('#group_urn').val();
     if (textgroup) {
       var works = inventories[inventory][textgroup].works;
-      populate_selector($('work_urn'),works);
+      populate_selector(jQuery('#work_urn'),works);
       update_edition_urns();
     }
     // hack to disable Create for perseus editions for now
     
     if (inventory != 'perseus') {
-      $('create_button').disabled = false;
+      jQuery('#create_button').disabled = false;
     }
   }
   
   function update_edition_urns()
   {
-    $('emend_button').disabled = true;
+    jQuery('#emend_button').disabled = true;
     // get the editions for the selected textgroup and work and populate the edition selector
-    var inventory = $F('CTSIdentifierCollectionSelect');
-    var textgroup = $F('group_urn');
-    var work = $F('work_urn').replace(textgroup+".",'');
+    var inventory = jQuery('#CTSIdentifierCollectionSelect').val();
+    var textgroup = jQuery('#group_urn').val();
+    var work = jQuery('#work_urn').val().replace(textgroup+".",'');
     if (work) {
       var editions = inventories[inventory][textgroup].works[work].editions
       
       if (editions) {
-        populate_selector($('edition_urn'),editions)
-        $('emend_button').disabled = false;
+        populate_selector(jQuery('#edition_urn'),editions)
+        jQuery('#emend_button').disabled = false;
       } else {
         // still need to empty it out
-        populate_selector($('edition_urn'),{})
-        $('emend_button').disabled = true;
+        populate_selector(jQuery('#edition_urn'),{})
+        jQuery('#emend_button').disabled = true;
       }
     }
 
@@ -125,7 +125,7 @@
     %p{:class => ['cts_selector_hint']}== Select a publication to work with:
     = hidden_field_tag 'IdentifierClass','CTSIdentifier'
     - [CTSIdentifier].each do |identifier_class|
-      = select_tag("#{identifier_class}CollectionSelect", options_for_select(identifier_class.inventories_hash.keys), :onchange => "get_inventory();$('emend_button').disabled='';if(this.options[0].value==''){this.remove(0)}")
+      = select_tag("#{identifier_class}CollectionSelect", options_for_select(identifier_class.inventories_hash.keys), :onchange => "get_inventory();jQuery('#emend_button').disabled='';if(this.options[0].value==''){this.remove(0)}")
     = select_tag 'group_urn', nil, :disabled => true, :style => 'min-width: 5em;', :onchange => "update_work_urns();"
     = select_tag 'work_urn', nil, :disabled => true, :style => 'min-width: 5em;', :onchange => "update_edition_urns();"
     = select_tag 'edition_urn', nil, :disabled => true, :style => 'min-width: 5em;', :onchange => "if(this.options[0].value==''){this.remove(0)};"

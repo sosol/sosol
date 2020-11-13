@@ -23,7 +23,7 @@
       //div.style.display = "block";
     }    
  
-    var batch_boxes = $$('div.batch_box');
+    var batch_boxes = jQuery('div.batch_box');
     for (var i = 0; i < batch_boxes.length; i++) {
       batch_boxes[i].style.display = "none";
     }
@@ -58,7 +58,7 @@
     body.appendChild(vote);
     
     
-    //var vote_divs = $$('div.vote');
+    //var vote_divs = jQuery('div.vote');
     //for (var i = 0; i < vote_divs.length; i++) {
     //  vote_divs[i].style.display = "none";
     //}
@@ -146,7 +146,7 @@
     }
   
  
-    var finalizings = $$('div.finalizing');
+    var finalizings = jQuery('div.finalizing');
     for (var i = 0; i < finalizings.length; i++) {
       finalizings[i].style.display = "none";
     }

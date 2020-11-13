@@ -11,9 +11,9 @@
   
   function get_inventory()
   {
-      var inventory = $F('CTSIdentifierCollectionSelect');
+      var inventory = jQuery('#CTSIdentifierCollectionSelect').val();
       
-        var request_url = get_collection_prefix() + "/translations?inventory=" + inventory + "&urn=" + $F('CTSIdentifierEditionSelect');
+        var request_url = get_collection_prefix() + "/translations?inventory=" + inventory + "&urn=" + jQuery('#CTSIdentifierEditionSelect').val();
         new Ajax.Request(request_url, {
           method: 'get',
           dataType: 'application/json',
@@ -42,26 +42,26 @@
     }
     
     if (count == 0) {
-      $$('p.cts_selector_hint')[0].innerHTML = 'No existing translations';
+      jQuery('p.cts_selector_hint')[0].innerHTML = 'No existing translations';
       select_element.disabled = true;
       select_element.hide();
-      $('emend_button').disabled = true;
-      $('emend_button').hide();
-      $('emend_or_create').hide();
+      jQuery('#emend_button').disabled = true;
+      jQuery('#emend_button').hide();
+      jQuery('#emend_or_create').hide();
     } else {
       if (count > 1) {
         select_element.insert("<option value=''>click to select...</option>");
       } 
-      $('emend_button').disabled = false;
+      jQuery('#emend_button').disabled = false;
       select_element.disabled = false;
     }
-    $('create_button').disabled = false;
+    jQuery('#create_button').disabled = false;
   }
   
     
    function update_translation_urns()
   {
-    populate_selector($('edition_urn'),editions.editions)
+    populate_selector(jQuery('#edition_urn'),editions.editions)
   }
   
   document.observe("dom:loaded", function() {    

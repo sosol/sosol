@@ -1,7 +1,7 @@
 (function() {
   Ajax.Responders.register({
     onCreate: function(request) {
-      var token = $$('meta[name=csrf-token]')[0];
+      var token = jQuery('meta[name=csrf-token]')[0];
       if (token) {
         if (!request.options.requestHeaders) request.options.requestHeaders = {};
         request.options.requestHeaders['X-CSRF-Token'] = token.readAttribute('content');
@@ -121,8 +121,8 @@
   function handleMethod(element) {
     var method = element.readAttribute('data-method'),
         url = element.readAttribute('href'),
-        csrf_param = $$('meta[name=csrf-param]')[0],
-        csrf_token = $$('meta[name=csrf-token]')[0];
+        csrf_param = jQuery('meta[name=csrf-param]')[0],
+        csrf_token = jQuery('meta[name=csrf-token]')[0];
 
     var form = new Element('form', { method: "POST", action: url, style: "display: none;" });
     $(element.parentNode).insert(form);

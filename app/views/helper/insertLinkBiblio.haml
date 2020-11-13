@@ -25,8 +25,8 @@
         json = response.responseText.evalJSON();
   
         document.getElementById("numfound").innerHTML = json.response.numFound + " Bibliography Records Found";
-        reset_selector($('biblio_selected'));
-        select_element = $('biblio_selected');
+        reset_selector(jQuery('#biblio_selected'));
+        select_element = jQuery('#biblio_selected');
         if (json.response.numFound == 0) {
           //select_element.insert("<option value=\"no bibliography records found\" style=\"width:80em\;\">no bibliography records found</option>");
           select_element.insert("<option value=\"" + "no bibliography records found" + "\" style=\"width:90em\;\">" + "no bibliography records found" + "</option>");

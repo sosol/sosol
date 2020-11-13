@@ -2,9 +2,9 @@
   function showBoardDialog(e)
   {
     
-    var board_list = $('board_list');
+    var board_list = jQuery('#board_list');
     var body = document.body;
-    var board_menu = $('board_menu');
+    var board_menu = jQuery('#board_menu');
     
     body.appendChild(board_list);
     
@@ -34,9 +34,9 @@
       var clicked = $(Event.element(e));
       if (clicked.id != 'board_menu')
       { 
-        if ($('board_list')) 
+        if (jQuery('#board_list')) 
           {
-            $('board_list').style.display = "none";
+            jQuery('#board_list').style.display = "none";
           }
       }
     }

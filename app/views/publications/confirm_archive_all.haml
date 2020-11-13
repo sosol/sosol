@@ -1,8 +1,8 @@
 :javascript
   function show_working_image() {
     //you have to submit the form before class toggle or does not work correctly
-    $('archive_all_form').submit();
-    $('show_working').toggleClassName('loading');
+    jQuery('#archive_all_form').submit();
+    jQuery('#show_working').toggleClassName('loading');
     Effect.SlideDown('show_working_div');
   }
 

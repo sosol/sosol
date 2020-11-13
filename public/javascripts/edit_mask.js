@@ -1,8 +1,8 @@
 /**** multi ****/
 
 function multiAdd(id, minimumIndex = 0, pathToActualValue = null) {
-  if($$('#multiPlus_' + id + ' > input') && $$('#multiPlus_' + id + ' > input').length){
-    var value = $$('#multiPlus_' + id + ' > input')[0].value;
+  if(jQuery('#multiPlus_' + id + ' > input') && jQuery('#multiPlus_' + id + ' > input').length){
+    var value = jQuery('#multiPlus_' + id + ' > input')[0].value;
     var idSuffix   = typeof pathToActualValue == 'string' ? '_' + pathToActualValue : '';
     var nameSuffix = typeof pathToActualValue == 'string' ? '[' + pathToActualValue.replace(/_/g, '][') + ']' : '';
 
@@ -31,7 +31,7 @@ function multiGetNextIndex(id) {
   }
   
   var index = 0;
-  $$(path).each(function(item){
+  jQuery(path).each(function(item){
     var itemIndex = item.id.match(/(\d+)[^\d]*$/)[1] * 1;
     if(index <= itemIndex){
       index = itemIndex + 1;
@@ -41,11 +41,11 @@ function multiGetNextIndex(id) {
 }
 
 function multiUpdate(id, newItem) {
-  $('multiItems_' + id).insert(newItem);
+  jQuery('#multiItems_' + id).insert(newItem);
 
-  $$('#multiPlus_' + id + ' > input').each(function(item){item.clear();});
-  $$('#multiPlus_' + id + ' > select').each(function(item){item.clear();});
-  $$('#multiPlus_' + id + ' > textarea').each(function(item){item.clear();});
+  jQuery('#multiPlus_' + id + ' > input').each(function(item){item.clear();});
+  jQuery('#multiPlus_' + id + ' > select').each(function(item){item.clear();});
+  jQuery('#multiPlus_' + id + ' > textarea').each(function(item){item.clear();});
 
   Sortable.create('multiItems_' + id, {overlap: 'horizontal', constraint: false, handle: 'move'});
 }
@@ -69,7 +69,7 @@ function toggleCatgory(event) {
 function rememberToggledView(){
   var expansionSet = '';
 
-  $$('.category').each(function(e){
+  jQuery('.category').each(function(e){
 
     if(e.next().visible()){
       expansionSet += e.classNames().reject(function(item){
@@ -78,20 +78,20 @@ function rememberToggledView(){
     }
   });
 
-  $('expansionSet').value = expansionSet;
+  jQuery('#expansionSet').value = expansionSet;
 
   return expansionSet;
 }
 
 function showExpansions(){
-  var flash = $('expansionSet').value;
+  var flash = jQuery('#expansionSet').value;
   var anchor_match = document.URL.match(/#[A-Za-z]+/);
   var anchor = anchor_match ? anchor_match[0] : '';
   anchor = anchor.substr(1,1).toLowerCase() + anchor.substr(2);
 
   var expansionSet = flash + ';' + anchor;
   
-  $$('.category').each(function(e){
+  jQuery('.category').each(function(e){
 
     var classy = e.classNames().reject(function(item){
         return item == 'category' ? true : false;
@@ -101,16 +101,16 @@ function showExpansions(){
       e.next().show();
     }
   });
-  $('expansionSet').value = '';
+  jQuery('#expansionSet').value = '';
   return flash;
 }
 
 
 Event.observe(window, 'load', function() {
   showExpansions();
-  $$('.category').each(function(e){e.observe('click', toggleCatgory);});
-  $('expandAll').observe('click', function(e){$$('.category').each(function(e){e.next().show();});});
-  $('collapseAll').observe('click', function(e){$$('.category').each(function(e){e.next().hide();});});
+  jQuery('.category').each(function(e){e.observe('click', toggleCatgory);});
+  jQuery('#expandAll').observe('click', function(e){jQuery('.category').each(function(e){e.next().show();});});
+  jQuery('#collapseAll').observe('click', function(e){jQuery('.category').each(function(e){e.next().hide();});});
 });
 
 // todo: if an item has been moved the »observeChange« alert needs to be triggered

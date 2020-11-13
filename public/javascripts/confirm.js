@@ -6,21 +6,21 @@
   var needToConfirmVote = false;
   
   // Add a change observer to each element with the observechange CSS class
-  $$('.observechange').invoke('observe', 'change', function(event) {
+  jQuery('.observechange').invoke('observe', 'change', function(event) {
     set_conf_true();
   });
   
-  $$('.observechangevote').invoke('observe', 'change', function(event) { 
+  jQuery('.observechangevote').invoke('observe', 'change', function(event) { 
     set_conf_true_vote();
   });
   
   // Add a change observer to commenttop with the observechangecomtop CSS class
-  $$('.observechangecomtop').invoke('observe', 'change', function(event) {
+  jQuery('.observechangecomtop').invoke('observe', 'change', function(event) {
     document.getElementById("comment").disabled = true;
   });
   
   // Add a change observer to comment with the observechangecomment CSS class
-  $$('.observechangecomment').invoke('observe', 'change', function(event) {
+  jQuery('.observechangecomment').invoke('observe', 'change', function(event) {
     document.getElementById("commenttop").disabled = true;
   });
   

@@ -17,10 +17,10 @@
     
     new Ajax.Request(request_url, {
       method: 'post',
-      parameters: $H({content: $F('ddb_identifier_leiden_plus'), type: 'epidoc', direction: 'xml2nonxml'}),
+      parameters: $H({content: jQuery('#ddb_identifier_leiden_plus').val(), type: 'epidoc', direction: 'xml2nonxml'}),
       onSuccess: function(response) {
         json = response.responseText.evalJSON();
-        $('ddb_identifier_leiden_plus').toggleClassName('loading');
+        jQuery('#ddb_identifier_leiden_plus').toggleClassName('loading');
         
         if ("exception" in json) {
           insert_flash_error('Error converting XML to Leiden+ approximately at line ' + json.exception.line + ' column ' + json.exception.column + '. Please correct the error <a href="' + '#{polymorphic_path([@identifier.publication, @identifier], :action => :editxml)}' + '">on the XML page</a>.');
@@ -35,9 +35,9 @@
         }
         else {
           //remove exisiting flash error if it is there when successfully completed
-          if ($('flasherror')) 
+          if (jQuery('#flasherror')) 
             {
-              $('flasherror').remove();
+              jQuery('#flasherror').remove();
             }
           Form.Element.setValue('ddb_identifier_leiden_plus',json.content);
           if (!was_disabled) {
@@ -63,18 +63,18 @@
   
   function insert_flash_error(msg){
     
-    if ($('flasherror')) 
+    if (jQuery('#flasherror')) 
       {
-        $('flasherror').update(msg);
+        jQuery('#flasherror').update(msg);
       }
       else
       {
-        $$('div#main > div.site').first().insert({
+        jQuery('div#main > div.site').first().insert({
           top: new Element('div',{'id': 'flasherror'}).update(msg)
         });
 
         //add class after the original insert to get the flash highlighting to work in IE browser
-        $('flasherror').addClassName('flash error');
+        jQuery('#flasherror').addClassName('flash error');
       }
   }
 
@@ -124,21 +124,21 @@
   
   document.observe("dom:loaded", function() {
     if (#{Sosol::Application.config.respond_to?(:xsugar_standalone_enabled) && Sosol::Application.config.xsugar_standalone_enabled} && !#{defined?(@bad_leiden) ? @bad_leiden : false}) {
-      was_disabled = $('ddb_identifier_leiden_plus').disabled;
+      was_disabled = jQuery('#ddb_identifier_leiden_plus').disabled;
       
       Form.Element.disable('ddb_identifier_leiden_plus');
       Form.Element.disable('identifier_submit_top');
       Form.Element.disable('identifier_submit');
       
-      $('ddb_identifier_leiden_plus').toggleClassName('loading');
+      jQuery('#ddb_identifier_leiden_plus').toggleClassName('loading');
       Form.Element.setValue('ddb_identifier_leiden_plus',
-        $('original_leiden_plus').value);
+        jQuery('#original_leiden_plus').value);
 
       ajax_xml_to_leiden(was_disabled);
     }
     else if (#{(defined?(@bad_leiden) ? @bad_leiden : false) || (Sosol::Application.config.respond_to?(:xsugar_standalone_enabled) || !Sosol::Application.config.xsugar_standalone_enabled)}) {
       Form.Element.setValue('ddb_identifier_leiden_plus',
-        $('original_leiden_plus').value);
+        jQuery('#original_leiden_plus').value);
       showMatch("ddb_identifier_leiden_plus", "**POSSIBLE ERROR**");
     }
   });

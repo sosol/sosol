@@ -4,14 +4,14 @@
   // and validates that at least one component of the starting citation was supplied before
   // submitting the form.
   function merge_cite_components() {
-    var start =  $$('input[class="cite_from"]').map(function(e) { return e.value; }).grep(/[\w\d]+/);
+    var start =  jQuery('input[class="cite_from"]').map(function(e) { return e.value; }).grep(/[\w\d]+/);
     if (start.length == 0 ) {
       alert("Please specify at least one level of the citation.");
       return false;
     }
-    var end = $$('input[class="cite_to"]').map(function(e) { return e.value; }).grep(/[\w\d]+/);
-    $('start_passage').value=start.join(".");
-    $('end_passage').value=end.join(".");
+    var end = jQuery('input[class="cite_to"]').map(function(e) { return e.value; }).grep(/[\w\d]+/);
+    jQuery('#start_passage').value=start.join(".");
+    jQuery('#end_passage').value=end.join(".");
     return true;
   }
   

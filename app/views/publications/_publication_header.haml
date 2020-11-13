@@ -5,10 +5,10 @@
     - if defined?(list_name)
       - list_id = "publication_list_holder_" + list_name
       %div{:class => "more_less", :id => 'less_' + list_id}
-        %a{:id => 'less_' + list_id, :class => 'lesslink', :href => '#', :onclick => "Effect.SlideUp('#{list_id}'); $('less_#{list_id}').hide(); $('more_#{list_id}').show(); return false;"}
+        %a{:id => 'less_' + list_id, :class => 'lesslink', :href => '#', :onclick => "Effect.SlideUp('#{list_id}'); jQuery('#less_#{list_id}').hide(); jQuery('#more_#{list_id}').show(); return false;"}
           = "-" + status  
       %div{:style => "display:none;", :class => "more_less", :id => 'more_' + list_id}
-        %a{:class => 'morelink', :href => '#', :onclick => "Effect.SlideDown('#{list_id}'); $('more_#{list_id}').hide(); $('less_#{list_id}').show(); return false;"}
+        %a{:class => 'morelink', :href => '#', :onclick => "Effect.SlideDown('#{list_id}'); jQuery('#more_#{list_id}').hide(); jQuery('#less_#{list_id}').show(); return false;"}
           = "+" + status
   
 

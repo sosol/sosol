@@ -22,9 +22,9 @@
   function populate_body_repo() {
     update_body_urn_parts();
     for (key in repos.keys) {
-      $('body_repo').insert("<option value='" + key + "'>" + key + "</option>");
+      jQuery('#body_repo').insert("<option value='" + key + "'>" + key + "</option>");
     }
-    $('body_repo').insert("<option value='-'>click to select...</option>");
+    jQuery('#body_repo').insert("<option value='-'>click to select...</option>");
     $(body_repo).childElements().each(function(o){
         if(o.value==body_urn_parts.repos){o.selected = true;get_inventory();throw $break;}
       });
@@ -32,7 +32,7 @@
   
   function get_inventory()
   {
-      var inventory = $F('body_repo');
+      var inventory = jQuery('#body_repo').val();
       if (inventory == '-') {
         update_group_urns();
       // if we don't already have this inventory's data, retrieve it and populate the selector
@@ -87,51 +87,51 @@
   }
   
   function update_group_urns() {
-    $('request_button').disabled = true;
-    clear_selector($('version_urn'));
-    clear_selector($('work_urn'));
-    var inventory = $F('body_repo');
+    jQuery('#request_button').disabled = true;
+    clear_selector(jQuery('#version_urn'));
+    clear_selector(jQuery('#work_urn'));
+    var inventory = jQuery('#body_repo').val();
     if (inventory == '-') {
-      clear_selector($('group_urn'));
+      clear_selector(jQuery('#group_urn'));
     } else {
       //  populate the textgroup selector
       var groups = inventories[inventory];
-      populate_selector($('group_urn'),groups,body_urn_parts.textgroup);
+      populate_selector(jQuery('#group_urn'),groups,body_urn_parts.textgroup);
       update_work_urns();
     }
   }
   
   function update_work_urns() {
-    $('request_button').disabled = true;
-    clear_selector($('version_urn'));
+    jQuery('#request_button').disabled = true;
+    clear_selector(jQuery('#version_urn'));
     // get the works for the selected textgroup and populate the work selector
-    var inventory = $F('body_repo');
-    var textgroup = $F('group_urn');
+    var inventory = jQuery('#body_repo').val();
+    var textgroup = jQuery('#group_urn').val();
     if (textgroup) { 
       var works = inventories[inventory][textgroup].works;
-      populate_selector($('work_urn'),works,body_urn_parts.work);
+      populate_selector(jQuery('#work_urn'),works,body_urn_parts.work);
       update_version_urns();
     }
   }
   
   function update_version_urns()
   {
-    $('request_button').disabled = true;
+    jQuery('#request_button').disabled = true;
     // get the editions for the selected textgroup and work and populate the edition selector
-    var inventory = $F('body_repo');
-    var textgroup = $F('group_urn');
-    var work = $F('work_urn');
+    var inventory = jQuery('#body_repo').val();
+    var textgroup = jQuery('#group_urn').val();
+    var work = jQuery('#work_urn').val();
     var editions = null;
     if (inventory && textgroup && work) {
       work = work.replace(textgroup+".",''); 
       editions = inventories[inventory][textgroup].works[work].editions
     }
     if (editions != null ) {
-      populate_selector($('version_urn'),editions,body_urn_parts.version)
+      populate_selector(jQuery('#version_urn'),editions,body_urn_parts.version)
     } else {
       // still need to empty it out
-      populate_selector($('version_urn'),{})
-      $('request_button').disabled = true;
+      populate_selector(jQuery('#version_urn'),{})
+      jQuery('#request_button').disabled = true;
     }
     update_cite_info();
   }
@@ -159,15 +159,15 @@
   
   function update_cite_info() {
     // clear the #citeinfo div in the form
-    $('citeinfo').innerHTML = '';
-    $('request_button').disabled = true;
+    jQuery('#citeinfo').innerHTML = '';
+    jQuery('#request_button').disabled = true;
     // get the current edition and repo from the form input
-    var inventory = $F('body_repo');
-    var textgroup = $F('group_urn');
-    var work = $F('work_urn');
+    var inventory = jQuery('#body_repo').val();
+    var textgroup = jQuery('#group_urn').val();
+    var work = jQuery('#work_urn').val();
     if (inventory && textgroup && work) { 
       work = work.replace(textgroup+".",'');
-      var version = $F('version_urn').replace('urn:cts:'+ textgroup + "." + work + ".",'')
+      var version = jQuery('#version_urn').val().replace('urn:cts:'+ textgroup + "." + work + ".",'')
       // lookup citation labels from stored inventory data
       // for each citation level, add label and input to the #citeinfo div in the form
       citeinfo = inventories[inventory][textgroup].works[work].editions[version].cites
@@ -176,60 +176,60 @@
       for (var i=0; i<range.length;i++) {
         values[i] = range[i].split('.');
       } 
-      $('citeinfo').insert('<span class="cite_span_label">From:</span>');
+      jQuery('#citeinfo').insert('<span class="cite_span_label">From:</span>');
       
       for (var i=0; i<citeinfo.length; i++) {
         var value = (values[0] != null && values[0].length == citeinfo.length) ? values[0][i] : '';
-        $('citeinfo').insert(
+        jQuery('#citeinfo').insert(
           '<label class="cite_from_label" for="cite_from' + i + '">' + citeinfo[i] + '</label>' +
           '<input type="text" name="cite_from_' + i + '" class="cite_from" value="' + value +'"/>');
       }
-      $('citeinfo').insert('<br/><span class="cite_span_label">To:</span>');
+      jQuery('#citeinfo').insert('<br/><span class="cite_span_label">To:</span>');
         for (var i=0; i<citeinfo.length; i++) {
           var value = (values[1] != null && values[1].length == citeinfo.length) ? values[1][i] : '';
-          $('citeinfo').insert(
+          jQuery('#citeinfo').insert(
             '<label class="cite_to_label" for="cite_to' + i + '">' + citeinfo[i] + '</label>' +
             '<input type="text" name="cite_to_' + i + '" class="cite_to" value="' + value +'"/>');
         }
     }
-    $('request_button').disabled = false;
+    jQuery('#request_button').disabled = false;
   }
   
   // Merges the individual components of the citation into the passage component of a CTS URN
   // and validates that at least one component of the starting citation was supplied before
   // submitting the form.
   function merge_cite_info() {
-    var start =  $$('input[class="cite_from"]').map(function(e) { return e.value; }).grep(/[\w\d]+/);
+    var start =  jQuery('input[class="cite_from"]').map(function(e) { return e.value; }).grep(/[\w\d]+/);
     if (start.length == 0 ) {
       alert("Please specify at least one level of the passage citation scheme.");
       return false;
     }
-    var end = $$('input[class="cite_to"]').map(function(e) { return e.value; }).grep(/[\w\d]+/);
+    var end = jQuery('input[class="cite_to"]').map(function(e) { return e.value; }).grep(/[\w\d]+/);
     if (end.length > 0 && end.length != start.length) {
       alert("Citation start and end must be at the same citation level.");
       return false;
     }
-    var uri = repos.keys[$F('body_repo')] + "/" + $('version_urn').value + ':' + start.join('.');
+    var uri = repos.keys[jQuery('#body_repo').val()] + "/" + jQuery('#version_urn').value + ':' + start.join('.');
     if (end.length > 0) {
       uri = uri + '-' + end.join('.');
     }
     var uri_match = new RegExp("^" + uri + '#');
-    var old_uri_value = $('body_uri').value;
+    var old_uri_value = jQuery('#body_uri').value;
     if (old_uri_value.match(uri_match) == null) {
-      $('body_uri').value = uri;
+      jQuery('#body_uri').value = uri;
     }
     get_body_passage();
     return false;
   }
   
   function get_body_passage() {
-    $('body_content').innerHTML = '<div class="loading">Loading...</div>';
-    var passage =  $$('input[class="cite_from"]').map(function(e) { return e.value; }).grep(/[\w\d]+/).join('.');
-    var end_range = $$('input[class="cite_to"]').map(function(e) { return e.value; }).grep(/[\w\d]+/).join('.');
+    jQuery('#body_content').innerHTML = '<div class="loading">Loading...</div>';
+    var passage =  jQuery('input[class="cite_from"]').map(function(e) { return e.value; }).grep(/[\w\d]+/).join('.');
+    var end_range = jQuery('input[class="cite_to"]').map(function(e) { return e.value; }).grep(/[\w\d]+/).join('.');
     if (end_range.length > 0) {
       passage = passage + '-' + end_range;
     }
-    var request_url = "#{root_url}cts/getpassage/" + $F('body_repo') + "/" + $F('version_urn') + ":" + passage;
+    var request_url = "#{root_url}cts/getpassage/" + jQuery('#body_repo').val() + "/" + jQuery('#version_urn').val() + ":" + passage;
     new Ajax.Request(request_url, {
       method: 'get',
       dataType: 'text/html',
@@ -237,7 +237,7 @@
         set_body_content(response.responseText);
       },
       onFailure: function(response) {
-        $('body_content').innerHTML = '<div class="error">Unable to load the requested text.</div>';
+        jQuery('#body_content').innerHTML = '<div class="error">Unable to load the requested text.</div>';
       }
     }); 
   }
@@ -271,11 +271,11 @@
       return;
     }
     body_span = [body_subref_start,body_subref_end];
-    var new_uri = $('body_uri').value.split('#')[0] + "#" + start_ref;
+    var new_uri = jQuery('#body_uri').value.split('#')[0] + "#" + start_ref;
     if (end_ref != start_ref) {
         new_uri = new_uri + '-' + end_ref;
      }
-    $('body_uri').value = new_uri;
+    jQuery('#body_uri').value = new_uri;
     toggle_body_highlight(true,['highlighted']);
   }
   
@@ -317,9 +317,9 @@
   }
   
   function set_body_content(a_html) {
-    var body = $('body_content');
-    $('body_content').innerHTML = a_html;
-    var uri = $('body_uri').getValue();
+    var body = jQuery('#body_content');
+    jQuery('#body_content').innerHTML = a_html;
+    var uri = jQuery('#body_uri').getValue();
     var u_match = uri.match(/^.*?urn:cts:(.*)$/)
     if (u_match != null) {
       var parts = u_match[1].split(/:/);
@@ -337,8 +337,8 @@
             r_end = r_parts;
           }
           body_span = [
-            $$("#body_content .token.text[data-ref=" + r_start + "]")[0],
-            $$("#body_content .token.text[data-ref=" + r_end + "]")[0]
+            jQuery("#body_content .token.text[data-ref=" + r_start + "]")[0],
+            jQuery("#body_content .token.text[data-ref=" + r_end + "]")[0]
             ]
         }
       }
@@ -348,11 +348,11 @@
   
   document.observe("dom:loaded", function() {
     get_repos();
-    $('group_urn').observe('change',update_work_urns);
-    $('work_urn').observe('change',update_version_urns);
-    $('version_urn').observe('select',update_cite_info);
-    $('body_content').observe('mousedown',start_body);
-    $('body_content').observe('mouseup',end_body);
+    jQuery('#group_urn').observe('change',update_work_urns);
+    jQuery('#work_urn').observe('change',update_version_urns);
+    jQuery('#version_urn').observe('select',update_cite_info);
+    jQuery('#body_content').observe('mousedown',start_body);
+    jQuery('#body_content').observe('mouseup',end_body);
 
   });
     

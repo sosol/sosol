@@ -8,7 +8,7 @@
   
   function get_target_passage() {
     var request_url = "#{root_url}cts/getpassage/" +
-      "#{@identifier.parentIdentifier.id}/" + $F('target_urn')
+      "#{@identifier.parentIdentifier.id}/" + jQuery('#target_urn').val()
     new Ajax.Request(request_url, {
       method: 'get',
       dataType: 'text/html',
@@ -16,7 +16,7 @@
         set_target_content(response.responseText);
       },
       onFailure: function() {
-        $('target_content').innerHTML = '<div class="error">Unable to load the requested text.</div>';
+        jQuery('#target_content').innerHTML = '<div class="error">Unable to load the requested text.</div>';
       }
     }); 
   }
@@ -24,12 +24,12 @@
   function add_target() {
     next_target = ++target_num;
     input_name = 'target_uri' + next_target;
-   $('targets').insert('<br/>' +
+   jQuery('#targets').insert('<br/>' +
       '<input class="target_uri" type="text" id="' + input_name + '" name="' + input_name + '">' + 
       '<button class="remove_target_uri" id="remove_' + input_name + '">Remove</button>');
     current_target = $(input_name);
     $(input_name).observe('click', select_target_input);
-    $('remove_' + input_name).observe('click', remove_target_input);
+    jQuery('#remove_' + input_name).observe('click', remove_target_input);
     return false;
   }
   
@@ -79,7 +79,7 @@
       alert("Unable to read the selected range. Please try your selection again.");
       return;
     }
-    var uri = $('src').value + "/" + $('target_urn').value + "#" + start_ref;
+    var uri = jQuery('#src').value + "/" + jQuery('#target_urn').value + "#" + start_ref;
     // no span needed if the start and end are the same
     if (end_ref != start_ref) {
       uri = uri + '-' + end_ref;
@@ -138,9 +138,9 @@
   }
   
   function set_target_content(a_html) {
-    var target = $('target_content');
-    $('target_content').innerHTML = a_html;
-    $$('.target_uri').each(
+    var target = jQuery('#target_content');
+    jQuery('#target_content').innerHTML = a_html;
+    jQuery('.target_uri').each(
       function(elem) {
         var uri = $(elem).getValue();
         var u_match = uri.match(/^.*?urn:cts:(.*)$/)
@@ -159,8 +159,8 @@
                 r_start = r_parts;
                 r_end = r_parts;
               }
-              var start_token = $$(".token.text[data-ref=" + r_start + "]")
-              var end_token = $$(".token.text[data-ref=" + r_end + "]")
+              var start_token = jQuery(".token.text[data-ref=" + r_start + "]")
+              var end_token = jQuery(".token.text[data-ref=" + r_end + "]")
               // highlight the tokens if able to find them
               if (start_token != null && end_token != null && start_token.length == 1 && end_token.length == 1) {
                 all_targets.set(elem.name,[start_token[0],end_token[0]]);
@@ -174,7 +174,7 @@
   }
   
   function check_input() {
-    var all_targets = $$('.target_uri');
+    var all_targets = jQuery('.target_uri');
     var valid_targets = [];
     var invalid_targets = [];
     all_targets.each(
@@ -191,7 +191,7 @@
         }
       }
     );
-    var valid_body = ( $('body_uri').getValue().match(/^https?:/) != null);
+    var valid_body = ( jQuery('#body_uri').getValue().match(/^https?:/) != null);
     var messages = [];
     if (! valid_targets || valid_targets.length == 0) {
       messages.push("You need to specify at least one valid uri as an annotation target.");
@@ -208,11 +208,11 @@
       return false;
     } else {
       if (Array.isArray(valid_targets)) {
-        $('valid_targets').value = $(valid_targets).collect(function(elem) { return elem.name; }).join(',');
+        jQuery('#valid_targets').value = $(valid_targets).collect(function(elem) { return elem.name; }).join(',');
       }
       else
       {
-        $('valid_targets').value = valid_targets.name;
+        jQuery('#valid_targets').value = valid_targets.name;
       }
       return true;
     }
@@ -220,43 +220,43 @@
   
   function post_to_alpheios() {
     if (check_input()) {
-      var target_urn = $$('.target_uri')[0].getValue();
-      var body_urn = $('body_uri').getValue();
-      if ($$('#target_content span.token.text.highlighted').length > 100) {
+      var target_urn = jQuery('.target_uri')[0].getValue();
+      var body_urn = jQuery('#body_uri').getValue();
+      if (jQuery('#target_content span.token.text.highlighted').length > 100) {
         alert("Target text must not exceed 100 words");
         return false;
       }
-      if ($$('#body_content span.token.text.highlighted').length > 100) {
+      if (jQuery('#body_content span.token.text.highlighted').length > 100) {
         alert("Body text must not exceed 100 words");
         return false;
       }
-      if ($$('#target_content span.token.text.highlighted').length == 0) {
+      if (jQuery('#target_content span.token.text.highlighted').length == 0) {
         alert("You must highlight at least one word to align in the annotation target text.");
         return false;
       }
-      if ($$('#body_content span.token.text.highlighted').length == 0 ) {
+      if (jQuery('#body_content span.token.text.highlighted').length == 0 ) {
         alert("You must highlight at least one word to align in the annotation body text.");
         return false;
       }
       var target_text = '';
       var body_text = '';
-      $$('#target_content span.token.highlighted').each(
+      jQuery('#target_content span.token.highlighted').each(
         function(a_elem) {
           target_text = target_text + a_elem.textContent;
         }
       )
-      $$('#body_content span.token.highlighted').each(
+      jQuery('#body_content span.token.highlighted').each(
         function(a_elem) {
           body_text = body_text + a_elem.textContent;
         }
       )
       
-      $('l1text').value = target_text;
-      $('l2text').value = body_text;
-      $('l1').value = 'grc';
-      $('l2').value = 'grc';
-      $('l1urn').value = target_urn;
-      $('l2urn').value = body_urn;
+      jQuery('#l1text').value = target_text;
+      jQuery('#l2text').value = body_text;
+      jQuery('#l1').value = 'grc';
+      jQuery('#l2').value = 'grc';
+      jQuery('#l1urn').value = target_urn;
+      jQuery('#l2urn').value = body_urn;
       return true;
       
     }
@@ -270,15 +270,15 @@
     
   document.observe("dom:loaded", function() {    
     get_target_passage();
-    $('target_uri1').observe('click', select_target_input);
-    $$('.remove_target_uri').each( 
+    jQuery('#target_uri1').observe('click', select_target_input);
+    jQuery('.remove_target_uri').each( 
       function(a_e) {
         $(a_e).observe('click',remove_target_input);
       }
     ); 
-    $('target_content').observe('mousedown',start_target);
-    $('target_content').observe('mouseup',end_target);
-    current_target = $('target_uri1');
+    jQuery('#target_content').observe('mousedown',start_target);
+    jQuery('#target_content').observe('mouseup',end_target);
+    current_target = jQuery('#target_uri1');
   });
 
 .append
