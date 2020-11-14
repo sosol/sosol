@@ -33,16 +33,16 @@ function workAuthorityChange(el){
 /* **** E D I T I O N **** */
 
 function editionLinkChange(el){
-  if(el.getValue().match(/^\d+$/)){
+  if(jQuery(el).val().match(/^\d+$/)){
     var url = window.location.href.indexOf('/editor/') > 0 ? '/editor/dclp_meta_identifiers/biblio_preview' : '/dclp_meta_identifiers/biblio_preview';
     var updatee = el.identify().replace('link', 'biblioPreview').replace('_value', '');
-    new Ajax.Updater({ success: updatee}, url, { parameters: {biblio: el.getValue()}, onFailure: function(){ $(updatee).update('<i>Loading review data failed…</i>'); } });
+    new Ajax.Updater({ success: updatee}, url, { parameters: {biblio: jQuery(el).val()}, onFailure: function(){ $(updatee).update('<i>Loading review data failed…</i>'); } });
   }
 }
 
 function editionUbertypeChange(el) {
   // hide and show translation dropdown
-  if(el.getValue() == 'translation'){
+  if(jQuery(el).val() == 'translation'){
     el.up(0).select('.editionLanguage').each(function(el){ el.show(); });
   } else {
     $(el.up(0).select('.editionLanguage')).each(function(el){ el.hide(); });
@@ -51,7 +51,7 @@ function editionUbertypeChange(el) {
 
   // set values for type & subtype
   var type = subtype = '';
-  switch(el.getValue()){
+  switch(jQuery(el).val()){
     case 'principal':
       type = 'edition';
       subtype = 'principal';
@@ -100,7 +100,7 @@ function editionUbertypeChange(el) {
 
 function editionExtraChange(el){
   var from = to = '';
-  var value = el.getValue();
+  var value = jQuery(el).val();
   if(match = value.match(/^([^\-]*[A-Za-z\d]+[^\-]*?) *- *([^\-]*?[A-Za-z\d]+[^\-]*)$/)){
     from = match[1];
     to = match[2];

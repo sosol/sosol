@@ -37,7 +37,7 @@ function publicationPreview(){
   jQuery('#multiItems_publicationExtra').select('input').each(function(i, input){
    
     if(input.type.toLowerCase() != 'hidden'){
-      preview += input.getValue() + ' ';
+      preview += jQuery(input).val() + ' ';
     }
   });
   
