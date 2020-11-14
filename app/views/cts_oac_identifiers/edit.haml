@@ -137,7 +137,7 @@
     var target = jQuery('#target_content');
     jQuery('#target_content').innerHTML = a_html;
     jQuery('.target_uri').each(
-      function(elem) {
+      function(i, elem) {
         var uri = $(elem).getValue();
         var u_match = uri.match(/^.*?urn:cts:(.*)$/)
         if (u_match != null) {
@@ -237,12 +237,12 @@
       var target_text = '';
       var body_text = '';
       jQuery('#target_content span.token.highlighted').each(
-        function(a_elem) {
+        function(i, a_elem) {
           target_text = target_text + a_elem.textContent;
         }
       )
       jQuery('#body_content span.token.highlighted').each(
-        function(a_elem) {
+        function(i, a_elem) {
           body_text = body_text + a_elem.textContent;
         }
       )
@@ -268,7 +268,7 @@
     get_target_passage();
     jQuery('#target_uri1').bind('click', select_target_input);
     jQuery('.remove_target_uri').each( 
-      function(a_e) {
+      function(i, a_e) {
         $(a_e).bind('click',remove_target_input);
       }
     ); 

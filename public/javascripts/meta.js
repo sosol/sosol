@@ -35,7 +35,7 @@ function publicationPreview(){
               jQuery('#hgv_meta_identifier_publicationExtra_2_value').getValue() + ' ' +
               jQuery('#hgv_meta_identifier_publicationExtra_3_value').getValue() + ' ';
 
-    jQuery('#multiItems_publicationExtra').select('input').each(function(input){
+    jQuery('#multiItems_publicationExtra').select('input').each(function(i, input){
    
       if(input.type.toLowerCase() != 'hidden'){
         preview += input.getValue() + ' ';
@@ -52,37 +52,33 @@ function hideDateTabs(){
   if($(jQuery('#hgv_meta_identifier_textDate_1_attributes_id').parentNode).getElementsBySelector('span')[0].innerHTML.indexOf('(') >= 0){
     
     // hide date tabs
-    jQuery('div#dateContainer div.dateItem div.dateTab').each(function(e){e.hide();});
+    jQuery('div#dateContainer div.dateItem div.dateTab').each(function(i, e){e.hide();});
     
     // activate show-button
-    jQuery('.showDateTabs').each(function(e){e.observe('click', function(ev){showDateTabs();});});
+    jQuery('.showDateTabs').bind('click', function(ev){showDateTabs();});
 
   } else {
 
     // hide show-button
-    jQuery('.showDateTabs').each(function(e){e.hide();});
+    jQuery('.showDateTabs').hide();
   }
 }
 
 function showDateTabs(){
-  jQuery('div#dateContainer div.dateItem div.dateTab').each(function(e){e.show();});
-  jQuery('.showDateTabs').each(function(e){e.hide();});
+  jQuery('div#dateContainer div.dateItem div.dateTab').show();
+  jQuery('.showDateTabs').hide();
 }
 
 function openDateTab(dateId)
 {
-  jQuery('div#edit div#dateContainer div.dateItem').each(function(dateItem){
-    dateItem.removeClassName('dateItemActive');
-  });
-  jQuery('div#edit div#dateContainer div.dateItem' + dateId).each(function(dateItem){
-    dateItem.addClassName('dateItemActive');
-  });
+  jQuery('div#edit div#dateContainer div.dateItem').removeClass('dateItemActive');
+  jQuery('div#edit div#dateContainer div.dateItem' + dateId).addClass('dateItemActive');
   
   toggleMentionedDates('#dateAlternative' + dateId);
 }
 
 function toggleMentionedDates(dateId){
-  jQuery('ul#multiItems_mentionedDate > li').each(function(li, index){
+  jQuery('ul#multiItems_mentionedDate > li').each(function(index, li){
       value = li.select('select.dateId')[0].value;
       if(value == dateId || value == ''){
         li.style.display = 'block';
@@ -185,7 +181,7 @@ function geoUpdateExcludeLists(key){
   // build exclude list
   // clear exclude fields
   var exclude = '';
-  jQuery('#multiItems_' + key + ' > li > input.provenancePlaceId').each(function(item){
+  jQuery('#multiItems_' + key + ' > li > input.provenancePlaceId').each(function(i, item){
     if(!item.value || item.value == ''){
       item.value = generateRandomId('geo');
     }
@@ -197,7 +193,7 @@ function geoUpdateExcludeLists(key){
   if(jQuery('#multiItems_' + key + ' > li > input.provenancePlaceId').length > 1){
 
     // write exclude lists to each item
-    jQuery('#multiItems_' + key + ' > li > input.provenancePlaceExclude').each(function(item){
+    jQuery('#multiItems_' + key + ' > li > input.provenancePlaceExclude').each(function(i, item){
        var meMyself = '#' + item.parentNode.select('input.provenancePlaceId')[0].value;
 
        item.value = exclude.replace(meMyself, '');
@@ -287,14 +283,14 @@ function multiAddGeoSpot(key, provenanceIndex, placeIndex)
   var referenceString = '';
   var referenceKey = generateRandomId('geoReference');
 
-  jQuery('#multiPlus_' + key + ' > div.paragraph > div.geoReference > ul > li > input').each(function(item){
+  jQuery('#multiPlus_' + key + ' > div.paragraph > div.geoReference > ul > li > input').each(function(i, item){
     if(item.value.length > 3){
       referenceList[referenceList.length] = item.value;
       referenceString += ' ' + item.value;
     }
   });
 
-  jQuery('#multiPlus_' + key + ' > div.paragraph > div.geoReference > p > input').each(function(item){
+  jQuery('#multiPlus_' + key + ' > div.paragraph > div.geoReference > p > input').each(function(i, item){
     if(item.value.length > 3){
       referenceList[referenceList.length] = item.value;
       referenceString += ' ' + item.value;
@@ -348,10 +344,10 @@ function multiAddGeoSpot(key, provenanceIndex, placeIndex)
   //Sortable.create('multiItems_' + referenceKey, {overlap: 'horizontal', constraint: false, handle: 'move'});
   
   // clear
-  jQuery('#multiPlus_' + key + ' > div.paragraph > div.geoReference > ul > li > input').each(function(item){
+  jQuery('#multiPlus_' + key + ' > div.paragraph > div.geoReference > ul > li > input').each(function(i, item){
       item.value = '';
   });
-  jQuery('#multiPlus_' + key + ' > div.paragraph > div.geoReference > p > input').each(function(item){
+  jQuery('#multiPlus_' + key + ' > div.paragraph > div.geoReference > p > input').each(function(i, item){
       item.value = '';
   });
   jQuery('#multiPlus_' + key + ' > input')[1].checked = false;
@@ -456,8 +452,8 @@ function multiUpdate(id, newItem)
 {
   jQuery('#multiItems_' + id).insert(newItem);
 
-  jQuery('#multiPlus_' + id + ' > input').each(function(item){item.clear();});
-  jQuery('#multiPlus_' + id + ' > select').each(function(item){item.clear();});
+  jQuery('#multiPlus_' + id + ' > input').val("");
+  jQuery('#multiPlus_' + id + ' > select').val("");
 
   Sortable.create('multiItems_' + id, {overlap: 'horizontal', constraint: false, handle: 'move'});
 }
@@ -508,7 +504,7 @@ function mentionedDateNewCertainty(selectbox)
   var value = selectbox.value;
 
   // remove
-  $(selectbox.parentNode).select('input[type=hidden]').each(function(item){
+  $(selectbox.parentNode).select('input[type=hidden]').each(function(i, item){
     if(item.id.indexOf('certainty') > 0){
       var certaintyIndex = item.id.match(/\d+/g)[1] * 1;
       if(certaintyIndex){
@@ -590,11 +586,11 @@ function complementPlace(key, data){
 
 function geoReferenceWizard(){
 
-  jQuery('div.geoReference').each(function(div){
+  jQuery('div.geoReference').each(function(i, div){
     var geoReferenceKey = div.id.match(/geoReference[^_]+/)[0];
     var referenceString = '';
     
-    jQuery('#multi_' + geoReferenceKey + ' input ').each(function(e){
+    jQuery('#multi_' + geoReferenceKey + ' input ').each(function(i, e){
       if(e.value.match(/\S\S\S+/)){
         referenceString += e.value.replace(/\s+/, '') + ' ';
       }
@@ -627,7 +623,7 @@ function toggleReferenceList(){
     display = 'none';
   }
 
-  jQuery('div.geoReferenceContainer').each(function(e){ e.setStyle( {'display' : display } ); });
+  jQuery('div.geoReferenceContainer').css("display", display);
 
 }
 
@@ -638,15 +634,15 @@ Event.observe(window, 'load', function() {
   // submit
   jQuery('#identifier_submit').bind('click', function(e){checkNotAddedMultiples(); geoReferenceWizard(); rememberToggledView(); set_conf_false();});
 
-  jQuery('.quickSave').each(function(e){e.observe('click', function(e){checkNotAddedMultiples(); geoReferenceWizard(); rememberToggledView(); set_conf_false(); jQuery('div#edit form')[0].submit();});});
+  jQuery('.quickSave').bind('click', function(e){checkNotAddedMultiples(); geoReferenceWizard(); rememberToggledView(); set_conf_false(); jQuery('div#edit form')[0].submit();});
 
   jQuery('#identifier_submit').bind('click', geoReferenceWizard);
 
   jQuery('#toggleReferenceList').bind('click', toggleReferenceList);
 
-  jQuery('.addPlace').each(function(el){el.observe('click', function(ev){ multiAddPlaceRaw(el); });});
-  jQuery('.addProvenance').each(function(el){el.observe('click', function(ev){ multiAddProvenanceRaw(el); });});
-  jQuery('.addOrigPlace').each(function(el){el.observe('click', function(ev){ multiAddOrigPlaceRaw(el); });});
+  jQuery('.addPlace').bind('click', function(ev){ multiAddPlaceRaw(el); });
+  jQuery('.addProvenance').bind('click', function(ev){ multiAddProvenanceRaw(el); });
+  jQuery('.addOrigPlace').bind('click', function(ev){ multiAddOrigPlaceRaw(el); });
 
   publicationPreview();
   

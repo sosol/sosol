@@ -31,7 +31,7 @@ function multiGetNextIndex(id) {
   }
   
   var index = 0;
-  jQuery(path).each(function(item){
+  jQuery(path).each(function(i, item){
     var itemIndex = item.id.match(/(\d+)[^\d]*$/)[1] * 1;
     if(index <= itemIndex){
       index = itemIndex + 1;
@@ -43,9 +43,9 @@ function multiGetNextIndex(id) {
 function multiUpdate(id, newItem) {
   jQuery('#multiItems_' + id).insert(newItem);
 
-  jQuery('#multiPlus_' + id + ' > input').each(function(item){item.clear();});
-  jQuery('#multiPlus_' + id + ' > select').each(function(item){item.clear();});
-  jQuery('#multiPlus_' + id + ' > textarea').each(function(item){item.clear();});
+  jQuery('#multiPlus_' + id + ' > input').each(function(i, item){item.clear();});
+  jQuery('#multiPlus_' + id + ' > select').each(function(i, item){item.clear();});
+  jQuery('#multiPlus_' + id + ' > textarea').each(function(i, item){item.clear();});
 
   Sortable.create('multiItems_' + id, {overlap: 'horizontal', constraint: false, handle: 'move'});
 }
@@ -69,7 +69,7 @@ function toggleCatgory(event) {
 function rememberToggledView(){
   var expansionSet = '';
 
-  jQuery('.category').each(function(e){
+  jQuery('.category').each(function(i, e){
 
     if(e.next().visible()){
       expansionSet += e.classNames().reject(function(item){
@@ -91,7 +91,7 @@ function showExpansions(){
 
   var expansionSet = flash + ';' + anchor;
   
-  jQuery('.category').each(function(e){
+  jQuery('.category').each(function(i, e){
 
     var classy = e.classNames().reject(function(item){
         return item == 'category' ? true : false;
@@ -108,9 +108,9 @@ function showExpansions(){
 
 Event.observe(window, 'load', function() {
   showExpansions();
-  jQuery('.category').each(function(e){e.observe('click', toggleCatgory);});
-  jQuery('#expandAll').bind('click', function(e){jQuery('.category').each(function(e){e.next().show();});});
-  jQuery('#collapseAll').bind('click', function(e){jQuery('.category').each(function(e){e.next().hide();});});
+  jQuery('.category').each(function(i, e){e.observe('click', toggleCatgory);});
+  jQuery('#expandAll').bind('click', function(e){jQuery('.category').each(function(i, e){e.next().show();});});
+  jQuery('#collapseAll').bind('click', function(e){jQuery('.category').each(function(i, e){e.next().hide();});});
 });
 
 // todo: if an item has been moved the »observeChange« alert needs to be triggered

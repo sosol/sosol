@@ -34,7 +34,7 @@ function publicationPreview(){
             jQuery('#apis_identifier_publicationExtra_2_value').getValue() + ' ' +
             jQuery('#apis_identifier_publicationExtra_3_value').getValue() + ' ';
 
-  jQuery('#multiItems_publicationExtra').select('input').each(function(input){
+  jQuery('#multiItems_publicationExtra').select('input').each(function(i, input){
    
     if(input.type.toLowerCase() != 'hidden'){
       preview += input.getValue() + ' ';
@@ -50,29 +50,29 @@ function hideDateTabs(){
   if($(jQuery('#apis_identifier_textDate_1_attributes_id').parentNode).getElementsBySelector('span')[0].innerHTML.indexOf('(') >= 0){
     
     // hide date tabs
-    jQuery('div#dateContainer div.dateItem div.dateTab').each(function(e){e.hide();});
+    jQuery('div#dateContainer div.dateItem div.dateTab').each(function(i, e){e.hide();});
     
     // activate show-button
-    jQuery('.showDateTabs').each(function(e){e.observe('click', function(ev){showDateTabs();});});
+    jQuery('.showDateTabs').each(function(e){e.observe('click', function(i, ev){showDateTabs();});});
 
   } else {
 
     // hide show-button
-    jQuery('.showDateTabs').each(function(e){e.hide();});
+    jQuery('.showDateTabs').each(function(i, e){e.hide();});
   }
 }
 
 function showDateTabs(){
-  jQuery('div#dateContainer div.dateItem div.dateTab').each(function(e){e.show();});
+  jQuery('div#dateContainer div.dateItem div.dateTab').each(function(i, e){e.show();});
   jQuery('.showDateTabs').each(function(e){e.hide();});
 }
 
 function openDateTab(dateId)
 {
-  jQuery('div#edit div#dateContainer div.dateItem').each(function(dateItem){
+  jQuery('div#edit div#dateContainer div.dateItem').each(function(i, dateItem){
     dateItem.removeClassName('dateItemActive');
   });
-  jQuery('div#edit div#dateContainer div.dateItem' + dateId).each(function(dateItem){
+  jQuery('div#edit div#dateContainer div.dateItem' + dateId).each(function(i, dateItem){
     dateItem.addClassName('dateItemActive');
   });
   
@@ -80,7 +80,7 @@ function openDateTab(dateId)
 }
 
 function toggleMentionedDates(dateId){
-  jQuery('ul#multiItems_mentionedDate > li').each(function(li, index){
+  jQuery('ul#multiItems_mentionedDate > li').each(function(index, li){
       value = li.select('select.dateId')[0].value;
       if(value == dateId || value == ''){
         li.style.display = 'block';
@@ -214,8 +214,8 @@ function multiUpdate(id, newItem)
 {
   jQuery('#multiItems_' + id).append(newItem);
   var foo = jQuery('#multiItems_' + id);
-  jQuery('#multiPlus_' + id + ' > input').each(function(item){item.clear();});
-  jQuery('#multiPlus_' + id + ' > select').each(function(item){item.clear();});
+  jQuery('#multiPlus_' + id + ' > input').each(function(i, item){item.clear();});
+  jQuery('#multiPlus_' + id + ' > select').each(function(i, item){item.clear();});
 
   Sortable.create('multiItems_' + id, {overlap: 'horizontal', constraint: false, handle: 'move'});
 }
@@ -288,7 +288,7 @@ function toggleReferenceList(){
     display = 'none';
   }
 
-  jQuery('div.geoReferenceContainer').each(function(e){ e.setStyle( {'display' : display } ); });
+  jQuery('div.geoReferenceContainer').each(function(i, e){ e.setStyle( {'display' : display } ); });
 
 }
 

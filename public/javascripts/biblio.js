@@ -166,7 +166,7 @@ function checkNotAddedMultiples(){
 
 Event.observe(window, 'load', function() {
 
-  jQuery('.quickSave').each(function(e){e.observe('click', function(e){checkNotAddedMultiples(); rememberToggledView(); set_conf_false(); jQuery('form.edit_biblio_identifier')[0].submit();});});
+  jQuery('.quickSave').bind('click', function(e){checkNotAddedMultiples(); rememberToggledView(); set_conf_false(); jQuery('form.edit_biblio_identifier')[0].submit();});});
   jQuery('#identifier_submit').bind('click', checkNotAddedMultiples);
 
 });

@@ -398,8 +398,8 @@ function multiAddWorkAuthority(plusButton, mode){
 }
 
 Event.observe(window, 'load', function() {
-  jQuery('.editionubertype').each(function(el){el.observe('change', function(ev){ editionUbertypeChange(el); });});
-  jQuery('.addEdition').each(function(el){el.observe('click', function(ev){ multiAddEditionRaw(el); });});
-  jQuery('.addWork').each(function(el){el.observe('click', function(ev){ multiAddWork(el); });});
-  jQuery('input.editionLink').each(function(el){editionLinkChange(el);});
+  jQuery('.editionubertype').bind('change', function(ev){ editionUbertypeChange(el); });
+  jQuery('.addEdition').bind('click', function(ev){ multiAddEditionRaw(el); });
+  jQuery('.addWork').bind('click', function(ev){ multiAddWork(el); });
+  jQuery('input.editionLink').each(function(i, el){editionLinkChange(el);});
 });

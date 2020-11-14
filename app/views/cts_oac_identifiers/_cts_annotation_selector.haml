@@ -20,7 +20,7 @@
       jQuery('#body_repo').append("<option value='" + key + "'>" + key + "</option>");
     }
     jQuery('#body_repo').append("<option value='-'>click to select...</option>");
-    jQuery('#body_repo').children().each(function(o){
+    jQuery('#body_repo').children().each(function(i, o){
         if(o.value==body_urn_parts.repos){o.selected = true;get_inventory();return false;}
       });
   }

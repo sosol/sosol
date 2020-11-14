@@ -54,9 +54,9 @@
   // loadExistingCommentary - load all existing Line by Line Commentary to the page for user
   //###########################################################################################
     
-  function loadExistingCommentary(commentary_li) {
+  function loadExistingCommentary(i, commentary_li) {
     existing_comments = jQuery(".comment-on-" + commentary_li.id);
-    existing_comments.reverse().each(function (comment) {
+    existing_comments.reverse().forEach(function (comment) {
       comment.addClassName('clickable');
       comment.addClassName('existing_comment');
       comment.observe('click',transformExistingCommentary);
@@ -73,7 +73,7 @@
   //###########################################################################################
     
   function removeAllClickable() {
-    jQuery(".clickable").each(function (clickable) {
+    jQuery(".clickable").each(function (i, clickable) {
       clickable.stopObserving('click');
       clickable.removeClassName('clickable');
     });
