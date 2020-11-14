@@ -125,7 +125,7 @@
     Form.Element.disable('com_sugar_content');
     Form.Element.disable('save_com');
 
-    jQuery('#com_sugar_content').toggleClassName('loading');
+    jQuery('#com_sugar_content').toggleClass('loading');
 
     Effect.SlideDown("form-"+comment_on, { queue: 'end'});
     
@@ -317,7 +317,7 @@
     //disable form for ajax call to server
     Form.Element.disable('com_sugar_content');
     Form.Element.disable('save_com');
-    jQuery('#com_sugar_content').toggleClassName('loading');
+    jQuery('#com_sugar_content').toggleClass('loading');
 
     originalleiden = jQuery('#com_sugar_content').value;
     //alert ("originalleiden" + originalleiden);
@@ -368,7 +368,7 @@
           jQuery('#com_sugar_content').value = error_content.replace(/^\<W\:/,'').replace(/\:W\>$/,'').strip();
           
           //enable form after error
-          jQuery('#com_sugar_content').toggleClassName('loading');
+          jQuery('#com_sugar_content').toggleClass('loading');
           Form.Element.enable('com_sugar_content');
           Form.Element.enable('save_com');
 
@@ -379,7 +379,7 @@
         else 
         {
           //temporarily enable so can set the are to the XML value for the form submit to pick up
-          jQuery('#com_sugar_content').toggleClassName('loading');
+          jQuery('#com_sugar_content').toggleClass('loading');
           Form.Element.enable('com_sugar_content');
 
           //remove wrap tags and namespace before call action to save to XML
@@ -390,7 +390,7 @@
           jQuery('#update_commentary_form').submit();
           
           //disable form again while server processes the new XML - will automatically reset on return from server
-          jQuery('#com_sugar_content').toggleClassName('loading');
+          jQuery('#com_sugar_content').toggleClass('loading');
           Form.Element.disable('com_sugar_content');
           Form.Element.disable('save_com');
         }
@@ -411,7 +411,7 @@
     //disable form for ajax call to server
     Form.Element.disable('fm_sugar_content');
     Form.Element.disable('save_fm');
-    jQuery('#fm_sugar_content').toggleClassName('loading');
+    jQuery('#fm_sugar_content').toggleClass('loading');
 
     originalleiden = jQuery('#fm_sugar_content').value;
 
@@ -459,7 +459,7 @@
           jQuery('#fm_sugar_content').value = error_content.replace(/^\<W\:/,'').replace(/\:W\>$/,'').strip();
           
           //enable form after error
-          jQuery('#fm_sugar_content').toggleClassName('loading');
+          jQuery('#fm_sugar_content').toggleClass('loading');
           Form.Element.enable('fm_sugar_content');
           Form.Element.enable('save_fm');
 
@@ -470,7 +470,7 @@
         else 
         {
           //temporarily enable so can set the are to the XML value for the form submit to pick up
-          jQuery('#fm_sugar_content').toggleClassName('loading');
+          jQuery('#fm_sugar_content').toggleClass('loading');
           Form.Element.enable('fm_sugar_content');
 
           //remove wrap tags and namespace before call action to save to XML
@@ -480,7 +480,7 @@
           jQuery('#update_frontmatter_form').submit();
           
           //disable form again while server processes the new XML - will automatically reset on return from server
-          jQuery('#fm_sugar_content').toggleClassName('loading');
+          jQuery('#fm_sugar_content').toggleClass('loading');
           Form.Element.disable('fm_sugar_content');
           Form.Element.disable('save_fm');
         }
@@ -545,7 +545,7 @@
               jQuery('#fm_sugar_content').value = error_content.strip();
 
               //enable form after error
-              jQuery('#fm_sugar_content').toggleClassName('loading');
+              jQuery('#fm_sugar_content').toggleClass('loading');
               Form.Element.enable('fm_sugar_content');
               Form.Element.enable('save_fm');
 
@@ -559,7 +559,7 @@
               jQuery('#com_sugar_content').value = error_content.strip();
 
               //enable form after error
-              jQuery('#com_sugar_content').toggleClassName('loading');
+              jQuery('#com_sugar_content').toggleClass('loading');
               Form.Element.enable('com_sugar_content');
               Form.Element.enable('save_com');
 
@@ -575,7 +575,7 @@
             {
               // hack for ampersand in URL's - change from encoding to & for display
               jQuery('#fm_sugar_content').value = json.content.replace(/%26/g,'&').replace(/^\<W\:\n\n/,'').replace(/\:W\>$/,'');
-              jQuery('#fm_sugar_content').toggleClassName('loading');
+              jQuery('#fm_sugar_content').toggleClass('loading');
               Form.Element.enable('fm_sugar_content');
               Form.Element.enable('save_fm');
             }
@@ -583,7 +583,7 @@
             {
               // hack for ampersand in URL's - change from encoding to & for display
               jQuery('#com_sugar_content').value = json.content.replace(/%26/g,'&').replace(/^\<W\:\n\n/,'').replace(/\:W\>$/,'');
-              jQuery('#com_sugar_content').toggleClassName('loading');
+              jQuery('#com_sugar_content').toggleClass('loading');
               Form.Element.enable('com_sugar_content');
               Form.Element.enable('save_com');
             }
@@ -689,7 +689,7 @@
     Form.Element.disable('fm_sugar_content');
     Form.Element.disable('save_fm');
 
-    jQuery('#fm_sugar_content').toggleClassName('loading');
+    jQuery('#fm_sugar_content').toggleClass('loading');
 
     Effect.SlideDown("form-frontmatter",{queue: 'end'});
 

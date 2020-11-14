@@ -20,7 +20,7 @@
       parameters: $H({content: jQuery('#ddb_identifier_leiden_plus').val(), type: 'epidoc', direction: 'xml2nonxml'}),
       onSuccess: function(response) {
         json = response.responseText.evalJSON();
-        jQuery('#ddb_identifier_leiden_plus').toggleClassName('loading');
+        jQuery('#ddb_identifier_leiden_plus').toggleClass('loading');
         
         if ("exception" in json) {
           insert_flash_error('Error converting XML to Leiden+ approximately at line ' + json.exception.line + ' column ' + json.exception.column + '. Please correct the error <a href="' + '#{polymorphic_path([@identifier.publication, @identifier], :action => :editxml)}' + '">on the XML page</a>.');
@@ -130,7 +130,7 @@
       Form.Element.disable('identifier_submit_top');
       Form.Element.disable('identifier_submit');
       
-      jQuery('#ddb_identifier_leiden_plus').toggleClassName('loading');
+      jQuery('#ddb_identifier_leiden_plus').toggleClass('loading');
       Form.Element.setValue('ddb_identifier_leiden_plus',
         jQuery('#original_leiden_plus').value);
 
