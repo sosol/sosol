@@ -6,7 +6,7 @@ function init()
   //add anything you need for initial page load here
   }
   
-documentjQuery(document).ready( init);
+jQuery(document).ready( init);
 
 function checkLeidenXML(id)
 {

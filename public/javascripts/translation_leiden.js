@@ -30,7 +30,7 @@ function init()
   	showMatch('hgv_trans_identifier_leiden_trans', '**POSSIBLE ERROR**');
   }
   
-documentjQuery(document).ready( init);
+jQuery(document).ready( init);
 
 
 //sets dialog size for the helper window and then calls the related view

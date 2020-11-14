@@ -12,7 +12,7 @@
           = event.target.title
         == (#{time_ago_in_words(event.created_at)} ago)
 :javascript
-  documentjQuery(document).ready( function() {
+  jQuery(document).ready( function() {
     jQuery("span.event_owner_User_#{@current_user.id}").each(function(s) {
       s.replace("You ");
     });

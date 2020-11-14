@@ -10,7 +10,7 @@
     var rangeIE = document.body.createTextRange(); //temporary - selectText function sets for real
   }
 
-  documentjQuery(document).ready( function() {
+  jQuery(document).ready( function() {
     jQuery('.commentary#edition li').invoke('observe','click',addCommentary);
     jQuery('.commentary#edition li').each(loadExistingCommentary);
     if (jQuery('#frontmatter_commentary_add')) //only one or the other will exist
