@@ -47,7 +47,7 @@ function publicationPreview(){
 /**** date ****/
 
 function hideDateTabs(){
-  if($(jQuery('#apis_identifier_textDate_1_attributes_id').parentNode).getElementsBySelector('span')[0].innerHTML.indexOf('(') >= 0){
+  if(jQuery('#apis_identifier_textDate_1_attributes_id')[0].parentNode.getElementsBySelector('span')[0].innerHTML.indexOf('(') >= 0){
     
     // hide date tabs
     jQuery('div#dateContainer div.dateItem div.dateTab').each(function(i, e){e.hide();});
