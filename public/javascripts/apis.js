@@ -28,11 +28,11 @@ function provenanceOrigPlaceUnknownToggle(unknown){
 /**** publication ****/
 
 function publicationPreview(){
-  preview = jQuery('#apis_identifier_publicationTitle').getValue() + ' ' + 
-            jQuery('#apis_identifier_publicationExtra_0_value').getValue() + ' ' +
-            jQuery('#apis_identifier_publicationExtra_1_value').getValue() + ' ' +
-            jQuery('#apis_identifier_publicationExtra_2_value').getValue() + ' ' +
-            jQuery('#apis_identifier_publicationExtra_3_value').getValue() + ' ';
+  preview = jQuery('#apis_identifier_publicationTitle').val() + ' ' + 
+            jQuery('#apis_identifier_publicationExtra_0_value').val() + ' ' +
+            jQuery('#apis_identifier_publicationExtra_1_value').val() + ' ' +
+            jQuery('#apis_identifier_publicationExtra_2_value').val() + ' ' +
+            jQuery('#apis_identifier_publicationExtra_3_value').val() + ' ';
 
   jQuery('#multiItems_publicationExtra').select('input').each(function(i, input){
    

@@ -138,7 +138,7 @@
     jQuery('#target_content').innerHTML = a_html;
     jQuery('.target_uri').each(
       function(i, elem) {
-        var uri = $(elem).getValue();
+        var uri = $(elem).val();
         var u_match = uri.match(/^.*?urn:cts:(.*)$/)
         if (u_match != null) {
           var parts = u_match[1].split(/:/);
@@ -175,19 +175,19 @@
     var invalid_targets = [];
     all_targets.each(
       function(elem) { 
-        if( $(elem).getValue().match(/^https?:/) != null ) {
+        if( $(elem).val().match(/^https?:/) != null ) {
           valid_targets.push(elem);
         }
       }
     );
     all_targets.each(
       function(elem) { 
-        if($(elem).getValue().match(/^https?:/) == null) {
+        if($(elem).val().match(/^https?:/) == null) {
           invalid_targets.push(elem);
         }
       }
     );
-    var valid_body = ( jQuery('#body_uri').getValue().match(/^https?:/) != null);
+    var valid_body = ( jQuery('#body_uri').val().match(/^https?:/) != null);
     var messages = [];
     if (! valid_targets || valid_targets.length == 0) {
       messages.push("You need to specify at least one valid uri as an annotation target.");
@@ -216,8 +216,8 @@
   
   function post_to_alpheios() {
     if (check_input()) {
-      var target_urn = jQuery('.target_uri')[0].getValue();
-      var body_urn = jQuery('#body_uri').getValue();
+      var target_urn = jQuery('.target_uri')[0].val();
+      var body_urn = jQuery('#body_uri').val();
       if (jQuery('#target_content span.token.text.highlighted').length > 100) {
         alert("Target text must not exceed 100 words");
         return false;

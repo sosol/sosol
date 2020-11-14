@@ -29,11 +29,11 @@ function provenanceOrigPlaceUnknownToggle(unknown){
 
 function publicationPreview(){
   if(jQuery('#publicationExtraFullTitle')){
-    preview = jQuery('#hgv_meta_identifier_publicationTitle').getValue() + ' ' + 
-              jQuery('#hgv_meta_identifier_publicationExtra_0_value').getValue() + ' ' +
-              jQuery('#hgv_meta_identifier_publicationExtra_1_value').getValue() + ' ' +
-              jQuery('#hgv_meta_identifier_publicationExtra_2_value').getValue() + ' ' +
-              jQuery('#hgv_meta_identifier_publicationExtra_3_value').getValue() + ' ';
+    preview = jQuery('#hgv_meta_identifier_publicationTitle').val() + ' ' + 
+              jQuery('#hgv_meta_identifier_publicationExtra_0_value').val() + ' ' +
+              jQuery('#hgv_meta_identifier_publicationExtra_1_value').val() + ' ' +
+              jQuery('#hgv_meta_identifier_publicationExtra_2_value').val() + ' ' +
+              jQuery('#hgv_meta_identifier_publicationExtra_3_value').val() + ' ';
 
     jQuery('#multiItems_publicationExtra').select('input').each(function(i, input){
    
@@ -356,8 +356,8 @@ function multiAddGeoSpot(key, provenanceIndex, placeIndex)
 
 function multiAddPublicationExtra()
 {
-  var type = jQuery('#multiPlus_publicationExtra > select')[0].getValue();
-  var value = jQuery('#multiPlus_publicationExtra > input')[0].getValue();
+  var type = jQuery('#multiPlus_publicationExtra > select')[0].val();
+  var value = jQuery('#multiPlus_publicationExtra > input')[0].val();
 
   var index = multiGetNextIndex('publicationExtra');
   if((index * 1) == 0){ // the first four index numbers are reserved for vol, fasc, num and side

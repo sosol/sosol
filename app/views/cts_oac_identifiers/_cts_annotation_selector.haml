@@ -132,7 +132,7 @@
   
   function update_body_urn_parts() {
     // check to see if the pre-populated URI is from one of the registered repositories
-    urn_match = $(body_uri).getValue().match(/^(.*?)\/(urn:cts:.*)$/)    
+    urn_match = jQuery('#body_uri').val().match(/^(.*?)\/(urn:cts:.*)$/)    
     if (urn_match != null) {
       urispace = urn_match[1];
       urn = urn_match[2];
@@ -309,7 +309,7 @@
   function set_body_content(a_html) {
     var body = jQuery('#body_content');
     jQuery('#body_content').innerHTML = a_html;
-    var uri = jQuery('#body_uri').getValue();
+    var uri = jQuery('#body_uri').val();
     var u_match = uri.match(/^.*?urn:cts:(.*)$/)
     if (u_match != null) {
       var parts = u_match[1].split(/:/);
