@@ -200,7 +200,6 @@
   });
   
   jQuery(document).on('ajax:complete', 'form', function(event) {
-    let form = event.target;
     if (form == event.findElement()) enableFormElements(form);
   });
 })();
