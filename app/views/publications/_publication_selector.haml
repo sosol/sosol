@@ -221,9 +221,9 @@
   function reset_vol_doc_em() {
     reset_selector(jQuery('#volume_number'));
     reset_selector(jQuery('#document_number'));
-    jQuery('#volume_number').disabled=true;
-    jQuery('#document_number').disabled=true;
-    jQuery('#emend_button').disabled=true;
+    jQuery('#volume_number').prop('disabled', true);
+    jQuery('#document_number').prop('disabled', true);
+    jQuery('#emend_button').prop('disabled', true);
   }
 
   function IDClassChange(class_selected) {
@@ -274,13 +274,13 @@
   = form_tag :controller => 'publications', :action => "create_from_selector" do
     -if emend == :helper
       = select_tag('IdentifierClass', options_for_select([%w{DDB DDBIdentifier},%w{HGV HGVIdentifier},%w{APIS APISIdentifier}]), :onchange => "IDClassChange(this.options[this.selectedIndex].value);".html_safe)
-      = select_tag("APISIdentifierCollectionSelect", options_for_select([['','']] + APISIdentifier.collection_names_hash.sort), :class => 'invisible', :onchange => "reset_selector(jQuery('#document_number'));jQuery('#volume_number').disabled=true;jQuery('#document_number').disabled='';jQuery('#emend_button').disabled='';get_apis_documents();if(this.options[0].value==''){this.remove(0)}".html_safe)
+      = select_tag("APISIdentifierCollectionSelect", options_for_select([['','']] + APISIdentifier.collection_names_hash.sort), :class => 'invisible', :onchange => "reset_selector(jQuery('#document_number'));jQuery('#volume_number').prop('disabled', true);jQuery('#document_number').disabled='';jQuery('#emend_button').disabled='';get_apis_documents();if(this.options[0].value==''){this.remove(0)}".html_safe)
     -else
       = select_tag('IdentifierClass', options_for_select([%w{DDB DDBIdentifier},%w{HGV HGVIdentifier},%w{APIS APISIdentifier}]), 
         :onchange => "['DDB','HGV','APIS'].each(function(i){if (jQuery('#IdentifierClass').val() == i + 'Identifier') {$(i + 'IdentifierCollectionSelect').removeClass('invisible')} else {$(i + 'IdentifierCollectionSelect').addClass('invisible')}}); reset_vol_doc_em();".html_safe)
     - [DDBIdentifier, HGVIdentifier].each do |identifier_class|
-      = select_tag("#{identifier_class}CollectionSelect", options_for_select([['','']] + identifier_class.collection_names_hash.invert.sort), :class => identifier_class == DDBIdentifier ? '' : 'invisible', :onchange => "reset_selector(jQuery('#document_number'));jQuery('#volume_number').disabled='';update_volumes();jQuery('#document_number').disabled=true;jQuery('#emend_button').disabled='';if(this.options[0].value==''){this.remove(0)}".html_safe)
-    = select_tag("APISIdentifierCollectionSelect", options_for_select([['','']] + APISIdentifier.collection_names_hash.sort), :class => 'invisible', :onchange => "reset_selector(jQuery('#document_number')); jQuery('#volume_number').disabled=true; jQuery('#document_number').disabled=''; jQuery('#emend_button').disabled=''; get_apis_documents(); if(this.options[0].value==''){this.remove(0)}".html_safe)
+      = select_tag("#{identifier_class}CollectionSelect", options_for_select([['','']] + identifier_class.collection_names_hash.invert.sort), :class => identifier_class == DDBIdentifier ? '' : 'invisible', :onchange => "reset_selector(jQuery('#document_number'));jQuery('#volume_number').disabled='';update_volumes();jQuery('#document_number').prop('disabled', true);jQuery('#emend_button').disabled='';if(this.options[0].value==''){this.remove(0)}".html_safe)
+    = select_tag("APISIdentifierCollectionSelect", options_for_select([['','']] + APISIdentifier.collection_names_hash.sort), :class => 'invisible', :onchange => "reset_selector(jQuery('#document_number')); jQuery('#volume_number').prop('disabled', true); jQuery('#document_number').disabled=''; jQuery('#emend_button').disabled=''; get_apis_documents(); if(this.options[0].value==''){this.remove(0)}".html_safe)
     = select_tag 'volume_number', nil, :disabled => true, :style => 'min-width: 5em;', :onchange => "jQuery('#document_number').disabled='';update_documents();if(this.options[0].value==''){this.remove(0)}".html_safe
     = select_tag 'document_number', nil, :disabled => true, :style => 'min-width: 5em;', :onchange => "if(this.options[0].value==''){this.remove(0)};".html_safe
     -if emend == :showemend
