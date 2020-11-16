@@ -59,8 +59,8 @@
     commentary_li = jQuery(commentary_li)
     existing_comments.toArray().reverse().forEach(function (comment) {
       comment = jQuery(comment);
-      commen.addClass('clickable');
-      commen.addClass('existing_comment');
+      comment.addClass('clickable');
+      comment.addClass('existing_comment');
       comment.observe('click',transformExistingCommentary);
       commentary_li.removeClass('clickable');
       commentary_li.unbind('click');
@@ -354,7 +354,7 @@
             });
             
             //add class after the original insert to get the flash highlighting to work in IE browser
-            jQuery('#notice_notice'.addClass('flash error');
+            jQuery('#notice_notice).addClass('flash error');
           }
          
           var error_content = ' ';
@@ -444,7 +444,7 @@
             });
             
             //add class after the original insert to get the flash highlighting to work in IE browser
-            jQuery('#notice_notice'.addClass('flash error');
+            jQuery('#notice_notice).addClass('flash error');
           }
              
           var error_content = ' ';

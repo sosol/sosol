@@ -81,7 +81,7 @@ var Droppables = {
 
   activate: function(drop) {
     if(drop.hoverclass)
-      Elemen.addClass(drop.element, drop.hoverclass);
+      Element.addClassName(drop.element, drop.hoverclass);
     this.last_active = drop;
   },
 
@@ -822,8 +822,8 @@ var Sortable = {
 
     if(!Sortable._marker) {
       Sortable._marker =
-        (jQuery('#dropmarker') || Element.extend(document.createElement('DIV'))).
-          hide(.addClass('dropmarker').setStyle({position:'absolute'});
+        ($('dropmarker') || Element.extend(document.createElement('DIV'))).
+          hide().addClassName('dropmarker').setStyle({position:'absolute'});
       document.getElementsByTagName("body").item(0).appendChild(Sortable._marker);
     }
     var offsets = dropon.cumulativeOffset();
