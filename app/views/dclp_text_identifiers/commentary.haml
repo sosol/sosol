@@ -59,7 +59,7 @@
     existing_comments.toArray().reverse().forEach(function (comment) {
       comment = jQuery(comment);
       comment.addClass('clickable');
-      commen.addClass('existing_comment');
+      comment.addClass('existing_comment');
       comment.bind('click',transformExistingCommentary);
       commentary_li.removeClass('clickable');
       commentary_li.unbind('click');
@@ -72,10 +72,8 @@
   //###########################################################################################
     
   function removeAllClickable() {
-    jQuery(".clickable").each(function (i, clickable) {
-      clickable.stopObserving('click');
-      clickable.removeClassName('clickable');
-    });
+    jQuery(".clickable").unbind('click')
+      .removeClass('clickable');
   }
   
   //###########################################################################################
@@ -655,7 +653,7 @@
     Effect.SlideDown("form-frontmatter",{queue: 'end'});
     
     element.unbind('click');
-    event.stop();
+    event.stopPropagation();
   }
 
   //###########################################################################################

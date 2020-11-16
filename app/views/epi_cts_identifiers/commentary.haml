@@ -641,7 +641,7 @@
     Effect.SlideDown("form-frontmatter",{queue: 'end'});
     
     element.stopObserving('click');
-    event.stop();
+    event.preventDefault();
   }
 
   //###########################################################################################

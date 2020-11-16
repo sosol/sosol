@@ -164,16 +164,16 @@
   jQuery(document).on('click', 'a[data-confirm], a[data-remote], a[data-method]', function(event) {
     let link = event.target;
     if (!allowAction(link)) {
-      event.stop();
+      event.preventDefault();
       return false;
     }
 
     if (link.readAttribute('data-remote')) {
       handleRemote(link);
-      event.stop();
+      event.preventDefault();
     } else if (link.readAttribute('data-method')) {
       handleMethod(link);
-      event.stop();
+      event.preventDefault();
     }
   });
 
@@ -187,13 +187,13 @@
     var form = event.findElement();
 
     if (!allowAction(form)) {
-      event.stop();
+      event.preventDefault();
       return false;
     }
 
     if (form.readAttribute('data-remote')) {
       handleRemote(form);
-      event.stop();
+      event.preventDefault();
     } else {
       disableFormElements(form);
     }
