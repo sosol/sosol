@@ -1024,7 +1024,7 @@ Effect.Transform = Class.create({
     return new Effect.Parallel(
       this.tracks.map(function(track){
         var ids = track.get('ids'), effect = track.get('effect'), options = track.get('options');
-        var elements = [$(ids) || jQuery(ids)].flatten();
+        var elements = [$(ids) || $$(ids)].flatten();
         return elements.map(function(e){ return new effect(e, Object.extend({ sync:true }, options)) });
       }).flatten(),
       this.options
