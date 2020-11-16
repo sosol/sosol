@@ -653,6 +653,7 @@
     Effect.SlideDown("form-frontmatter",{queue: 'end'});
     
     element.unbind('click');
+    event.preventDefault();
     event.stopPropagation();
   }
 

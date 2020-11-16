@@ -274,12 +274,12 @@ function toggleReferenceList(){
   
   if(actionElement.hasClassName('showReferenceList')){
     actionElement.removeClass('showReferenceList');
-    actionElemen.addClass('hideReferenceList');
+    actionElement.addClass('hideReferenceList');
     actionElement.innerHTML = 'hide geo references';
     display = 'block';
   } else {
     actionElement.removeClass('hideReferenceList');
-    actionElemen.addClass('showReferenceList');
+    actionElement.addClass('showReferenceList');
     actionElement.innerHTML = 'show geo references';
     display = 'none';
   }

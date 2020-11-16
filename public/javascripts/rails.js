@@ -165,15 +165,18 @@
     let link = event.target;
     if (!allowAction(link)) {
       event.preventDefault();
+      event.stopPropagation();
       return false;
     }
 
     if (link.readAttribute('data-remote')) {
       handleRemote(link);
       event.preventDefault();
+      event.stopPropagation();
     } else if (link.readAttribute('data-method')) {
       handleMethod(link);
       event.preventDefault();
+      event.stopPropagation();
     }
   });
 
@@ -188,12 +191,14 @@
 
     if (!allowAction(form)) {
       event.preventDefault();
+      event.stopPropagation();
       return false;
     }
 
     if (form.readAttribute('data-remote')) {
       handleRemote(form);
       event.preventDefault();
+      event.stopPropagation();
     } else {
       disableFormElements(form);
     }
