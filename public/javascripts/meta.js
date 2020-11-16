@@ -450,7 +450,7 @@ function multiAddMentionedDate()
 
 function multiUpdate(id, newItem)
 {
-  jQuery('#multiItems_' + id).insert(newItem);
+  jQuery('#multiItems_' + id).append(newItem);
 
   jQuery('#multiPlus_' + id + ' > input').val("");
   jQuery('#multiPlus_' + id + ' > select').val("");
@@ -516,7 +516,7 @@ function mentionedDateNewCertainty(selectbox)
   // add
   if (value.length) {
     if (value == 'low') { // global    
-      $(selectbox).parentNode.insert('<input type="hidden" value="low" name="hgv_meta_identifier[mentionedDate][' + index + '][children][date][attributes][certainty]" id="hgv_meta_identifier_mentionedDate_' + index + '_children_date_attributes_certainty">');
+      jQuery(selectbox).parent().append('<input type="hidden" value="low" name="hgv_meta_identifier[mentionedDate][' + index + '][children][date][attributes][certainty]" id="hgv_meta_identifier_mentionedDate_' + index + '_children_date_attributes_certainty">');
     }
     else { // specific
       var certaintyIndex = 1;
@@ -528,7 +528,7 @@ function mentionedDateNewCertainty(selectbox)
         var j = 0;
         for (j = 0; j < dateTypes.length; j++) {
           var dateType = dateTypes[j];
-          $(selectbox).parentNode.insert('<input type="hidden" value="../date/' + dateBits[i] + '-from-date(@' + dateType + ')" name="hgv_meta_identifier[mentionedDate][' + index + '][children][date][children][certainty][' + certaintyIndex + '][attributes][match]" id="hgv_meta_identifier_mentionedDate_' + index + '_children_date_children_certainty_' + certaintyIndex + '_attributes_match">');
+          jQuery(selectbox).parent().append('<input type="hidden" value="../date/' + dateBits[i] + '-from-date(@' + dateType + ')" name="hgv_meta_identifier[mentionedDate][' + index + '][children][date][children][certainty][' + certaintyIndex + '][attributes][match]" id="hgv_meta_identifier_mentionedDate_' + index + '_children_date_children_certainty_' + certaintyIndex + '_attributes_match">');
           certaintyIndex++;
         }
       }
@@ -612,13 +612,13 @@ function toggleReferenceList(){
   var display = '';
   
   if(actionElement.hasClassName('showReferenceList')){
-    actionElement.removeClassName('showReferenceList');
-    actionElement.addClassName('hideReferenceList');
+    actionElement.removeClass('showReferenceList');
+    actionElemen.addClass('hideReferenceList');
     actionElement.innerHTML = 'hide geo references';
     display = 'block';
   } else {
-    actionElement.removeClassName('hideReferenceList');
-    actionElement.addClassName('showReferenceList');
+    actionElement.removeClass('hideReferenceList');
+    actionElemen.addClass('showReferenceList');
     actionElement.innerHTML = 'show geo references';
     display = 'none';
   }

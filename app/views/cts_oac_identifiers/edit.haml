@@ -20,7 +20,7 @@
   function add_target() {
     next_target = ++target_num;
     input_name = '#target_uri' + next_target;
-   jQuery('#targets').insert('<br/>' +
+   jQuery('#targets').append('<br/>' +
       '<input class="target_uri" type="text" id="' + input_name + '" name="' + input_name + '">' + 
       '<button class="remove_target_uri" id="remove_' + input_name + '">Remove</button>');
     current_target = $(input_name);
@@ -100,9 +100,9 @@
           a_classes.each(
             function(a_class) {
               if (a_on) {
-                $(set[0]).addClassName(a_class);
+                jQuery(set[0].addClass(a_class);
               } else {
-                $(set[0]).removeClassName(a_class);
+                jQuery(set[0]).removeClass(a_class);
               }
               
             }
@@ -117,9 +117,9 @@
               a_classes.each(
                 function(a_class) {
                   if (a_on) {
-                    $(sibs[i]).addClassName(a_class);
+                    jQuery(sibs[i].addClass(a_class);
                   } else {
-                    $(sibs[i]).removeClassName(a_class);
+                    jQuery(sibs[i]).removeClass(a_class);
                   }
                   if (sibs[i] == set[1]) {
                     done = true;

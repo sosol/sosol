@@ -69,12 +69,8 @@ function showDateTabs(){
 
 function openDateTab(dateId)
 {
-  jQuery('div#edit div#dateContainer div.dateItem').each(function(i, dateItem){
-    dateItem.removeClassName('dateItemActive');
-  });
-  jQuery('div#edit div#dateContainer div.dateItem' + dateId).each(function(i, dateItem){
-    dateItem.addClassName('dateItemActive');
-  });
+  jQuery('div#edit div#dateContainer div.dateItem').removeClass('dateItemActive');
+  jQuery('div#edit div#dateContainer div.dateItem' + dateId).addClass('dateItemActive');
   
   toggleMentionedDates('#dateAlternative' + dateId);
 }
@@ -277,13 +273,13 @@ function toggleReferenceList(){
   var display = '';
   
   if(actionElement.hasClassName('showReferenceList')){
-    actionElement.removeClassName('showReferenceList');
-    actionElement.addClassName('hideReferenceList');
+    actionElement.removeClass('showReferenceList');
+    actionElemen.addClass('hideReferenceList');
     actionElement.innerHTML = 'hide geo references';
     display = 'block';
   } else {
-    actionElement.removeClassName('hideReferenceList');
-    actionElement.addClassName('showReferenceList');
+    actionElement.removeClass('hideReferenceList');
+    actionElemen.addClass('showReferenceList');
     actionElement.innerHTML = 'show geo references';
     display = 'none';
   }

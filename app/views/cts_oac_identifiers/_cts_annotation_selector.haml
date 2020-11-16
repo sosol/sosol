@@ -58,7 +58,7 @@
     for (var i in options)
     {
       if (options[i].urn != null) {
-        select_element.insert("<option value='" + options[i].urn + "'>" + options[i].label + "</option>");
+        select_element.append("<option value='" + options[i].urn + "'>" + options[i].label + "</option>");
         count++;
       }
     }
@@ -67,7 +67,7 @@
       select_element.hide();
     } else {
       if (count > 1) {
-        select_element.insert("<option value=''>click to select...</option>");
+        select_element.append("<option value=''>click to select...</option>");
       } 
       select_element.disabled = false;
       select_element.show();
@@ -170,18 +170,18 @@
       for (var i=0; i<range.length;i++) {
         values[i] = range[i].split('.');
       } 
-      jQuery('#citeinfo').insert('<span class="cite_span_label">From:</span>');
+      jQuery('#citeinfo').append('<span class="cite_span_label">From:</span>');
       
       for (var i=0; i<citeinfo.length; i++) {
         var value = (values[0] != null && values[0].length == citeinfo.length) ? values[0][i] : '';
-        jQuery('#citeinfo').insert(
+        jQuery('#citeinfo').append(
           '<label class="cite_from_label" for="cite_from' + i + '">' + citeinfo[i] + '</label>' +
           '<input type="text" name="cite_from_' + i + '" class="cite_from" value="' + value +'"/>');
       }
-      jQuery('#citeinfo').insert('<br/><span class="cite_span_label">To:</span>');
+      jQuery('#citeinfo').append('<br/><span class="cite_span_label">To:</span>');
         for (var i=0; i<citeinfo.length; i++) {
           var value = (values[1] != null && values[1].length == citeinfo.length) ? values[1][i] : '';
-          jQuery('#citeinfo').insert(
+          jQuery('#citeinfo').append(
             '<label class="cite_to_label" for="cite_to' + i + '">' + citeinfo[i] + '</label>' +
             '<input type="text" name="cite_to_' + i + '" class="cite_to" value="' + value +'"/>');
         }
@@ -275,9 +275,9 @@
           a_classes.each(
             function(a_class) {
               if (a_on) {
-                $(set[0]).addClassName(a_class);
+                jQuery(set[0].addClass(a_class);
               } else {
-                $(set[0]).removeClassName(a_class);
+                jQuery(set[0]).removeClass(a_class);
               }
               
             }
@@ -292,9 +292,9 @@
               a_classes.each(
                 function(a_class) {
                   if (a_on) {
-                    $(sibs[i]).addClassName(a_class);
+                    jQuery(sibs[i].addClass(a_class);
                   } else {
-                    $(sibs[i]).removeClassName(a_class);
+                    jQuery(sibs[i]).removeClass(a_class);
                   }
                   if (sibs[i] == set[1]) {
                     done = true;

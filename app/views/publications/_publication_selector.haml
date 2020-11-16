@@ -34,7 +34,7 @@
   
   function reset_selector(select_element) {
     select_element.children().each(Element.remove);
-    select_element.insert("<option></option>");
+    select_element.append("<option></option>");
   }
 
   function toggle_availability() {
@@ -151,7 +151,7 @@
         
         if(!is_hgv_identifier) {
           values.each(function(v) {
-            select_element.insert("<option value=\"" + v + "\">" + v + "</option>");
+            select_element.append("<option value=\"" + v + "\">" + v + "</option>");
           });
           select_element.children()[0].selected = true;
           toggle_availability();
@@ -202,7 +202,7 @@
         });
 
         values.each(function(v) {
-          select_element.insert("<option value=\"" + v + "\">" + v + "</option>");
+          select_element.append("<option value=\"" + v + "\">" + v + "</option>");
         });
         select_element.children()[0].selected = true;
 
@@ -230,19 +230,19 @@
     switch(class_selected)
     {
     case "DDBIdentifier":
-      jQuery('#DDBIdentifierCollectionSelect').removeClassName('invisible');
-      jQuery('#HGVIdentifierCollectionSelect').addClassName('invisible');
-      jQuery('#APISIdentifierCollectionSelect').addClassName('invisible');
+      jQuery('#DDBIdentifierCollectionSelect').removeClass('invisible');
+      jQuery('#HGVIdentifierCollectionSelect'.addClass('invisible');
+      jQuery('#APISIdentifierCollectionSelect'.addClass('invisible');
       break;
     case "HGVIdentifier":
-      jQuery('#DDBIdentifierCollectionSelect').addClassName('invisible');
-      jQuery('#HGVIdentifierCollectionSelect').removeClassName('invisible');
-      jQuery('#APISIdentifierCollectionSelect').addClassName('invisible');
+      jQuery('#DDBIdentifierCollectionSelect'.addClass('invisible');
+      jQuery('#HGVIdentifierCollectionSelect').removeClass('invisible');
+      jQuery('#APISIdentifierCollectionSelect'.addClass('invisible');
       break;
     case "APISIdentifier":
-      jQuery('#DDBIdentifierCollectionSelect').addClassName('invisible');
-      jQuery('#HGVIdentifierCollectionSelect').addClassName('invisible');
-      jQuery('#APISIdentifierCollectionSelect').removeClassName('invisible');
+      jQuery('#DDBIdentifierCollectionSelect'.addClass('invisible');
+      jQuery('#HGVIdentifierCollectionSelect'.addClass('invisible');
+      jQuery('#APISIdentifierCollectionSelect').removeClass('invisible');
       break;
     default: 
       alert("The following value needs to be added to the IDClassChange Javascript function - " + class_selected);
@@ -256,13 +256,13 @@
     jQuery('#DDBIdentifierCollectionSelect').children()[0].selected = true;
     jQuery('#HGVIdentifierCollectionSelect').children()[0].selected = true;
     
-    jQuery('#DDBIdentifierCollectionSelect').removeClassName('invisible');
-    jQuery('#HGVIdentifierCollectionSelect').addClassName('invisible');
+    jQuery('#DDBIdentifierCollectionSelect').removeClass('invisible');
+    jQuery('#HGVIdentifierCollectionSelect'.addClass('invisible');
 
     if (jQuery('#APISIdentifierCollectionSelect')) //only when used in helper pop up
       {
         jQuery('#APISIdentifierCollectionSelect').children()[0].selected = true;
-        jQuery('#APISIdentifierCollectionSelect').addClassName('invisible');
+        jQuery('#APISIdentifierCollectionSelect'.addClass('invisible');
       }
     
     reset_vol_doc_em();
@@ -276,7 +276,7 @@
       = select_tag("APISIdentifierCollectionSelect", options_for_select([['','']] + APISIdentifier.collection_names_hash.sort), :class => 'invisible', :onchange => "reset_selector(jQuery('#document_number'));jQuery('#volume_number').disabled=true;jQuery('#document_number').disabled='';jQuery('#emend_button').disabled='';get_apis_documents();if(this.options[0].value==''){this.remove(0)}".html_safe)
     -else
       = select_tag('IdentifierClass', options_for_select([%w{DDB DDBIdentifier},%w{HGV HGVIdentifier},%w{APIS APISIdentifier}]), 
-        :onchange => "['DDB','HGV','APIS'].each(function(i){if (jQuery('#IdentifierClass').val() == i + 'Identifier') {$(i + 'IdentifierCollectionSelect').removeClassName('invisible')} else {$(i + 'IdentifierCollectionSelect').addClassName('invisible')}}); reset_vol_doc_em();".html_safe)
+        :onchange => "['DDB','HGV','APIS'].each(function(i){if (jQuery('#IdentifierClass').val() == i + 'Identifier') {$(i + 'IdentifierCollectionSelect').removeClass('invisible')} else {$(i + 'IdentifierCollectionSelect'.addClass('invisible')}}); reset_vol_doc_em();".html_safe)
     - [DDBIdentifier, HGVIdentifier].each do |identifier_class|
       = select_tag("#{identifier_class}CollectionSelect", options_for_select([['','']] + identifier_class.collection_names_hash.invert.sort), :class => identifier_class == DDBIdentifier ? '' : 'invisible', :onchange => "reset_selector(jQuery('#document_number'));jQuery('#volume_number').disabled='';update_volumes();jQuery('#document_number').disabled=true;jQuery('#emend_button').disabled='';if(this.options[0].value==''){this.remove(0)}".html_safe)
     = select_tag("APISIdentifierCollectionSelect", options_for_select([['','']] + APISIdentifier.collection_names_hash.sort), :class => 'invisible', :onchange => "reset_selector(jQuery('#document_number')); jQuery('#volume_number').disabled=true; jQuery('#document_number').disabled=''; jQuery('#emend_button').disabled=''; get_apis_documents(); if(this.options[0].value==''){this.remove(0)}".html_safe)

@@ -69,12 +69,15 @@
       }
       else
       {
-        jQuery('div#main > div.site').first().insert({
-          top: new Element('div',{'id': 'flasherror'}).update(msg)
+        jQuery('div#main > div.site').first().prepend(function() {
+          let e = document.createElement('div');
+          e.setAttribute('id', 'flasherror');
+          e.innerHTML = msg;
+          return e;
         });
 
         //add class after the original insert to get the flash highlighting to work in IE browser
-        jQuery('#flasherror').addClassName('flash error');
+        jQuery('#flasherror').addClass('flash error');
       }
   }
 

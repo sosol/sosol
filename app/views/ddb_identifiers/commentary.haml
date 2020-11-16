@@ -56,15 +56,14 @@
     
   function loadExistingCommentary(i, commentary_li) {
     existing_comments = jQuery(".comment-on-" + commentary_li.id);
+    commentary_li = jQuery(commentary_li);
     existing_comments.toArray().reverse().forEach(function (comment) {
-      comment.addClassName('clickable');
-      comment.addClassName('existing_comment');
-      comment.observe('click',transformExistingCommentary);
-      commentary_li.removeClassName('clickable');
-      commentary_li.stopObserving('click');
-      commentary_li.insert({
-        after: comment
-      });
+      comment.addClass('clickable');
+      comment.addClass('existing_comment');
+      comment.bind('click',transformExistingCommentary);
+      commentary_li.removeClass('clickable');
+      commentary_li.unbind('click');
+      commentary_li.append(comment);
     });
   }
   
@@ -116,9 +115,7 @@
     
     Effect.SlideUp(comment_div_container.id, {duration: 0.5});
     
-    $(comment_li).insert({
-      after: '<li class="input existing_comment"/>' + generateCommentaryForm(comment_on,nval,content,comment_div_container.id)
-    });
+    $(comment_li).append('<li class="input existing_comment"/>' + generateCommentaryForm(comment_on,nval,content,comment_div_container.id));
     
     menuInit();
 
@@ -355,12 +352,15 @@
           }
           else
           {
-            jQuery('div#main > div.site').first().insert({
-              top: new Element('div',{'id': 'notice_notice'}).update('Error converting Commentary Grammar to XML approximately at line ' + json.exception.line + ' column ' + json.exception.column + '.  This file was NOT SAVED.  Please correct the error below.')
+            jQuery('div#main > div.site').first().prepend(function () {
+              let e = document.createElement('div');
+              e.setAttribute('id', 'notice_notice');
+              e.innerHTML = 'Error converting Commentary Grammar to XML approximately at line ' + json.exception.line + ' column ' + json.exception.column + '.  This file was NOT SAVED.  Please correct the error below.';
+              return e;
             });
             
             //add class after the original insert to get the flash highlighting to work in IE browser
-            jQuery('#notice_notice').addClassName('flash error');
+            jQuery('#notice_notice'.addClass('flash error');
           }
          
           var error_content = ' ';
@@ -446,12 +446,15 @@
           }
           else
           {
-            jQuery('div#main > div.site').first().insert({
-              top: new Element('div',{'id': 'notice_notice'}).update('Error converting Commentary Grammar to XML approximately at line ' + json.exception.line + ' column ' + json.exception.column + '.  This file was NOT SAVED.  Please correct the error below.')
+            jQuery('div#main > div.site').first().prepend(function () {
+              let e = document.createElement('div');
+              e. setAttribute('id', 'notice_notice');
+              e.innerHTML = 'Error converting Commentary Grammar to XML approximately at line ' + json.exception.line + ' column ' + json.exception.column + '.  This file was NOT SAVED.  Please correct the error below.';
+              return e;
             });
             
             //add class after the original insert to get the flash highlighting to work in IE browser
-            jQuery('#notice_notice').addClassName('flash error');
+            jQuery('#notice_notice'.addClass('flash error');
           }
              
           var error_content = ' ';
@@ -528,12 +531,15 @@
           }
           else
           {
-            jQuery('div#main > div.site').first().insert({
-              top: new Element('div',{'id': 'notice_notice'}).update('Error converting XML to Commentary Grammar approximately at line ' + json.exception.line + ' column ' + json.exception.column + '. Please correct the error <a href="' + '#{polymorphic_path([@identifier.publication, @identifier], :action => :editxml)}' + '">on the XML page</a>.')
+            jQuery('div#main > div.site').first().prepend(function () {
+              let e = document.createElement('div');
+              e. setAttribute('id', 'notice_notice');
+              e.innerHTML = 'Error converting XML to Commentary Grammar approximately at line ' + json.exception.line + ' column ' + json.exception.column + '. Please correct the error <a href="' + '#{polymorphic_path([@identifier.publication, @identifier], :action => :editxml)}' + '">on the XML page</a>.';
+              return e;
             });
             
             //add class after the original insert to get the flash highlighting to work in IE browser
-            jQuery('#notice_notice').addClassName('flash error');
+            jQuery('#notice_notice').addClass('flash error');
           }
          
           var error_content = ' ';
@@ -608,18 +614,16 @@
         jQuery('#notice_notice').remove();
       }
   
-    var element = Event.element(event);
-    if (!element.hasClassName('line')) {element = element.up('li.line');}
-    nval = jQuery("#n-" + element.id).innerHTML;
-    element.insert({
-      after: '<li class="input"/>' + generateCommentaryForm(element.id,nval)
-    });
+    var element = jQuery(event.target);
+    if (!element.hasClass('line')) {element = element.parentsUntil('li.line');}
+    nval = jQuery("#n-" + element.id).html();
+    element.append('<li class="input"/>' + generateCommentaryForm(element.id,nval));
 
     menuInit();
     
     Effect.SlideDown("form-"+element.id);
-    element.stopObserving('click');
-    element.removeClassName('clickable');
+    element.unbind('click');
+    element.removeClass('clickable');
   }
 
   //###########################################################################################
@@ -634,7 +638,7 @@
         jQuery('#notice_notice').remove();
       }
     
-    var element = Event.element(event);
+    var element = jQuery(event.target);
     
     var original_content = jQuery('#frontmatter_commentary_container textarea');
     if(original_content.size() == 0) {
@@ -646,15 +650,13 @@
 
     Effect.SlideUp("frontmatter_commentary_container",{queue: 'front', duration: 0.5});
     
-    jQuery("#frontmatter_commentary_container").insert({
-      after: generateFrontmatterCommentaryForm(original_content)
-    });
+    jQuery("#frontmatter_commentary_container").append(generateFrontmatterCommentaryForm(original_content));
         
     menuInit();
 
     Effect.SlideDown("form-frontmatter",{queue: 'end'});
     
-    element.stopObserving('click');
+    element.unbind('click');
     event.stop();
   }
 
@@ -680,9 +682,7 @@
     
     Effect.SlideUp("frontmatter_commentary_container",{queue: 'front', duration: 0.5});
     
-    jQuery("#frontmatter_commentary_container").insert({
-      after: generateFrontmatterCommentaryForm(original_content)
-    });
+    jQuery("#frontmatter_commentary_container").append(generateFrontmatterCommentaryForm(original_content));
 
     menuInit();
 

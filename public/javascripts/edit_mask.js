@@ -41,7 +41,7 @@ function multiGetNextIndex(id) {
 }
 
 function multiUpdate(id, newItem) {
-  jQuery('#multiItems_' + id).insert(newItem);
+  jQuery('#multiItems_' + id).append(newItem);
 
   jQuery('#multiPlus_' + id + ' > input').each(function(i, item){item.clear();});
   jQuery('#multiPlus_' + id + ' > select').each(function(i, item){item.clear();});

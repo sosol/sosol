@@ -36,7 +36,7 @@
     for (var i in options)
     {
       if (options[i].urn != null) {
-        select_element.insert("<option value='" + options[i].urn + "'>" + options[i].label + "</option>");
+        select_element.append("<option value='" + options[i].urn + "'>" + options[i].label + "</option>");
         count++;
       }
     }
@@ -50,7 +50,7 @@
       jQuery('#emend_or_create').hide();
     } else {
       if (count > 1) {
-        select_element.insert("<option value=''>click to select...</option>");
+        select_element.append("<option value=''>click to select...</option>");
       } 
       jQuery('#emend_button').disabled = false;
       select_element.disabled = false;

@@ -28,12 +28,11 @@
         reset_selector(jQuery('#biblio_selected'));
         select_element = jQuery('#biblio_selected');
         if (json.response.numFound == 0) {
-          //select_element.insert("<option value=\"no bibliography records found\" style=\"width:80em\;\">no bibliography records found</option>");
-          select_element.insert("<option value=\"" + "no bibliography records found" + "\" style=\"width:90em\;\">" + "no bibliography records found" + "</option>");
+          select_element.append("<option value=\"" + "no bibliography records found" + "\" style=\"width:90em\;\">" + "no bibliography records found" + "</option>");
         }
         else {
           json.response.docs.each(function(v) {
-            select_element.insert("<option value=\"" + v.id + "\" style=\"width:90em\;\">" + v.display + "</option>");
+            select_element.append("<option value=\"" + v.id + "\" style=\"width:90em\;\">" + v.display + "</option>");
           });
         }
         select_element.children()[0].selected = true;

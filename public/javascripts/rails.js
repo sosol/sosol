@@ -116,7 +116,11 @@
   }
 
   function insertHiddenField(form, name, value) {
-    form.insert(new Element('input', { type: 'hidden', name: name, value: value }));
+    let input = document.createElement('input');
+    input.setAttribute('type', 'hidden');
+    input.setAttribute('name', name);
+    input.setAttribute('value', value);
+    form.appendChild(input);
   }
 
   function handleMethod(element) {
@@ -126,7 +130,7 @@
         csrf_token = jQuery('meta[name=csrf-token]')[0];
 
     var form = new Element('form', { method: "POST", action: url, style: "display: none;" });
-    $(element.parentNode).insert(form);
+    jQuery(element.parentNode).append(form);
 
     if (method !== 'post') {
       insertHiddenField(form, '_method', method);
