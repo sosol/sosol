@@ -63,7 +63,7 @@
       comment.bind('click',transformExistingCommentary);
       commentary_li.removeClass('clickable');
       commentary_li.unbind('click');
-      commentary_li.append(comment);
+      commentary_li.after(comment);
     });
   }
   
@@ -113,7 +113,7 @@
     
     Effect.SlideUp(comment_div_container.id, {duration: 0.5});
     
-    $(comment_li).append('<li class="input existing_comment"/>' + generateCommentaryForm(comment_on,nval,content,comment_div_container.id));
+    $(comment_li).after('<li class="input existing_comment"/>' + generateCommentaryForm(comment_on,nval,content,comment_div_container.id));
     
     menuInit();
 
@@ -615,7 +615,7 @@
     var element = jQuery(event.target);
     if (!element.hasClass('line')) {element = element.parentsUntil('li.line');}
     nval = jQuery("#n-" + element.id).html();
-    element.append('<li class="input"/>' + generateCommentaryForm(element.id,nval));
+    element.after('<li class="input"/>' + generateCommentaryForm(element.id,nval));
 
     menuInit();
     
@@ -648,7 +648,7 @@
 
     Effect.SlideUp("frontmatter_commentary_container",{queue: 'front', duration: 0.5});
     
-    jQuery("#frontmatter_commentary_container").append(generateFrontmatterCommentaryForm(original_content));
+    jQuery("#frontmatter_commentary_container").after(generateFrontmatterCommentaryForm(original_content));
         
     menuInit();
 
@@ -681,7 +681,7 @@
     
     Effect.SlideUp("frontmatter_commentary_container",{queue: 'front', duration: 0.5});
     
-    jQuery("#frontmatter_commentary_container").append(generateFrontmatterCommentaryForm(original_content));
+    jQuery("#frontmatter_commentary_container").after(generateFrontmatterCommentaryForm(original_content));
 
     menuInit();
 
