@@ -50,20 +50,20 @@
     }
     
     if (count == 0) {
-      select_element.disabled = true;
+      select_element.prop('disabled', true);
       select_element.hide();
     } else {
       if (count > 1) {
         select_element.append("<option value=''>click to select...</option>");
       } 
-      select_element.disabled = false;
+      select_element.prop('disabled', false);
       select_element.show();
     }
   }
   
   function update_group_urns() {
-    jQuery('#emend_button').disabled = true;
-    jQuery('#create_button').disabled = true;
+    jQuery('#emend_button').prop('disabled', true);
+    jQuery('#create_button').prop('disabled', true);
     clear_selector(jQuery('#edition_urn'));
     clear_selector(jQuery('#work_urn'));
     var inventory = jQuery('#CTSIdentifierCollectionSelect').val();
@@ -74,8 +74,8 @@
   }
   
   function update_work_urns() {
-    jQuery('#emend_button').disabled = true;
-    jQuery('#create_button').disabled = true;
+    jQuery('#emend_button').prop('disabled', true);
+    jQuery('#create_button').prop('disabled', true);
     clear_selector(jQuery('#edition_urn'));
     // get the works for the selected textgroup and populate the work selector
     var inventory = jQuery('#CTSIdentifierCollectionSelect').val();
@@ -88,13 +88,13 @@
     // hack to disable Create for perseus editions for now
     
     if (inventory != 'perseus') {
-      jQuery('#create_button').disabled = false;
+      jQuery('#create_button').prop('disabled', false);
     }
   }
   
   function update_edition_urns()
   {
-    jQuery('#emend_button').disabled = true;
+    jQuery('#emend_button').prop('disabled', true);
     // get the editions for the selected textgroup and work and populate the edition selector
     var inventory = jQuery('#CTSIdentifierCollectionSelect').val();
     var textgroup = jQuery('#group_urn').val();
@@ -104,11 +104,11 @@
       
       if (editions) {
         populate_selector(jQuery('#edition_urn'),editions)
-        jQuery('#emend_button').disabled = false;
+        jQuery('#emend_button').prop('disabled', false);
       } else {
         // still need to empty it out
         populate_selector(jQuery('#edition_urn'),{})
-        jQuery('#emend_button').disabled = true;
+        jQuery('#emend_button').prop('disabled', true);
       }
     }
 

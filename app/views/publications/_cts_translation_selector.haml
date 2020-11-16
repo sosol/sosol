@@ -43,19 +43,19 @@
     
     if (count == 0) {
       jQuery('p.cts_selector_hint')[0].innerHTML = 'No existing translations';
-      select_element.disabled = true;
+      select_element.prop('disabled', true);
       select_element.hide();
-      jQuery('#emend_button').disabled = true;
+      jQuery('#emend_button').prop('disabled', true);
       jQuery('#emend_button').hide();
       jQuery('#emend_or_create').hide();
     } else {
       if (count > 1) {
         select_element.append("<option value=''>click to select...</option>");
       } 
-      jQuery('#emend_button').disabled = false;
-      select_element.disabled = false;
+      jQuery('#emend_button').prop('disabled', false);
+      select_element.prop('disabled', false);
     }
-    jQuery('#create_button').disabled = false;
+    jQuery('#create_button').prop('disabled', false);
   }
   
     

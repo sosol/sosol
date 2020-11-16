@@ -63,13 +63,13 @@
       }
     }
     if (count == 0) {
-      select_element.disabled = true;
+      select_element.prop('disabled', true);
       select_element.hide();
     } else {
       if (count > 1) {
         select_element.append("<option value=''>click to select...</option>");
       } 
-      select_element.disabled = false;
+      select_element.prop('disabled', false);
       select_element.show();
     }
     select_element.children().each(function(o){
@@ -81,7 +81,7 @@
   }
   
   function update_group_urns() {
-    jQuery('#request_button').disabled = true;
+    jQuery('#request_button').prop('disabled', true);
     clear_selector(jQuery('#version_urn'));
     clear_selector(jQuery('#work_urn'));
     var inventory = jQuery('#body_repo').val();
@@ -96,7 +96,7 @@
   }
   
   function update_work_urns() {
-    jQuery('#request_button').disabled = true;
+    jQuery('#request_button').prop('disabled', true);
     clear_selector(jQuery('#version_urn'));
     // get the works for the selected textgroup and populate the work selector
     var inventory = jQuery('#body_repo').val();
@@ -110,7 +110,7 @@
   
   function update_version_urns()
   {
-    jQuery('#request_button').disabled = true;
+    jQuery('#request_button').prop('disabled', true);
     // get the editions for the selected textgroup and work and populate the edition selector
     var inventory = jQuery('#body_repo').val();
     var textgroup = jQuery('#group_urn').val();
@@ -125,7 +125,7 @@
     } else {
       // still need to empty it out
       populate_selector(jQuery('#version_urn'),{})
-      jQuery('#request_button').disabled = true;
+      jQuery('#request_button').prop('disabled', true);
     }
     update_cite_info();
   }
@@ -154,7 +154,7 @@
   function update_cite_info() {
     // clear the #citeinfo div in the form
     jQuery('#citeinfo').innerHTML = '';
-    jQuery('#request_button').disabled = true;
+    jQuery('#request_button').prop('disabled', true);
     // get the current edition and repo from the form input
     var inventory = jQuery('#body_repo').val();
     var textgroup = jQuery('#group_urn').val();
@@ -186,7 +186,7 @@
             '<input type="text" name="cite_to_' + i + '" class="cite_to" value="' + value +'"/>');
         }
     }
-    jQuery('#request_button').disabled = false;
+    jQuery('#request_button').prop('disabled', false);
   }
   
   // Merges the individual components of the citation into the passage component of a CTS URN

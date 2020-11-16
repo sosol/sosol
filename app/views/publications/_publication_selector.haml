@@ -43,11 +43,12 @@
      'DDBIdentifierCollectionSelect',
      'APISIdentifierCollectionSelect',
      'volume_number', 'document_number'].each(function(s) {
-      if($(s).disabled == '') {
-        $(s).disabled = true;
+       s = jQuery(s);
+      if(s.prop('disabled') == '') {
+        a.prop('disabled', true);
       }
       else {
-        $(s).disabled = '';
+        s.prop('disabled', '');
       }
      });
   }
@@ -156,10 +157,10 @@
           select_element.children()[0].selected = true;
           toggle_availability();
           if(disable_volume) {
-            jQuery('#volume_number').disabled = true;
+            jQuery('#volume_number').prop('disabled', true);
           }
           else if(select_element == jQuery('#volume_number')) {
-            jQuery('#document_number').disabled = true;
+            jQuery('#document_number').prop('disabled', true);
           }
         }
       } //end on success function
