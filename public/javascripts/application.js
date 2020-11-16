@@ -14,6 +14,8 @@ function showHide(id)
   }
 }
 
+jQuery.noConflict();
+
 // From: http://weblog.rubyonrails.org/assets/2011/2/8/prototype-snippet.js
 // See:  http://weblog.rubyonrails.org/2011/2/8/csrf-protection-bypass-in-ruby-on-rails
 /*
