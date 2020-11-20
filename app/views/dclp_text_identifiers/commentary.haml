@@ -437,7 +437,7 @@
       .then(response => response.json())
       .then(json => {
         if ("exception" in json) {
-          if (jQuery('#notice_notice')) //update if already there, add if not
+          if (document.QuerySelector('#notice_notice')) //update if already there, add if not
           {
             jQuery('#notice_notice').html('Error converting Commentary Grammar to XML approximately at line ' + json.exception.line + ' column ' + json.exception.column + '.  This file was NOT SAVED.  Please correct the error below.');
           }
@@ -611,7 +611,7 @@
       }
   
     var element = jQuery(event.target);
-    if (!element.hasClass('line')) {element = element.parentsUntil('li.line');}
+    if (!element.hasClass('line')) {element = element.parents('li.line');}
     nval = jQuery("#n-" + element[0].id).html();
     element.after('<li class="input"/>' + generateCommentaryForm(element.id,nval));
 

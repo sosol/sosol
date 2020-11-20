@@ -123,43 +123,43 @@ function multiAddRelatedArticleList()
 /**** check ****/
 
 function checkNotAddedMultiples(){
-  if(jQuery('#authorList_firstName').value.match(/.+/) || jQuery('#authorList_lastName').value.match(/.+/) || jQuery('#authorList_name').value.match(/.+/)){
+  if(jQuery('#authorList_firstName').val().match(/.+/) || jQuery('#authorList_lastName').val().match(/.+/) || jQuery('#authorList_name').val().match(/.+/)){
     multiAddNameList('authorList');
   }
 
-  if(jQuery('#editorList_firstName').value.match(/.+/) || jQuery('#editorList_lastName').value.match(/.+/) || jQuery('#editorList_name').value.match(/.+/)){
+  if(jQuery('#editorList_firstName').val().match(/.+/) || jQuery('#editorList_lastName').val().match(/.+/) || jQuery('#editorList_name').val().match(/.+/)){
     multiAddNameList('editorList');
   }
 
-  if(jQuery('#journalTitleShort_title').value.match(/.+/)){
+  if(jQuery('#journalTitleShort_title').val().match(/.+/)){
     multiAddShortTitleList('journalTitleShort');
   }
 
-  if(jQuery('#bookTitleShort_title').value.match(/.+/)){
+  if(jQuery('#bookTitleShort_title').val().match(/.+/)){
     multiAddShortTitleList('bookTitleShort');
   }
 
-  if(jQuery('#papyrologicalSeriesTitleShort_title').value.match(/.+/)){
+  if(jQuery('#papyrologicalSeriesTitleShort_title').val().match(/.+/)){
     multiAddShortTitleList('papyrologicalSeriesTitleShort');
   }
 
-  if(jQuery('#note_responsibility').value.match(/.+/) && jQuery('#note_annotation').value.match(/.+/)){
+  if(jQuery('#note_responsibility').val().match(/.+/) && jQuery('#note_annotation').val().match(/.+/)){
     multiAddNote();
   }
 
-  if(jQuery('#containerList_pointer').value.match(/.+/)){
+  if(jQuery('#containerList_pointer').val().match(/.+/)){
     multiAddRelatedList('containerList');
   }
 
-  if(jQuery('#revieweeList_pointer').value.match(/.+/)){
+  if(jQuery('#revieweeList_pointer').val().match(/.+/)){
     multiAddRelatedList('revieweeList');
   }
 
-  if(jQuery('#publisherList_publisherType').value.match(/.+/) && jQuery('#publisherList_value').value.match(/.+/)){
+  if(jQuery('#publisherList_publisherType').val().match(/.+/) && jQuery('#publisherList_value').val().match(/.+/)){
     multiAddPublisherList();
   }
 
-  if(jQuery('#relatedArticleList_series').value.match(/.+/) || jQuery('#relatedArticleList_inventory').value.match(/.+/)){
+  if(jQuery('#relatedArticleList_series').val().match(/.+/) || jQuery('#relatedArticleList_inventory').val().match(/.+/)){
     multiAddRelatedArticleList();
   }
 }

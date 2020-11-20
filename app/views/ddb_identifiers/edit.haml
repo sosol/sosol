@@ -35,7 +35,7 @@
         }
         else {
           //remove exisiting flash error if it is there when successfully completed
-          if (jQuery('#flasherror')) 
+          if (jQuery('#flasherror').length)
             {
               jQuery('#flasherror').remove();
             }
@@ -63,7 +63,7 @@
   
   function insert_flash_error(msg){
     
-    if (jQuery('#flasherror')) 
+    if (jQuery('#flasherror').length)
       {
         jQuery('#flasherror').update(msg);
       }
@@ -127,7 +127,7 @@
   
   jQuery(document).ready( function() {
     if (#{Sosol::Application.config.respond_to?(:xsugar_standalone_enabled) && Sosol::Application.config.xsugar_standalone_enabled} && !#{defined?(@bad_leiden) ? @bad_leiden : false}) {
-      was_disabled = jQuery('#ddb_identifier_leiden_plus').disabled;
+      was_disabled = jQuery('#ddb_identifier_leiden_plus')[0].disabled;
       
       Form.Element.disable('ddb_identifier_leiden_plus');
       Form.Element.disable('identifier_submit_top');
@@ -135,13 +135,13 @@
       
       jQuery('#ddb_identifier_leiden_plus').toggleClass('loading');
       Form.Element.setValue('ddb_identifier_leiden_plus',
-        jQuery('#original_leiden_plus').value);
+        jQuery('#original_leiden_plus').val());
 
       ajax_xml_to_leiden(was_disabled);
     }
     else if (#{(defined?(@bad_leiden) ? @bad_leiden : false) || (Sosol::Application.config.respond_to?(:xsugar_standalone_enabled) || !Sosol::Application.config.xsugar_standalone_enabled)}) {
       Form.Element.setValue('ddb_identifier_leiden_plus',
-        jQuery('#original_leiden_plus').value);
+        jQuery('#original_leiden_plus').val());
       showMatch("ddb_identifier_leiden_plus", "**POSSIBLE ERROR**");
     }
   });

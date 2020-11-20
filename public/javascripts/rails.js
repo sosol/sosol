@@ -56,14 +56,15 @@
   if (!submitBubbles) {
     // discover forms on the page by observing focus events which always bubble
     jQuery(document).on('focusin', 'form', function(focusEvent) {
+      let form = jQuery(focusEvent.target);
       // special handler for the real "submit" event (one-time operation)
-      if (!focusEvent.target.retrieve('emulated:submit')) {
+      if (!form.data('emulated:submit')) {
         form.on('submit', function(submitEvent) {
-          var emulated = form.fire('emulated:submit', submitEvent, true);
+          var emulated = form.trigger('emulated:submit', submitEvent);
           // if custom event received preventDefault, cancel the real one too
           if (emulated.returnValue === false) submitEvent.preventDefault();
         });
-        form.store('emulated:submit', true);
+        form.data('emulated:submit', true);
       }
     });
   }
@@ -71,13 +72,13 @@
   if (!changeBubbles) {
     // discover form inputs on the page
     jQuery(document).on('focusin', 'input, select, textarea', function(focusEvent) {
-      let input = focusEvent.target;
+      let input = jQuery(focusEvent.target);
       // special handler for real "change" events
-      if (!input.retrieve('emulated:change')) {
+      if (!input.data('emulated:change')) {
         input.on('change', function(changeEvent) {
-          input.fire('emulated:change', changeEvent, true);
+          input.trigger('emulated:change', changeEvent);
         });
-        input.store('emulated:change', true);
+        input.data('emulated:change', true);
       }
     });
   }
@@ -169,11 +170,11 @@
       return false;
     }
 
-    if (link.readAttribute('data-remote')) {
+    if (link.hasAttribute('data-remote')) {
       handleRemote(link);
       event.preventDefault();
       event.stopPropagation();
-    } else if (link.readAttribute('data-method')) {
+    } else if (link.hasAttribute('data-method')) {
       handleMethod(link);
       event.preventDefault();
       event.stopPropagation();
@@ -183,11 +184,11 @@
   jQuery(document).on("click", "form input[type=submit], form button[type=submit], form button:not([type])", function(event) {
     let button = event.target;
     // register the pressed submit button
-    event.findElement('form').store('rails:submit-button', button.name || false);
+    jQuery(event.target).parents('form').data('rails:submit-button', button.name || false);
   });
 
   jQuery(document).on("submit", function(event) {
-    var form = event.findElement();
+    var form = event.target;
 
     if (!allowAction(form)) {
       event.preventDefault();
@@ -205,10 +206,10 @@
   });
 
   jQuery(document).on('ajax:create', 'form', function(event) {
-    if (form == event.target.findElement()) disableFormElements(form);
+    if (form == event.target) disableFormElements(form);
   });
   
   jQuery(document).on('ajax:complete', 'form', function(event) {
-    if (form == event.findElement()) enableFormElements(form);
+    if (form == event.target) enableFormElements(form);
   });
 })();

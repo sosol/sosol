@@ -35,8 +35,8 @@
             select_element.append("<option value=\"" + v.id + "\" style=\"width:90em\;\">" + v.display + "</option>");
           });
         }
-        select_element.children()[0].selected = true;
-        setFulltext(select_element.children()[0].innerHTML);
+select_element.children().first()[0].selected = true;
+setFulltext(select_element.children().first()[0].innerHTML);
         //}
       },
       onFailure: function(response) {

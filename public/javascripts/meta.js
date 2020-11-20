@@ -5,20 +5,20 @@ function provenanceOrigPlaceUnknownToggle(unknown){
     
     if((jQuery('#multiItems_provenance li.provenance').length == 0) || confirm('Delete all provenance entries?')){
       // set value
-      jQuery('#geoPreview').innerHMTL = 'unbekannt';
+      jQuery('#geoPreview').html('unbekannt');
 
       // hide data pane
       jQuery('#multi_provenance').hide();
 
       // delete geo data
-      jQuery('#multiItems_provenance').innerHTML = '';
+      jQuery('#multiItems_provenance').html('');
     } else {
       unknown.checked = false;
     }
 
   } else {
    // reset value
-   jQuery('#geoPreview').innerHMTL = '';
+   jQuery('#geoPreview').html('');
    
    // show data pane
    jQuery('#multi_provenance').show();
@@ -28,31 +28,31 @@ function provenanceOrigPlaceUnknownToggle(unknown){
 /**** publication ****/
 
 function publicationPreview(){
-  if(jQuery('#publicationExtraFullTitle')){
+    if(jQuery('#publicationExtraFullTitle').length){
     preview = jQuery('#hgv_meta_identifier_publicationTitle').val() + ' ' + 
               jQuery('#hgv_meta_identifier_publicationExtra_0_value').val() + ' ' +
               jQuery('#hgv_meta_identifier_publicationExtra_1_value').val() + ' ' +
               jQuery('#hgv_meta_identifier_publicationExtra_2_value').val() + ' ' +
               jQuery('#hgv_meta_identifier_publicationExtra_3_value').val() + ' ';
 
-    jQuery('#multiItems_publicationExtra').select('input').each(function(i, input){
+    jQuery('#multiItems_publicationExtra').find('input').each(function(i, input){
    
       if(input.type.toLowerCase() != 'hidden'){
         preview += jQuery(input).val() + ' ';
       }
     });
   
-    jQuery('#publicationExtraFullTitle').innerHTML = preview;
+    jQuery('#publicationExtraFullTitle').html(preview);
   }
 }
 
 /**** date ****/
 
 function hideDateTabs(){
-  if(jQuery('#hgv_meta_identifier_textDate_1_attributes_id')[0].parentNode.getElementsBySelector('span')[0].innerHTML.indexOf('(') >= 0){
+  if(jQuery('#hgv_meta_identifier_textDate_1_attributes_id')[0].parentNode.querySelector('span')[0].innerHTML.indexOf('(') >= 0){
     
     // hide date tabs
-    jQuery('div#dateContainer div.dateItem div.dateTab').each(function(i, e){e.hide();});
+    jQuery('div#dateContainer div.dateItem div.dateTab').hide();
     
     // activate show-button
     jQuery('.showDateTabs').bind('click', function(ev){showDateTabs();});
@@ -87,14 +87,14 @@ function toggleMentionedDates(dateId){
         li.style.display = 'none';
       }
   });
-  jQuery('#mentionedDate_dateId').value = dateId;
+  jQuery('#mentionedDate_dateId').val(dateId);
 }
 
 /**** multi ****/
 
 function multiAddCitedLiterature(){
-  var target     = jQuery('#citedLiterature_target').value;
-  var pagination = jQuery('#citedLiterature_pagination').value;
+  var target     = jQuery('#citedLiterature_target').val();
+  var pagination = jQuery('#citedLiterature_pagination').val();
 
   var index = multiGetNextIndex('citedLiterature');
 
@@ -110,8 +110,8 @@ function multiAddCitedLiterature(){
 
 function multiAddBl()
 {
-  var volume = jQuery('#multiPlus_bl > select')[0].value;
-  var page = jQuery('#multiPlus_bl > input')[0].value;
+  var volume = jQuery('#multiPlus_bl > select')[0].val();
+  var page = jQuery('#multiPlus_bl > input')[0].val();
 
   var index = multiGetNextIndex('bl');
 
@@ -365,7 +365,7 @@ function multiAddPublicationExtra()
   }
   
   var pattern = '';
-  jQuery('#multiPlus_publicationExtra > select')[0].select('option').each(function(option){
+    jQuery('#multiPlus_publicationExtra > select').first().find('option').each(function(i, option){
     if(option.selected){
       pattern = option.text.replace(/<.+>/, '');
     }
@@ -443,7 +443,7 @@ function multiAddMentionedDate()
 
   multiUpdate('mentionedDate', item);
   
-  jQuery('#mentionedDate_dateId').value = dateId;
+  jQuery('#mentionedDate_dateId').val(dateId);
   
   mentionedDateNewDate(jQuery('#hgv_meta_identifier_mentionedDate_' + index +  '_date1'));
 }
@@ -470,14 +470,14 @@ function multiRemove(item)
 function mentionedDateNewDate(dateinput)
 {
   var index = dateinput.id.match(/\d+/)[0];
-  var date1 = jQuery('#hgv_meta_identifier_mentionedDate_' + index + '_date1').value;
-  var date2 = jQuery('#hgv_meta_identifier_mentionedDate_' + index + '_date2').value;
+  var date1 = jQuery('#hgv_meta_identifier_mentionedDate_' + index + '_date1').val();
+  var date2 = jQuery('#hgv_meta_identifier_mentionedDate_' + index + '_date2').val();
   
   if(date2 && date2 != ''){
-    jQuery('#hgv_meta_identifier_mentionedDate_' + index + '_children_date_attributes_notBefore').value = date1;
-    jQuery('#hgv_meta_identifier_mentionedDate_' + index + '_children_date_attributes_notAfter').value  = date2;
+    jQuery('#hgv_meta_identifier_mentionedDate_' + index + '_children_date_attributes_notBefore').val(date1);
+    jQuery('#hgv_meta_identifier_mentionedDate_' + index + '_children_date_attributes_notAfter').val(date2);
   } else {
-    jQuery('#hgv_meta_identifier_mentionedDate_' + index + '_children_date_attributes_when').value      = date1;
+    jQuery('#hgv_meta_identifier_mentionedDate_' + index + '_children_date_attributes_when').val(date1);
   }
 
   mentionedDateNewCertainty(jQuery('#hgv_meta_identifier_mentionedDate_' + index + '_certaintyPicker')); // update certainties as well
@@ -504,7 +504,7 @@ function mentionedDateNewCertainty(selectbox)
   var value = selectbox.value;
 
   // remove
-  $(selectbox.parentNode).select('input[type=hidden]').each(function(i, item){
+  $(selectbox.parentNode).find('input[type=hidden]').each(function(i, item){
     if(item.id.indexOf('certainty') > 0){
       var certaintyIndex = item.id.match(/\d+/g)[1] * 1;
       if(certaintyIndex){
@@ -539,15 +539,15 @@ function mentionedDateNewCertainty(selectbox)
 /**** check ****/
 
 function checkNotAddedMultiples(){
-  if(jQuery('#mentionedDate_date') && jQuery('#mentionedDate_date').value.match(/-?\d{4}(-\d{2}(-\d{2})?)?/)){
+    if(jQuery('#mentionedDate_date').length && jQuery('#mentionedDate_date').val().match(/-?\d{4}(-\d{2}(-\d{2})?)?/)){
     multiAddMentionedDate();
   }
 
-  if(jQuery('#bl_volume') && jQuery('#bl_volume').value.match(/([IVXLCDM]+|(II [1|2]))/)){
+    if(jQuery('#bl_volume').length && jQuery('#bl_volume').val().match(/([IVXLCDM]+|(II [1|2]))/)){
     multiAddBl();
   }
 
-  if(jQuery('#figures_url') && jQuery('#figures_url').value.match(/http:\/\/.+/)){
+    if(jQuery('#figures_url').length && jQuery('#figures_url').val().match(/http:\/\/.+/)){
     multiAddFigures();
   }
 

@@ -3,16 +3,16 @@
   :javascript 
 
     function checkForComment() { 
-      comment_text = jQuery('#submit_comment').value; 
+      comment_text = jQuery('#submit_comment').val();
 
-      if (jQuery('#community_id') != null)
+      if (jQuery('#community_id').length)
       {
-        var selected_submit = jQuery('#community_id').value;
-        jQuery('#submit_button').disabled = (selected_submit == "")  ||  ( comment_text.replace(/^\s+|\s+$/g, '') == "" )
+        var selected_submit = jQuery('#community_id').val();
+        jQuery('#submit_button')[0].disabled = (selected_submit == "")  ||  ( comment_text.replace(/^\s+|\s+$/g, '') == "" )
       }
       else
       {
-        jQuery('#submit_button').disabled = ( comment_text.replace(/^\s+|\s+$/g, '') == "" )
+        jQuery('#submit_button')[0].disabled = ( comment_text.replace(/^\s+|\s+$/g, '') == "" )
       } 
     }
     
@@ -178,7 +178,7 @@
           - form_for :apis, :url => {:controller => 'identifiers', :action => 'create', :publication_id => @publication.id, :identifier_type => class_type} do |f|
             = select_tag 'apis_collection', options_for_select(options.flatten.uniq), :onchange => "this.form.submit()"
         - else
-          = link_to(create_type, options = {:controller => 'identifiers', :action => 'create', :publication_id => @publication.id, :identifier_type => class_type, :method => :post}, html_options = {:id => "#{link_type}", :onclick => "jQuery('##{link_type}').replace('<b #{newstyle}>Creating New #{link_type}...</b>');"})
+          = link_to(create_type, options = {:controller => 'identifiers', :action => 'create', :publication_id => @publication.id, :identifier_type => class_type, :method => :post}, html_options = {:id => "#{link_type}", :onclick => "jQuery('##{link_type}').html('<b #{newstyle}>Creating New #{link_type}...</b>');"})
      
         %br
 

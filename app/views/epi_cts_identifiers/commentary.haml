@@ -30,7 +30,7 @@
     
   function addObs() {
     
-    if (jQuery('#fm_sugar_content')) //if front matter commentary form is there
+if (jQuery('#fm_sugar_content').length) //if front matter commentary form is there
       {
         jQuery('#fm_sugar_content').bind('select', selectText);
 
@@ -39,7 +39,7 @@
         //}
       }
     
-    if (jQuery('#com_sugar_content')) //if line by line commentary form is there
+      if (jQuery('#com_sugar_content').length) //if line by line commentary form is there
       {
         jQuery('#com_sugar_content').bind('select', selectText);
 
@@ -85,7 +85,7 @@
   function transformExistingCommentary(event) {
     removeAllClickable();
     //remove exisiting notification error if it there before loading the new form
-    if (jQuery('#notice_notice')) 
+      if (jQuery('#notice_notice').length)
       {
         jQuery('#notice_notice').remove();
       }
@@ -314,7 +314,7 @@
     Form.Element.disable('save_com');
     jQuery('#com_sugar_content').toggleClass('loading');
 
-    originalleiden = jQuery('#com_sugar_content').value;
+    originalleiden = jQuery('#com_sugar_content').val();
     //alert ("originalleiden" + originalleiden);
     if (#{Sosol::Application.config.respond_to?(:xsugar_standalone_use_proxy) && Sosol::Application.config.xsugar_standalone_use_proxy}) {
       request_url = "#{url_for(:controller => 'ajax_proxy', :only_path => true)}" + '/xsugar/';
@@ -339,9 +339,9 @@
         json = response.responseText.evalJSON();
       
         if ("exception" in json) {
-          if (jQuery('#notice_notice')) //update if already there, add if not
+          if (jQuery('#notice_notice').length) //update if already there, add if not
           {
-            jQuery('#notice_notice').update('Error converting Commentary Grammar to XML approximately at line ' + json.exception.line + ' column ' + json.exception.column + '.  This file was NOT SAVED.  Please correct the error below.');
+            jQuery('#notice_notice').html('Error converting Commentary Grammar to XML approximately at line ' + json.exception.line + ' column ' + json.exception.column + '.  This file was NOT SAVED.  Please correct the error below.');
           }
           else
           {
@@ -376,7 +376,7 @@
           Form.Element.enable('com_sugar_content');
 
           //remove wrap tags and namespace before call action to save to XML
-          jQuery('#com_sugar_content').value = json.content.replace(/^\<wrap(.*?)\>/,'').replace(/\<\/wrap\>$/,'').strip();
+          jQuery('#com_sugar_content').val(json.content.replace(/^\<wrap(.*?)\>/,'').replace(/\<\/wrap\>$/,'').strip());
 
           jQuery('#update_commentary_form').submit();
           
@@ -404,7 +404,7 @@
     Form.Element.disable('save_fm');
     jQuery('#fm_sugar_content').toggleClass('loading');
 
-    originalleiden = jQuery('#fm_sugar_content').value;
+    originalleiden = jQuery('#fm_sugar_content').val();
 
     if (#{Sosol::Application.config.respond_to?(:xsugar_standalone_use_proxy) && Sosol::Application.config.xsugar_standalone_use_proxy}) {
       request_url = "#{url_for(:controller => 'ajax_proxy', :only_path => true)}" + '/xsugar/';
@@ -429,9 +429,9 @@
         json = response.responseText.evalJSON();
       
         if ("exception" in json) {
-          if (jQuery('#notice_notice')) //update if already there, add if not
+          if (jQuery('#notice_notice').length) //update if already there, add if not
           {
-            jQuery('#notice_notice').update('Error converting Commentary Grammar to XML approximately at line ' + json.exception.line + ' column ' + json.exception.column + '.  This file was NOT SAVED.  Please correct the error below.');
+            jQuery('#notice_notice').html('Error converting Commentary Grammar to XML approximately at line ' + json.exception.line + ' column ' + json.exception.column + '.  This file was NOT SAVED.  Please correct the error below.');
           }
           else
           {
@@ -448,7 +448,7 @@
              
           var error_content = ' ';
           error_content = insert_error_here(json.content, json.exception.line, json.exception.column);
-          jQuery('#fm_sugar_content').value = error_content.replace(/^\<W\:/,'').replace(/\:W\>$/,'').strip();
+          jQuery('#fm_sugar_content').val(error_content.replace(/^\<W\:/,'').replace(/\:W\>$/,'').strip());
           
           //enable form after error
           jQuery('#fm_sugar_content').toggleClass('loading');
@@ -466,7 +466,7 @@
           Form.Element.enable('fm_sugar_content');
 
           //remove wrap tags and namespace before call action to save to XML
-          jQuery('#fm_sugar_content').value = json.content.replace(/^\<wrap(.*?)\>/,'').replace(/\<\/wrap\>$/,'').strip();
+          jQuery('#fm_sugar_content').val(json.content.replace(/^\<wrap(.*?)\>/,'').replace(/\<\/wrap\>$/,'').strip());
 
           jQuery('#update_frontmatter_form').submit();
           
@@ -511,9 +511,9 @@
         json = response.responseText.evalJSON();
       
         if ("exception" in json) {
-          if (jQuery('#notice_notice')) //update if already there, add if not
+          if (jQuery('#notice_notice').length) //update if already there, add if not
           {
-            jQuery('#notice_notice').update('Error converting XML to Commentary Grammar approximately at line ' + json.exception.line + ' column ' + json.exception.column + '. Please correct the error <a href="' + '#{polymorphic_path([@identifier.publication, @identifier], :action => :editxml)}' + '">on the XML page</a>.');
+            jQuery('#notice_notice').html('Error converting XML to Commentary Grammar approximately at line ' + json.exception.line + ' column ' + json.exception.column + '. Please correct the error <a href="' + '#{polymorphic_path([@identifier.publication, @identifier], :action => :editxml)}' + '">on the XML page</a>.');
           }
           else
           {
@@ -534,7 +534,7 @@
           if (wherefrom == "FM")
             {
               //jQuery('#fm_sugar_content').value = error_content.replace(/^\<wrap\>/,'').replace(/\<\/wrap\>$/,'').strip();
-              jQuery('#fm_sugar_content').value = error_content.strip();
+              jQuery('#fm_sugar_content').val(error_content.strip());
 
               //enable form after error
               jQuery('#fm_sugar_content').toggleClass('loading');
@@ -548,7 +548,7 @@
           else
             {
               //jQuery('#com_sugar_content').value = error_content.replace(/^\<wrap\>/,'').replace(/\<\/wrap\>$/,'').strip();
-              jQuery('#com_sugar_content').value = error_content.strip();
+              jQuery('#com_sugar_content').val(error_content.strip());
 
               //enable form after error
               jQuery('#com_sugar_content').toggleClass('loading');
@@ -565,14 +565,14 @@
           // will automatically put back in on a save if a user does not
           if (wherefrom == "FM")
             {
-              jQuery('#fm_sugar_content').value = json.content.replace(/^\<W\:\n\n/,'').replace(/\:W\>$/,'');
+              jQuery('#fm_sugar_content').val(json.content.replace(/^\<W\:\n\n/,'').replace(/\:W\>$/,''));
               jQuery('#fm_sugar_content').toggleClass('loading');
               Form.Element.enable('fm_sugar_content');
               Form.Element.enable('save_fm');
             }
           else
             {
-              jQuery('#com_sugar_content').value = json.content.replace(/^\<W\:\n\n/,'').replace(/\:W\>$/,'');
+              jQuery('#com_sugar_content').val(json.content.replace(/^\<W\:\n\n/,'').replace(/\:W\>$/,''));
               jQuery('#com_sugar_content').toggleClass('loading');
               Form.Element.enable('com_sugar_content');
               Form.Element.enable('save_com');
@@ -593,13 +593,13 @@
   function addCommentary(event) {
     removeAllClickable();
     //remove exisiting notification error if it there before loading the new form
-    if (jQuery('#notice_notice')) 
+      if (jQuery('#notice_notice').length)
       {
         jQuery('#notice_notice').remove();
       }
   
     var element = jQuery(event.target);
-    if (!element.hasClass('line')) {element = element.parentsUntil('li.line');}
+    if (!element.hasClass('line')) {element = element.parents('li.line');}
     nval = jQuery("#n-" + element.id).html();
     element.after('<li class="input"/>' + generateCommentaryForm(element.id,nval));
 
@@ -617,7 +617,7 @@
   function addFrontmatterCommentary(event) {
     removeAllClickable();
     //remove exisiting notification error if it there before loading the new form
-    if (jQuery('#notice_notice')) 
+      if (jQuery('#notice_notice').length)
       {
         jQuery('#notice_notice').remove();
       }
@@ -629,7 +629,7 @@
       original_content = '';
     }
     else {
-      original_content = original_content[0].value;
+original_content = original_content.first().val();
     }
 
     Effect.SlideUp("frontmatter_commentary_container",{queue: 'front', duration: 0.5});
@@ -653,7 +653,7 @@
   function transformExistingFrontmatterCommentary(event) {
     removeAllClickable();
     //remove exisiting notification error if it there before loading the new form
-    if (jQuery('#notice_notice')) 
+      if (jQuery('#notice_notice').length)
       {
         jQuery('#notice_notice').remove();
       }
@@ -662,7 +662,7 @@
       original_content = '';
     }
     else {
-      original_content = original_content[0].value;
+original_content = original_content.first().val();
     }
     
     Effect.SlideUp("frontmatter_commentary_container",{queue: 'front', duration: 0.5});
@@ -758,10 +758,10 @@
   function helpComOpen(view, wherefrom){
 
     //set textarea to the value the window opened will insert to - either the frontmatter or commentary
-    jQuery('#fm_or_com').value = wherefrom;
+    jQuery('#fm_or_com').val(wherefrom);
 
     //remove exisiting notification error if it there before loading the new form
-    if (jQuery('#notice_notice')) 
+      if (jQuery('#notice_notice').length)
       {
         jQuery('#notice_notice').remove();
       }

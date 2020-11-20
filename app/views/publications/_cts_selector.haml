@@ -125,7 +125,7 @@
     %p{:class => ['cts_selector_hint']}== Select a publication to work with:
     = hidden_field_tag 'IdentifierClass','CTSIdentifier'
     - [CTSIdentifier].each do |identifier_class|
-      = select_tag("#{identifier_class}CollectionSelect", options_for_select(identifier_class.inventories_hash.keys), :onchange => "get_inventory();jQuery('#emend_button').disabled='';if(this.options[0].value==''){this.remove(0)}")
+      = select_tag("#{identifier_class}CollectionSelect", options_for_select(identifier_class.inventories_hash.keys), :onchange => "get_inventory();jQuery('#emend_button').prop('disabled','');if(this.options[0].value==''){this.remove(0)}")
     = select_tag 'group_urn', nil, :disabled => true, :style => 'min-width: 5em;', :onchange => "update_work_urns();"
     = select_tag 'work_urn', nil, :disabled => true, :style => 'min-width: 5em;', :onchange => "update_edition_urns();"
     = select_tag 'edition_urn', nil, :disabled => true, :style => 'min-width: 5em;', :onchange => "if(this.options[0].value==''){this.remove(0)};"

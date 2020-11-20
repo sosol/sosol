@@ -153,7 +153,7 @@
           values.each(function(v) {
             select_element.append("<option value=\"" + v + "\">" + v + "</option>");
           });
-          select_element.children()[0].selected = true;
+          select_element.children().first()[0].selected = true;
           toggle_availability();
           if(disable_volume) {
             jQuery('#volume_number').prop('disabled', true);
@@ -252,16 +252,16 @@
   }
   
   jQuery(document).ready( function() {
-    jQuery('#IdentifierClass').children()[0].selected = true;
-    jQuery('#DDBIdentifierCollectionSelect').children()[0].selected = true;
-    jQuery('#HGVIdentifierCollectionSelect').children()[0].selected = true;
+    jQuery('#IdentifierClass').children().first()[0].selected = true;
+    jQuery('#DDBIdentifierCollectionSelect').children().first()[0].selected = true;
+    jQuery('#HGVIdentifierCollectionSelect').children().first()[0].selected = true;
     
     jQuery('#DDBIdentifierCollectionSelect').removeClass('invisible');
     jQuery('#HGVIdentifierCollectionSelect').addClass('invisible');
 
-    if (jQuery('#APISIdentifierCollectionSelect')) //only when used in helper pop up
+    if (jQuery('#APISIdentifierCollectionSelect').length) //only when used in helper pop up
       {
-        jQuery('#APISIdentifierCollectionSelect').children()[0].selected = true;
+        jQuery('#APISIdentifierCollectionSelect').children().first()[0].selected = true;
         jQuery('#APISIdentifierCollectionSelect').addClass('invisible');
       }
     

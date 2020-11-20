@@ -43,9 +43,9 @@ function multiGetNextIndex(id) {
 function multiUpdate(id, newItem) {
   jQuery('#multiItems_' + id).append(newItem);
 
-  jQuery('#multiPlus_' + id + ' > input').each(function(i, item){item.clear();});
-  jQuery('#multiPlus_' + id + ' > select').each(function(i, item){item.clear();});
-  jQuery('#multiPlus_' + id + ' > textarea').each(function(i, item){item.clear();});
+  jQuery('#multiPlus_' + id + ' > input').val('');
+  jQuery('#multiPlus_' + id + ' > select').val('');
+  jQuery('#multiPlus_' + id + ' > textarea').val('');
 
   Sortable.create('multiItems_' + id, {overlap: 'horizontal', constraint: false, handle: 'move'});
 }
