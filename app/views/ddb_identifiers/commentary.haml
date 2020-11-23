@@ -58,7 +58,7 @@
     existing_comments = jQuery(".comment-on-" + commentary_li.id);
     commentary_li = jQuery(commentary_li);
     existing_comments.toArray().reverse().forEach(function (comment) {
-      let comment = jQuery(comment);
+      comment = jQuery(comment);
       comment.addClass('clickable');
       comment.addClass('existing_comment');
       comment.bind('click',transformExistingCommentary);
