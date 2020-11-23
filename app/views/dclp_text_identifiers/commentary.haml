@@ -314,7 +314,7 @@
     Form.Element.disable('save_com');
     jQuery('#com_sugar_content').toggleClass('loading');
 
-    originalleiden = jQuery('#com_sugar_content').value;
+    originalleiden = jQuery('#com_sugar_content').val();
     //alert ("originalleiden" + originalleiden);
     if (#{Sosol::Application.config.respond_to?(:xsugar_standalone_use_proxy) && Sosol::Application.config.xsugar_standalone_use_proxy}) {
       console.log('use proxy');
@@ -410,7 +410,7 @@
     Form.Element.disable('save_fm');
     jQuery('#fm_sugar_content').toggleClass('loading');
 
-    originalleiden = jQuery('#fm_sugar_content').value;
+    originalleiden = jQuery('#fm_sugar_content').val();
 
     if (#{Sosol::Application.config.respond_to?(:xsugar_standalone_use_proxy) && Sosol::Application.config.xsugar_standalone_use_proxy}) {
       request_url = "#{url_for(:controller => 'ajax_proxy', :only_path => true)}" + '/xsugar/';
@@ -613,7 +613,7 @@
     var element = jQuery(event.target);
     if (!element.hasClass('line')) {element = element.parents('li.line');}
     nval = jQuery("#n-" + element[0].id).html();
-    element.after('<li class="input"/>' + generateCommentaryForm(element.id,nval));
+    element.after('<li class="input"/>' + generateCommentaryForm(element[0].id,nval));
 
     menuInit();
     

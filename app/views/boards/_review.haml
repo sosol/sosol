@@ -1,5 +1,5 @@
 :javascript
-  function checkForComment() { comment_text = jQuery('#comment_comment').value; jQuery('#vote_submit').disabled = comment_text.replace(/^\s+|\s+$/g, '') == ""; }
+  function checkForComment() { comment_text = jQuery('#comment_comment').val(); jQuery('#vote_submit').disabled = comment_text.replace(/^\s+|\s+$/g, '') == ""; }
   function preventDoubleVote() { set_conf_false_vote();  jQuery('#vote_submit').hide();  }
 - if identifier.modified?
   %h3 Votes

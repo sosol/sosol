@@ -75,7 +75,7 @@
       alert("Unable to read the selected range. Please try your selection again.");
       return;
     }
-    var uri = jQuery('#src').value + "/" + jQuery('#target_urn').value + "#" + start_ref;
+    var uri = jQuery('#src').val() + "/" + jQuery('#target_urn').val() + "#" + start_ref;
     // no span needed if the start and end are the same
     if (end_ref != start_ref) {
       uri = uri + '-' + end_ref;
@@ -174,15 +174,15 @@
     var valid_targets = [];
     var invalid_targets = [];
     all_targets.each(
-      function(elem) { 
-        if( $(elem).val().match(/^https?:/) != null ) {
+      function(i, elem) { 
+        if( jQuery(elem).val().match(/^https?:/) != null ) {
           valid_targets.push(elem);
         }
       }
     );
     all_targets.each(
-      function(elem) { 
-        if($(elem).val().match(/^https?:/) == null) {
+      function(i, elem) { 
+        if(jQuery(elem).val().match(/^https?:/) == null) {
           invalid_targets.push(elem);
         }
       }
@@ -198,17 +198,17 @@
     if (! valid_body) {
       messages.push("You need to specify a valid uri as the annotation body.");
     }
-    // TODO we need also to check that the target rnages don't overlap
+    // TODO we need also to check that the target ranges don't overlap
     if (messages.length > 0) {
       alert(messages.join("\n"));
       return false;
     } else {
       if (Array.isArray(valid_targets)) {
-        jQuery('#valid_targets').value = $(valid_targets).collect(function(elem) { return elem.name; }).join(',');
+        jQuery('#valid_targets').val(valid_targets.map(function(elem) { return elem.name; }).join(','));
       }
       else
       {
-        jQuery('#valid_targets').value = valid_targets.name;
+        jQuery('#valid_targets').val(valid_targets.name);
       }
       return true;
     }
@@ -247,12 +247,12 @@
         }
       )
       
-      jQuery('#l1text').value = target_text;
-      jQuery('#l2text').value = body_text;
-      jQuery('#l1').value = 'grc';
-      jQuery('#l2').value = 'grc';
-      jQuery('#l1urn').value = target_urn;
-      jQuery('#l2urn').value = body_urn;
+      jQuery('#l1text').val(target_text);
+      jQuery('#l2text').val(body_text);
+      jQuery('#l1').val('grc');
+      jQuery('#l2').val('grc');
+      jQuery('#l1urn').val(target_urn);
+      jQuery('#l2urn').val(body_urn);
       return true;
       
     }

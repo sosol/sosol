@@ -358,7 +358,7 @@ if (jQuery('#fm_sugar_content').length) //if front matter commentary form is the
          
           var error_content = ' ';
           error_content = insert_error_here(json.content, json.exception.line, json.exception.column);
-          jQuery('#com_sugar_content').value = error_content.replace(/^\<W\:/,'').replace(/\:W\>$/,'').strip();
+          jQuery('#com_sugar_content').val(error_content.replace(/^\<W\:/,'').replace(/\:W\>$/,'').strip());
           
           //enable form after error
           jQuery('#com_sugar_content').toggleClass('loading');

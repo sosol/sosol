@@ -78,13 +78,13 @@ function rememberToggledView(){
     }
   });
 
-  jQuery('#expansionSet').value = expansionSet;
+  jQuery('#expansionSet').val(expansionSet);
 
   return expansionSet;
 }
 
 function showExpansions(){
-  var flash = jQuery('#expansionSet').value;
+  var flash = jQuery('#expansionSet').val();
   var anchor_match = document.URL.match(/#[A-Za-z]+/);
   var anchor = anchor_match ? anchor_match[0] : '';
   anchor = anchor.substr(1,1).toLowerCase() + anchor.substr(2);
@@ -101,7 +101,7 @@ function showExpansions(){
       e.next().show();
     }
   });
-  jQuery('#expansionSet').value = '';
+  jQuery('#expansionSet').val('');
   return flash;
 }
 

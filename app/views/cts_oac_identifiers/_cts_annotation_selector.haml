@@ -203,12 +203,12 @@
       alert("Citation start and end must be at the same citation level.");
       return false;
     }
-    var uri = repos.keys[jQuery('#body_repo').val()] + "/" + jQuery('#version_urn').value + ':' + start.join('.');
+    var uri = repos.keys[jQuery('#body_repo').val()] + "/" + jQuery('#version_urn').val() + ':' + start.join('.');
     if (end.length > 0) {
       uri = uri + '-' + end.join('.');
     }
     var uri_match = new RegExp("^" + uri + '#');
-    var old_uri_value = jQuery('#body_uri').value;
+    var old_uri_value = jQuery('#body_uri').val();
     if (old_uri_value.match(uri_match) == null) {
       jQuery('#body_uri').value = uri;
     }
@@ -261,7 +261,7 @@
       return;
     }
     body_span = [body_subref_start,body_subref_end];
-    var new_uri = jQuery('#body_uri').value.split('#')[0] + "#" + start_ref;
+    var new_uri = jQuery('#body_uri').val().split('#')[0] + "#" + start_ref;
     if (end_ref != start_ref) {
         new_uri = new_uri + '-' + end_ref;
      }
