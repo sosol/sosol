@@ -615,12 +615,12 @@
   
     var element = jQuery(event.target);
     if (!element.hasClass('line')) {element = element.parents('li.line');}
-    nval = jQuery("#n-" + element.id).html();
-    element.after('<li class="input"/>' + generateCommentaryForm(element.id,nval));
+    nval = jQuery("#n-" + element[0].id).html();
+    element.after('<li class="input"/>' + generateCommentaryForm(element[0].id,nval));
 
     menuInit();
     
-    Effect.SlideDown("form-"+element.id);
+    Effect.SlideDown("form-"+element[0].id);
     element.unbind('click');
     element.removeClass('clickable');
   }
