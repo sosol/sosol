@@ -773,7 +773,7 @@
   function helpComOpen(view, wherefrom){
 
     //set textarea to the value the window opened will insert to - either the frontmatter or commentary
-    jQuery('#fm_or_com').value = wherefrom;
+    jQuery('#fm_or_com').val(wherefrom);
 
     //remove exisiting notification error if it there before loading the new form
     if (jQuery('#notice_notice').length)
