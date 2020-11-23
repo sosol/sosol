@@ -49,8 +49,10 @@ setFulltext(select_element.children().first()[0].innerHTML);
 
 #main
   = csrf_meta_tag
-  = javascript_include_tag :defaults
   = javascript_include_tag 'jquery'
+  = javascript_tag 
+    jQuery.noConflict();
+  = javascript_include_tag :defaults
   = javascript_include_tag 'commentary'
     
   .site
