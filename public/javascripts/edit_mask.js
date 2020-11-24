@@ -60,7 +60,7 @@ function multiRemove(item) {
 
 function toggleCatgory(event) {
   let e = jQuery(this);
-  if(e.next().is(':hidden'()){
+  if(e.next().is(':hidden')) {
     e.next().show();
   } else {
     e.next().hide();
