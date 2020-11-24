@@ -210,7 +210,7 @@
     var uri_match = new RegExp("^" + uri + '#');
     var old_uri_value = jQuery('#body_uri').val();
     if (old_uri_value.match(uri_match) == null) {
-      jQuery('#body_uri').value = uri;
+      jQuery('#body_uri').val(uri);
     }
     get_body_passage();
     return false;
@@ -233,9 +233,9 @@
   }
   
   function start_body(a_e) {
-    var rp = a_e.element();
-    if ($(rp).hasClassName('punc')) {
-      $(rp).next();
+    var rp = a_e.target;
+    if (jQuery(rp).hasClass('punc')) {
+      body_subref_start = jQuery(rp).next()[0];
     } else {
       body_subref_start = rp;
     }
@@ -244,9 +244,9 @@
   }
   
   function end_body(a_e) {
-    var rp = a_e.element();
-    if ($(rp).hasClassName('punc')) {
-      body_subref_end = $(rp).previous();
+    var rp = a_e.target;
+    if (jQuery(rp).hasClassName('punc')) {
+      body_subref_end = jQuery(rp).prev()[0];
     } else {
       body_subref_end = rp;
     }
@@ -265,7 +265,7 @@
     if (end_ref != start_ref) {
         new_uri = new_uri + '-' + end_ref;
      }
-    jQuery('#body_uri').value = new_uri;
+    jQuery('#body_uri').val(new_uri);
     toggle_body_highlight(true,['highlighted']);
   }
   

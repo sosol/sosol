@@ -59,10 +59,11 @@ function multiRemove(item) {
 /**** toggle view ****/
 
 function toggleCatgory(event) {
-  if(!this.next().visible()){
-    $(this).next().show();
+  let e = jQuery(this);
+  if(e.next().is(':hidden'()){
+    e.next().show();
   } else {
-    $(this).next().hide();
+    e.next().hide();
   }
 }
 

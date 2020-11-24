@@ -5,26 +5,26 @@ function workAuthorNameChange(el){
 }
 
 function workAuthorityChange(el){
-  var select = $(el);
-  var key = select.value;
-  var oldKey = select.readAttribute('data');
-  var caption = select.select('option[value=' + key + ']')[0].innerHTML;
+  var select = jQuery(el);
+  var key = select.val();
+  var oldKey = select.attr('data');
+  var caption = select.find('option[value=' + key + ']')[0].innerHTML;
   var valid = true;
 
-  select.up().siblings('select').each(function(sib){
-    if(key == sib.select('select')[0].value){
+  select.parent().siblings('select').each(function(sib){
+    if(key == jQuery(sib).find('select')[0].value){
       valid = false;
     }
   });
 
   if(!valid){
     alert(caption + ' cannot be used twice.');
-    select.value = oldKey;
+    select.val(oldKey);
   } else {
-    var input = select.siblings('input')[0];
-    input.setAttribute('name', input.readAttribute('name').replace(/\[[^\]]+\]$/, '[' + key + ']'));
-    input.setAttribute('id', input.readAttribute('id').replace(/_[^_]+$/, '_' + key));
-    select.setAttribute('data', key);
+    var input = select.siblings('input').first();
+    input.attr('name', input.attr('name').replace(/\[[^\]]+\]$/, '[' + key + ']'));
+    input.attr('id', input.attr('id').replace(/_[^_]+$/, '_' + key));
+    select.attr('data', key);
   }
 
   return valid;
@@ -36,17 +36,18 @@ function editionLinkChange(el){
   if(jQuery(el).val().match(/^\d+$/)){
     var url = window.location.href.indexOf('/editor/') > 0 ? '/editor/dclp_meta_identifiers/biblio_preview' : '/dclp_meta_identifiers/biblio_preview';
     var updatee = el.identify().replace('link', 'biblioPreview').replace('_value', '');
-    new Ajax.Updater({ success: updatee}, url, { parameters: {biblio: jQuery(el).val()}, onFailure: function(){ $(updatee).update('<i>Loading review data failed…</i>'); } });
+    new Ajax.Updater({ success: updatee}, url, { parameters: {biblio: jQuery(el).val()}, onFailure: function(){ jQuery(updatee).html('<i>Loading review data failed…</i>'); } });
   }
 }
 
 function editionUbertypeChange(el) {
   // hide and show translation dropdown
-  if(jQuery(el).val() == 'translation'){
-    el.up(0).select('.editionLanguage').each(function(el){ el.show(); });
+  el - jQuery(el);
+  if(el.val() == 'translation'){
+    el.parent().find('.editionLanguage').show();
   } else {
-    $(el.up(0).select('.editionLanguage')).each(function(el){ el.hide(); });
-    $(el.up(0).select('select.editionLanguage')).each(function(el){ el.setValue(''); });
+    el.parent().find('.editionLanguage').hide();
+    el.parent().find('select.editionLanguage').val('');
   }
 
   // set values for type & subtype

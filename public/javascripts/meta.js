@@ -172,7 +172,7 @@ function multiAddProvenanceRaw(e){
   multiUpdate('provenance', item);
 
   Sortable.create('multiItems_' + geoPlaceKey, {overlap: 'horizontal', constraint: false, handle: 'move'});
-  $(addPlaceKey).bind('click', function(ev){ multiAddPlaceRaw(this); });
+  jQuery('#' + addPlaceKey).bind('click', function(ev){ multiAddPlaceRaw(this); });
 }
 
 function geoUpdateExcludeLists(key){
@@ -504,7 +504,7 @@ function mentionedDateNewCertainty(selectbox)
   var value = selectbox.value;
 
   // remove
-  $(selectbox.parentNode).find('input[type=hidden]').each(function(i, item){
+  jQuery(selectbox.parentNode).find('input[type=hidden]').each(function(i, item){
     if(item.id.indexOf('certainty') > 0){
       var certaintyIndex = item.id.match(/\d+/g)[1] * 1;
       if(certaintyIndex){
@@ -578,7 +578,7 @@ function complementPlace(key, data){
   var i = keyMap.indexOf(key) + 1;
   for(i; i < keyMap.length; i++){
     if(data[keyMap[i]]){
-      $(keyMap[i]).value = data[keyMap[i]];
+      jQuery(keyMap[i]).val(data[keyMap[i]]);
     }
   }
 

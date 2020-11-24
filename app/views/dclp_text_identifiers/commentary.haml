@@ -89,15 +89,15 @@
         jQuery('#notice_notice').remove();
       }
     
-    var comment_li = Event.element(event).up('li.input');  
+    var comment_li = jQuery(event.target).parents('li.input');  
     
         //get the original xml fragment
-    var originalxmls = $(comment_li).select('textarea.originalxml');
+    var originalxmls = comment_li.find('textarea.originalxml');
     var originalxml = "";
     if (originalxmls.length > 0)
     {
       //originalxml = originalxmls[0].innerHTML;
-      originalxml = originalxmls[0].value;
+      originalxml = originalxmls.val();
     }
     
     comment_div_container = comment_li.children().first();
@@ -113,7 +113,7 @@
     
     Effect.SlideUp(comment_div_container.id, {duration: 0.5});
     
-    jQuery(comment_li).after('<li class="input existing_comment"/>' + generateCommentaryForm(comment_on,nval,content,comment_div_container.id));
+    comment_li.after('<li class="input existing_comment"/>' + generateCommentaryForm(comment_on,nval,content,comment_div_container.id));
     
     menuInit();
 
@@ -145,7 +145,7 @@
         '<input type="hidden" name="line_id" value="' + id + '"/>' +
         '<input type="hidden" name="original_item_id" value="' + original_item_id + '"/>' +
         '<span style="float:right;position:relative;top:-1.5em">' +
-          '<a href="#{url_for({:action => :delete_commentary})}" style="color:red" onclick="if (confirm(\'Are you sure you want to delete this commentary entry?\')) {$(\'delete_form\').submit();};return false;">delete</a>'
+          '<a href="#{url_for({:action => :delete_commentary})}" style="color:red" onclick="if (confirm(\'Are you sure you want to delete this commentary entry?\')) {jQuery(\'#delete_form\').submit();};return false;">delete</a>'
         '</span>' +
       '</form>';
     }
@@ -162,7 +162,7 @@
     else {
       return '#{form_tag({:action => :delete_frontmatter_commentary}, :method => :delete, :id => "delete_frontmatter_form").chomp()}' +
           '<span style="float:right;position:relative;top:-1.5em">' +
-            '<a href="#{url_for({:action => :delete_frontmatter_commentary})}" style="color:red" onclick="if (confirm(\'Are you sure you want to delete the front matter commentary?\')) {$(\'delete_frontmatter_form\').submit();};return false;">delete</a>'
+            '<a href="#{url_for({:action => :delete_frontmatter_commentary})}" style="color:red" onclick="if (confirm(\'Are you sure you want to delete the front matter commentary?\')) {jQuery(\'#delete_frontmatter_form\').submit();};return false;">delete</a>'
           '</span>' +
         '</form>';
     }
@@ -363,7 +363,7 @@
          
           var error_content = ' ';
           error_content = insert_error_here(json.content, json.exception.line, json.exception.column);
-          jQuery('#com_sugar_content').value = error_content.replace(/^\<W\:/,'').replace(/\:W\>$/,'').strip();
+          jQuery('#com_sugar_content').val(error_content.replace(/^\<W\:/,'').replace(/\:W\>$/,'').strip());
           
           //enable form after error
           jQuery('#com_sugar_content').toggleClass('loading');
@@ -382,7 +382,7 @@
 
           //remove wrap tags and namespace before call action to save to XML
           // hack for ampersand in URL's - change from encoding to XML encoding to save in XML
-          jQuery('#com_sugar_content').value = json.content.replace(/%26/g,'&amp;').replace(/^\<wrap(.*?)\>/,'').replace(/\<\/wrap\>$/,'').strip();
+          jQuery('#com_sugar_content').val(json.content.replace(/%26/g,'&amp;').replace(/^\<wrap(.*?)\>/,'').replace(/\<\/wrap\>$/,'').strip());
           console.log('submitting update_commentary_form');
 
           jQuery('#update_commentary_form').submit();
@@ -475,7 +475,7 @@
 
           //remove wrap tags and namespace before call action to save to XML
           // hack for ampersand in URL's - change from encoding to XML encoding to save in XML
-          jQuery('#fm_sugar_content').value = json.content.replace(/%26/g,'&amp;').replace(/^\<wrap(.*?)\>/,'').replace(/\<\/wrap\>$/,'').strip();
+          jQuery('#fm_sugar_content').val(json.content.replace(/%26/g,'&amp;').replace(/^\<wrap(.*?)\>/,'').replace(/\<\/wrap\>$/,'').strip());
 
           jQuery('#update_frontmatter_form').submit();
           
@@ -545,7 +545,7 @@
           if (wherefrom == "FM")
             {
               //jQuery('#fm_sugar_content').value = error_content.replace(/^\<wrap\>/,'').replace(/\<\/wrap\>$/,'').strip();
-              jQuery('#fm_sugar_content').value = error_content.strip();
+              jQuery('#fm_sugar_content').val(error_content.strip());
 
               //enable form after error
               jQuery('#fm_sugar_content').toggleClass('loading');
@@ -559,7 +559,7 @@
           else
             {
               //jQuery('#com_sugar_content').value = error_content.replace(/^\<wrap\>/,'').replace(/\<\/wrap\>$/,'').strip();
-              jQuery('#com_sugar_content').value = error_content.strip();
+              jQuery('#com_sugar_content').val(error_content.strip());
 
               //enable form after error
               jQuery('#com_sugar_content').toggleClass('loading');
@@ -577,7 +577,7 @@
           if (wherefrom == "FM")
             {
               // hack for ampersand in URL's - change from encoding to & for display
-              jQuery('#fm_sugar_content').value = json.content.replace(/%26/g,'&').replace(/^\<W\:\n\n/,'').replace(/\:W\>$/,'');
+              jQuery('#fm_sugar_content').val(json.content.replace(/%26/g,'&').replace(/^\<W\:\n\n/,'').replace(/\:W\>$/,''));
               jQuery('#fm_sugar_content').toggleClass('loading');
               Form.Element.enable('fm_sugar_content');
               Form.Element.enable('save_fm');
@@ -585,7 +585,7 @@
           else
             {
               // hack for ampersand in URL's - change from encoding to & for display
-              jQuery('#com_sugar_content').value = json.content.replace(/%26/g,'&').replace(/^\<W\:\n\n/,'').replace(/\:W\>$/,'');
+              jQuery('#com_sugar_content').val(json.content.replace(/%26/g,'&').replace(/^\<W\:\n\n/,'').replace(/\:W\>$/,''));
               jQuery('#com_sugar_content').toggleClass('loading');
               Form.Element.enable('com_sugar_content');
               Form.Element.enable('save_com');

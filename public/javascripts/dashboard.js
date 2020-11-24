@@ -4,13 +4,10 @@
  function toggleBatchDiv(button_node, div_node)
   {
  
-    var button = $(button_node);
-    var div = $(div_node);
+    var button = jQuery(button_node);
+    var div = div_node;
     
-    
-        
     var body = document.body;
-    
     
     body.appendChild(div);
     var show_div = true;
@@ -35,8 +32,8 @@
     
     div.setStyle({ position: 'absolute', zIndex: '9999'});
     
-    var left_pos = button.cumulativeOffset().left - div.getWidth() ;
-    var top_pos = button.cumulativeOffset().top  ;
+    var left_pos = button.offset().left - div.getWidth() ;
+    var top_pos = button.offset().top  ;
     
     div.style.top = top_pos + "px";
     div.style.left = left_pos + "px";
@@ -50,12 +47,12 @@
   function showVotes(button_node, vote_node, show)
   {
     
-    var button = $(button_node);
-    var vote = $(vote_node);
+    var button = jQuery(button_node);
+    var vote = jQuery(vote_node);
      
     var body = document.body;
      
-    body.appendChild(vote);
+    body.appendChild(vote[0]);
     
     
     //var vote_divs = jQuery('div.vote');
@@ -66,22 +63,22 @@
     
     if (show)
     {
-      vote.style.display = "block";
+      vote.css('display', "block");
     }
     else
     {
-      vote.style.display = "none";
+      vote.css('display', "none");
     }    
  
     
     
-    vote.setStyle({ position: 'absolute', zIndex: '9999'});
+    vote.css({ position: 'absolute', zIndex: '9999'});
     
-    var left_pos = button.cumulativeOffset().left - vote.getWidth() ;
-    var top_pos = button.cumulativeOffset().top  ;
+    var left_pos = button.offset().left - vote.getWidth() ;
+    var top_pos = button.offset().top  ;
     
-    vote.style.top = top_pos + "px";
-    vote.style.left = left_pos + "px";
+    vote.css('top', top_pos + "px");
+    vote.css('left', left_pos + "px");
    
     //vote.show();
   
@@ -90,35 +87,35 @@
   function showFinalizer(button_node, vote_node, show)
   {
  
-    var button = $(button_node);
-    var vote = $(vote_node);
+    var button = jQuery(button_node);
+    var vote = jQuery(vote_node);
     
     
         
     var body = document.body;
     
     
-    body.appendChild(vote);
+    body.appendChild(vote[0]);
     
     if (show)
     {
-      vote.style.display = "block";
+      vote.css('display', "block");
     }
     else
     {
-      vote.style.display = "none";
+      vote.css('display', "none");
     }    
  
     
     
-    vote.setStyle({ position: 'absolute', zIndex: '9999'});
+    vote.css({ position: 'absolute', zIndex: '9999'});
     
-    var left_pos = button.cumulativeOffset().left + button.getWidth() - vote.getWidth() ;
+    var left_pos = button.offset().left + button.getWidth() - vote.getWidth() ;
     //var left_pos = button.cumulativeOffset().left - vote.getWidth() ;
-    var top_pos = button.cumulativeOffset().top  ;
+    var top_pos = button.offset().top  ;
     
-    vote.style.top = top_pos + "px";
-    vote.style.left = left_pos + "px";
+    vote.css('top', top_pos + "px");
+    vote.css('left', left_pos + "px");
    
     //vote.show();
   
@@ -127,20 +124,20 @@
   function toggleFinalizer(button_node, finalizer_node)
   {
  
-    var button = $(button_node);
-    var finalizer = $(finalizer_node);
+    var button = jQuery(button_node);
+    var finalizer = jQuery(finalizer_node);
     
     
         
     var body = document.body;
     
     
-    body.appendChild(finalizer);
+    body.appendChild(finalizer[0]);
     
  
  
     var show_div = true;
-    if (finalizer.style.display=="block")
+    if (finalizer.css('display') == "block")
     {
       show_div = false;
     }
@@ -152,19 +149,19 @@
     }
     
     if (show_div) {
-      finalizer.style.display = "block";
+      finalizer.css('display', "block");
     }
     
  
     
     
-    finalizer.setStyle({ position: 'absolute', zIndex: '9999'});
+    finalizer.css({ position: 'absolute', zIndex: '9999'});
     
-    var left_pos = button.cumulativeOffset().left - finalizer.getWidth() ;
-    var top_pos = button.cumulativeOffset().top  ;
+    var left_pos = button.offset().left - finalizer.getWidth() ;
+    var top_pos = button.offset().top  ;
     
-    finalizer.style.top = top_pos + "px";
-    finalizer.style.left = left_pos + "px";
+    finalizer.css('top', top_pos + "px");
+    finalizer.css('left', left_pos + "px");
    
     
   
