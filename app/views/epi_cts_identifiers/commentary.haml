@@ -112,9 +112,9 @@ if (jQuery('#fm_sugar_content').length) //if front matter commentary form is the
     comment_on = comment_li.attr('class').split(/\s+/).replace(/comment-on-/,'');
     content = comment_div.html().strip();
     
-    Effect.SlideUp(comment_div_container.id, {duration: 0.5});
+    Effect.SlideUp(comment_div_container[0].id, {duration: 0.5});
     
-    jQuery(comment_li).after('<li class="input existing_comment"/>' + generateCommentaryForm(comment_on,nval,content,comment_div_container.id));
+    jQuery(comment_li).after('<li class="input existing_comment"/>' + generateCommentaryForm(comment_on,nval,content,comment_div_container[0].id));
     
     menuInit();
 

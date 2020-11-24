@@ -105,15 +105,15 @@
     comment_div = comment_div_container.children().first();
     
     nval_node = comment_div.children().first();
-    nval = nval_node.innerHTML;
+    nval = nval_node.html();
     nval_node.remove();
     
     comment_on = comment_li.attr('class').split(/\s+/)[0].replace(/comment-on-/,'');
     content = comment_div.html().strip();
     
-    Effect.SlideUp(comment_div_container.id, {duration: 0.5});
+    Effect.SlideUp(comment_div_container[0].id, {duration: 0.5});
     
-    comment_li.after('<li class="input existing_comment"/>' + generateCommentaryForm(comment_on,nval,content,comment_div_container.id));
+    comment_li.after('<li class="input existing_comment"/>' + generateCommentaryForm(comment_on,nval,content,comment_div_container[0].id));
     
     menuInit();
 
