@@ -92,10 +92,10 @@ function showExpansions(){
   
   jQuery('.category').each(function(i, e){
 
-    var classy = e.attr('class').split(/\s+/).filter(item => item !== 'category')[0] + ';';
+    var classy = e.getAttribute('class').split(/\s+/).filter(item => item !== 'category')[0] + ';';
 
     if(expansionSet.indexOf(classy) >= 0){
-      e.next().show();
+      jQuery(e).next().show();
     }
   });
   jQuery('#expansionSet').val('');
