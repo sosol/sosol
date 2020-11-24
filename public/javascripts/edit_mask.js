@@ -72,10 +72,8 @@ function rememberToggledView(){
 
   jQuery('.category').each(function(i, e){
 
-    if(e.next().visible()){
-      expansionSet += e.classNames().reject(function(item){
-        return item == 'category' ? true : false;
-      })[0] + ';';
+    if(e.next().is(':visible')){
+      expansionSet += e.attr('class').split(/\s+/).filter(item => item !== 'category')[0] + ';';
     }
   });
 
@@ -94,9 +92,7 @@ function showExpansions(){
   
   jQuery('.category').each(function(i, e){
 
-    var classy = e.classNames().reject(function(item){
-        return item == 'category' ? true : false;
-      })[0];
+    var classy = e.attr('class').split(/\s+/).filter(item => item !== 'category')[0] + ';';
 
     if(expansionSet.indexOf(classy) >= 0){
       e.next().show();

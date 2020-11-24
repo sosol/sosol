@@ -109,7 +109,7 @@ if (jQuery('#fm_sugar_content').length) //if front matter commentary form is the
     nval = nval_node.innerHTML;
     nval_node.remove();
     
-    comment_on = comment_li.classNames().toArray().first().replace(/comment-on-/,'');
+    comment_on = comment_li.attr('class').split(/\s+/).replace(/comment-on-/,'');
     content = comment_div.innerHTML.strip();
     
     Effect.SlideUp(comment_div_container.id, {duration: 0.5});
