@@ -2,7 +2,7 @@
   function showBoardDialog(e)
   {
     
-    var board_list = jQuery('#board_list');
+    var board_list = jQuery('#board_list')[0];
     var body = document.body;
     var board_menu = jQuery('#board_menu');
     
@@ -19,8 +19,8 @@
     
     board_list.setStyle({ position: 'absolute', zIndex: '9999'});
     
-    var left_pos = board_menu.cumulativeOffset().left + board_menu.getWidth() - board_list.getWidth() ;
-    var top_pos = board_menu.cumulativeOffset().top + board_menu.getHeight() ;
+    var left_pos = board_menu.offset().left + board_menu.getWidth() - board_list.getWidth() ;
+    var top_pos = board_menu.offset().top + board_menu.getHeight() ;
     
     board_list.style.top = top_pos + "px";
     board_list.style.left = left_pos + "px";
@@ -34,7 +34,7 @@
       var clicked = e.target;
       if (clicked.id != 'board_menu')
       { 
-        if (jQuery('#board_list')) 
+        if (jQuery('#board_list').length) 
           {
             jQuery('#board_list').hide();
           }
