@@ -2,28 +2,28 @@
   function showBoardDialog(e)
   {
     
-    var board_list = jQuery('#board_list')[0];
+    var board_list = jQuery('#board_list');
     var body = document.body;
     var board_menu = jQuery('#board_menu');
     
-    body.appendChild(board_list);
+    body.appendChild(board_list[0]);
     
-    if (board_list.style.display == "block")
+    if (board_list.css('display') == "block")
     {
-      board_list.style.display = "none";
+      board_list.css('display', "none");
     }
     else
     {
-      board_list.style.display = "block";
+      board_list.css('display', "block");
     }
     
-    board_list.setStyle({ position: 'absolute', zIndex: '9999'});
+    board_list.css({ position: 'absolute', zIndex: '9999'});
     
-    var left_pos = board_menu.offset().left + board_menu.getWidth() - board_list.getWidth() ;
-    var top_pos = board_menu.offset().top + board_menu.getHeight() ;
+    var left_pos = board_menu.offset().left + board_menu.width() - board_list.width() ;
+    var top_pos = board_menu.offset().top + board_menu.height() ;
     
-    board_list.style.top = top_pos + "px";
-    board_list.style.left = left_pos + "px";
+    board_list.css('top', top_pos + "px");
+    board_list.css('left', left_pos + "px");
    
   }
   
