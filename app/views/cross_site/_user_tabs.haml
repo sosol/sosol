@@ -6,25 +6,25 @@
     var body = document.body;
     var community_menu = jQuery('#community_menu');
     
-    body.appendChild(community_list);
+    body.appendChild(community_list[0]);
     
-    if (community_list.style.display == "block")
+    if (community_list.css('display') == "block")
     {
-      community_list.style.display = "none";
+      community_list.css('display', "none");
     }
     else
     {
-      community_list.style.display = "block";
+      community_list.css('display', "block");
     }
     
-    community_list.setStyle({ position: 'absolute', zIndex: '9999'});
+    community_list.css({ position: 'absolute', zIndex: '9999'});
     
     
-    var left_pos = community_menu.cumulativeOffset().left + community_menu.getWidth() - community_list.getWidth() ;
-    var top_pos = community_menu.cumulativeOffset().top + community_menu.getHeight() ;
+    var left_pos = community_menu.offset().left + community_menu.width() - community_list.width() ;
+    var top_pos = community_menu.offset().top + community_menu.height() ;
     
-    community_list.style.top = top_pos + "px";
-    community_list.style.left = left_pos + "px";
+    community_list.css('top', top_pos + "px");
+    community_list.css('left', left_pos + "px");
 
     
   }
@@ -35,7 +35,7 @@
       var clicked = e.target;
       if (clicked.id != 'community_menu')
       { 
-        if (jQuery('#community_list')) 
+        if (jQuery('#community_list').length) 
           {
             jQuery('#community_list').hide();
           }
