@@ -57,7 +57,7 @@ class HGVMetaIdentifier < HGVIdentifier
 
   # ?
   def n_attribute
-    ddb = DDBIdentifier.find_by_publication_id(self.publication.id)
+    ddb = DDBIdentifier.where(publication_id: self.publication.id).limit(1).first
     if ddb
       return ddb.n_attribute
     else
