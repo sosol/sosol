@@ -4,7 +4,7 @@ dist: bionic
 sudo: false
 env:
   global:
-    - JRUBY_OPTS="-J-Xmx1g"
+    - JRUBY_OPTS="-J-Xmx1g -Xjit.threshold=0"
 jdk:
   - openjdk8
   - openjdk9
