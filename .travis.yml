@@ -8,7 +8,7 @@ env:
 jdk:
   - openjdk8
 rvm:
-  - jruby-9.2.14.0
+  - jruby-9.2.16.0
 before_install:
   - gem install bundler --version '>2.0'
 before_script:
