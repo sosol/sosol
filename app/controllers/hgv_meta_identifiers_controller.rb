@@ -29,7 +29,8 @@ class HgvMetaIdentifiersController < IdentifiersController
     find_identifier
     #exit
     begin
-      commit_sha = @identifier.set_epidoc(params[:hgv_meta_identifier], params[:comment].to_s)
+      params.permit!
+      commit_sha = @identifier.set_epidoc(params[:hgv_meta_identifier].to_h, params[:comment].to_s)
       expire_publication_cache
       generate_flash_message
     rescue JRubyXML::ParseError => e
@@ -93,7 +94,8 @@ class HgvMetaIdentifiersController < IdentifiersController
   # Side effect on +@identifier+ and +@update+
   def get_geo_preview
     @identifier = HGVMetaIdentifier.new
-    @identifier.populate_epidoc_attributes_from_attributes_hash params[:hgv_meta_identifier]
+    params.permit!
+    @identifier.populate_epidoc_attributes_from_attributes_hash params[:hgv_meta_identifier].to_h
     @update = HgvProvenance.format @identifier.non_database_attribute[:provenance]
 
     respond_to do |format|
@@ -181,7 +183,8 @@ class HgvMetaIdentifiersController < IdentifiersController
         
         if params[:hgv_meta_identifier][:provenance]
           hgv = HGVMetaIdentifier.new
-          hgv.populate_epidoc_attributes_from_attributes_hash params[:hgv_meta_identifier]
+          params.permit!
+          hgv.populate_epidoc_attributes_from_attributes_hash params[:hgv_meta_identifier].to_h
           params[:hgv_meta_identifier][:origPlace] = HgvProvenance.format hgv.non_database_attribute[:provenance]
 
         else

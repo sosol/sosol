@@ -148,8 +148,10 @@ Sosol::Application.routes.draw do
     resources :hgv_meta_identifiers do
     
         member do
-    get :get_date_preview
-    get :get_geo_preview
+    post :get_date_preview
+    patch :get_date_preview
+    post :get_geo_preview
+    patch :get_geo_preview
     get :history
     get :preview
     get :editxml
@@ -161,14 +163,16 @@ Sosol::Application.routes.draw do
     end
 
     resources :dclp_meta_identifiers do
+      collection do
+        get :biblio_autocomplete
+        get :ancient_author_autocomplete
+      end
 
         member do
     get :history
     get :preview
     get :editxml
-    get :biblio_autocomplete
     get :biblio_preview
-    get :ancient_author_autocomplete
     patch :updatexml
     get :rename_review
     patch :rename
@@ -411,6 +415,7 @@ Sosol::Application.routes.draw do
   match 'ajax_proxy/sparql/:query' => 'ajax_proxy#sparql', :query => /.*/, :via => :get
   match 'ajax_proxy/get_bibliography/' => 'ajax_proxy#get_bibliography', :via => :get
   match 'sparql' => 'ajax_proxy#sparql', :via => :get
+  get 'ajax_proxy', to: 'ajax_proxy#index'
   match 'ajax_proxy/xsugar/' => 'ajax_proxy#xsugar', :via => :post
   match 'ajax_proxy/hgvnum/' => 'ajax_proxy#hgvnum', :via => :post
   match 'ajax_proxy/:id' => 'ajax_proxy#proxy', :id => /papyri\.info.*/, :via => :get
