@@ -20,7 +20,7 @@
       %span{:class => "legend"}
         %div{:class => "alt-title"}
         %div{:class => 'original boards'}
-          = link_to display_title, publication, :title => "Last modified #{time_ago_in_words(publication.updated_at)} ago. Submitted by " + publication.creator.name, :class => "collection"
+          = link_to display_title, publication, :title => "Last modified #{time_ago_in_words(publication.updated_at)} ago. Submitted by " + (publication.creator ? publication.creator.name : 'Deleted account'), :class => "collection"
           %ul{:class => 'publications'}
             - Identifier.site_identifier_classes.each do |i|
               - if i.constantize::is_visible
