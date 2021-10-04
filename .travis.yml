@@ -2,8 +2,6 @@ language: ruby
 cache: bundler
 dist: focal
 sudo: false
-services:
-  - postgresql
 addons:
   postgresql: "12"
   apt:
