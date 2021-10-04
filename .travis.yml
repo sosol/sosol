@@ -10,6 +10,7 @@ addons:
       - postgresql-client-13
 env:
   global:
+    - PGVER=13
     - PGPORT=5433
     - PGUSER=travis
     - JRUBY_OPTS="-J-Xmx1g"
