@@ -11,8 +11,7 @@ addons:
 env:
   global:
     - PGVER=13
-    - PGPORT=5433
-    - PGUSER=travis
+    - PGUSER=postgresql
     - JRUBY_OPTS="-J-Xmx1g"
 jdk:
   - openjdk11
