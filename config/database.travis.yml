@@ -2,4 +2,5 @@ test:
   adapter: postgresql
   database: sosol_test
   username: <%= ENV['PGUSER'] %>
+  password: <%= ENV['PGPASSWORD'] %>
   port: <%= ENV['PGPORT'].to_i %>
