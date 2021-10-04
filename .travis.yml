@@ -16,7 +16,7 @@ env:
     - PGUSER=travis
     - JRUBY_OPTS="-J-Xmx1g"
 jdk:
-  - openjdk8
+  - openjdk11
 rvm:
   - jruby-9.2.14.0
 before_install:
