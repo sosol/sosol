@@ -21,7 +21,8 @@ rvm:
   - jruby-9.2.14.0
 before_install:
   - gem install bundler --version '>2.0'
-  - psql -c 'create database sosol_test;' -U travis
+  - psql -c 'SELECT version();' -U $PGUSER
+  - psql -c 'create database sosol_test;' -U $PGUSER
 before_script:
   - gem --version
   - bundle exec cap local externals:setup
