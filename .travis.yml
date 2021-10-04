@@ -1,11 +1,19 @@
 language: ruby
 cache: bundler
-dist: bionic
+dist: focal
 sudo: false
 services:
   - postgresql
+addons:
+  postgresql: "12"
+  apt:
+    packages:
+      - postgresql-12
+      - postgresql-client-12
 env:
   global:
+    - PGPORT=5433
+    - PGUSER=travis
     - JRUBY_OPTS="-J-Xmx1g"
 jdk:
   - openjdk8
