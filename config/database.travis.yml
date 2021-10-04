@@ -3,3 +3,4 @@ test:
   database: sosol_test
   password: ""
   username: <%= ENV['PGUSER'] %>
+  port: <%= ENV['PGPORT'].to_i %>
