@@ -20,8 +20,8 @@ rvm:
 before_install:
   - gem install bundler --version '>2.0'
 before_script:
-  - psql -c 'SELECT version();' -U $PGUSER
-  - psql -c 'create database sosol_test;' -U $PGUSER
+  - psql -c 'SELECT version();'
+  - psql -c 'create database sosol_test;'
   - gem --version
   - bundle exec cap local externals:setup
   - touch config/environments/test_secret.rb
