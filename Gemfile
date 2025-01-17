@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 ruby '3.1.4', engine: 'jruby', engine_version: '9.4.9.0'
 
-gem 'rails', '~> 7.0', '< 7.1'
+gem 'rails', '~> 7.1', '< 7.2'
 
 # Needed for the new asset pipeline
 gem 'coffee-rails'
@@ -36,10 +36,22 @@ gem 'logger'
 gem 'sass'
 # gem 'json-jruby', '>= 1.6.6', :require => 'json', :platform => :jruby
 gem 'actionpack-page_caching'
-gem 'activerecord-jdbc-adapter', '>= 61.3', '~> 70', platform: :jruby
-gem 'activerecord-jdbcmysql-adapter', '>= 61.3', '~> 70', platform: :jruby
-gem 'activerecord-jdbcpostgresql-adapter', '>= 61.3', '~> 70', platform: :jruby
-gem 'activerecord-jdbcsqlite3-adapter', '>= 61.3', '~> 70', platform: :jruby
+gem 'activerecord-jdbc-adapter', '>= 61.3', '~> 71',
+  platform: :jruby,
+  git: 'https://github.com/jruby/activerecord-jdbc-adapter',
+  glob: 'activerecord-jdbc-adapter.gemspec'
+gem 'activerecord-jdbcmysql-adapter', '>= 61.3', '~> 71',
+  platform: :jruby,
+  git: 'https://github.com/jruby/activerecord-jdbc-adapter',
+  glob: 'activerecord-jdbcmysql-adapter/activerecord-jdbcmysql-adapter.gemspec'
+gem 'activerecord-jdbcpostgresql-adapter', '>= 61.3', '~> 71',
+  platform: :jruby,
+  git: 'https://github.com/jruby/activerecord-jdbc-adapter',
+  glob: 'activerecord-jdbcpostgresql-adapter/activerecord-jdbcpostgresql-adapter.gemspec'
+gem 'activerecord-jdbcsqlite3-adapter', '>= 61.3', '~> 71',
+  platform: :jruby,
+  git: 'https://github.com/jruby/activerecord-jdbc-adapter',
+  glob: 'activerecord-jdbcsqlite3-adapter/activerecord-jdbcsqlite3-adapter.gemspec'
 gem 'activerecord-session_store'
 gem 'airbrake'
 gem 'airbrake-ruby', '6.2.0'
