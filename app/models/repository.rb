@@ -328,7 +328,7 @@ class Repository
     if @path == Sosol::Application.config.canonical_repository && file != CollectionIdentifier.new.to_path
       raise 'Cannot commit directly to canonical repository'
     end
-    parent_sha1 = self.class.run_command("#{git_command_prefix} show-ref -s #{Shellwords.escape(branch)}")
+    parent_sha1 = self.class.run_command("#{git_command_prefix} show-ref -s #{Shellwords.escape(branch)}").chomp
 
     # empty the index
     self.class.run_command("#{git_command_prefix} read-tree --empty")
@@ -340,10 +340,10 @@ class Repository
     self.class.run_command("#{git_command_prefix} update-index --add --cacheinfo 100644 #{blob_sha1} #{Shellwords.escape(file)}")
 
     # create a tree from the index
-    tree_sha1 = self.class.run_command("#{git_command_prefix} write-tree")
+    tree_sha1 = self.class.run_command("#{git_command_prefix} write-tree").chomp
 
     # commit tree to repo
-    commit_sha1 = self.class.run_command("echo #{Shellwords.escape(comment)} | #{git_command_prefix} commit-tree #{tree_sha1} -p #{parent_sha1}")
+    commit_sha1 = self.class.run_command("#{git_command_prefix} commit-tree -p #{parent_sha1} -m #{Shellwords.escape(comment)} #{tree_sha1}").chomp
 
     # update branch
     self.class.run_command("#{git_command_prefix} update-ref refs/heads/#{Shellwords.escape(branch)} #{commit_sha1} #{parent_sha1}")
