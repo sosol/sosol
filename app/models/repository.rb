@@ -318,7 +318,7 @@ class Repository
     zlib_content = Zlib::Deflate.deflate(store)
     path = File.join(self.path, 'objects', sha1[0,2], sha1[2,38])
     FileUtils.mkdir_p(File.dirname(path))
-    File.open(path, 'w') { |f| f.write zlib_content }
+    File.open(path, 'wb') { |f| f.write zlib_content }
 
     return sha1
   end
