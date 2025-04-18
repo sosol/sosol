@@ -212,7 +212,7 @@ class Repository
 
   def get_file_from_branch(file, branch = 'master')
     # get_blob_from_branch(file, branch)
-    self.class.run_command("#{git_command_prefix} show #{Shellwords.escape(branch)}:#{Shellwords.escape(file)}").chomp
+    self.class.run_command("#{git_command_prefix} show #{Shellwords.escape(branch)}:#{Shellwords.escape(file)} 2> /dev/null").chomp
   rescue RuntimeError
     nil
   end
