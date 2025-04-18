@@ -43,6 +43,10 @@ class Board < ApplicationRecord
     title
   end
 
+  def email
+    Sosol::Application.config.site_email_from
+  end
+
   def jgit_actor
     org.eclipse.jgit.lib.PersonIdent.new(title, Sosol::Application.config.site_email_from)
   end

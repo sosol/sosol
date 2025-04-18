@@ -1,6 +1,8 @@
 require 'English'
 require 'fileutils'
 require 'shellwords'
+require 'digest/sha1'
+require 'zlib'
 
 class Repository
   attr_reader :master, :path
@@ -92,6 +94,12 @@ class Repository
 
       @path = File.join(Sosol::Application.config.repository_root,
                         @master_class_path, "#{master.name.gsub(Repository::BASH_SPECIAL_CHARACTERS_REGEX, '_')}.git")
+
+      # needed so that any call to `git write-tree` has correct author info
+      if File.exist?(@path)
+        self.class.run_command("#{git_command_prefix} config user.name #{Shellwords.escape(self.owner.human_name)}")
+        self.class.run_command("#{git_command_prefix} config user.email #{Shellwords.escape(self.owner.email)}")
+      end
     end
   end
 
@@ -300,6 +308,38 @@ class Repository
     jgit_tree.add_blob(new_path, file_id.name)
     jgit_tree.del(original_path)
     jgit_tree.commit(comment, actor)
+  end
+
+  def add_blob_native(content)
+    header = "blob #{content.bytesize}\0"
+    store = header + content
+    sha1 = Digest::SHA1.hexdigest(store)
+    zlib_content = Zlib::Deflate.deflate(store)
+    path = File.join(self.path, 'objects', sha1[0,2], sha1[2,38])
+    FileUtils.mkdir_p(File.dirname(path))
+    File.open(path, 'w') { |f| f.write zlib_content }
+
+    return sha1
+  end
+
+  def commit_content_cgit(file, branch, data, comment, actor)
+    if @path == Sosol::Application.config.canonical_repository && file != CollectionIdentifier.new.to_path
+      raise 'Cannot commit directly to canonical repository'
+    end
+    last_commit_id = self.get_head(branch)
+
+    # empty the index
+    self.class.run_command("#{git_command_prefix} read-tree --empty")
+
+    # add the data as a blob
+    blob_sha1 = self.add_blob_native(data)
+
+    # add the blob to the index
+    self.class.run_command("#{git_command_prefix} update-index --add --cacheinfo 100644 #{blob_sha1} #{Shellwords.escape(file)}")
+
+    # create a tree from the index
+    tree_sha1 = self.class.run_command("#{git_command_prefix} write-tree")
+
   end
 
   # Returns a String of the SHA1 of the commit
