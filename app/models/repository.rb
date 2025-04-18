@@ -95,11 +95,15 @@ class Repository
       @path = File.join(Sosol::Application.config.repository_root,
                         @master_class_path, "#{master.name.gsub(Repository::BASH_SPECIAL_CHARACTERS_REGEX, '_')}.git")
 
-      # needed so that any call to `git commit-tree` has correct author info
-      if File.exist?(@path)
-        self.class.run_command("#{git_command_prefix} config user.name #{Shellwords.escape(self.owner.human_name)}")
-        self.class.run_command("#{git_command_prefix} config user.email #{Shellwords.escape(self.owner.email)}")
-      end
+      self.set_git_author_info
+    end
+  end
+
+  def set_git_author_info
+    # needed so that any call to `git commit-tree` has correct author info
+    if File.exist?(@path)
+      self.class.run_command("#{git_command_prefix} config user.name #{Shellwords.escape(self.owner.human_name)}")
+      self.class.run_command("#{git_command_prefix} config user.email #{Shellwords.escape(self.owner.email)}")
     end
   end
 
@@ -141,6 +145,7 @@ class Repository
     # master.update_attribute :has_repository, true
     # create a git repository
     Repository.new.fork_bare(path)
+    self.set_git_author_info
     begin
       @@jgit_repo_cache.put(path,
                             org.eclipse.jgit.storage.file.FileRepositoryBuilder.new.setGitDir(java.io.File.new(path)).readEnvironment.findGitDir.build)
