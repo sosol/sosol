@@ -310,6 +310,7 @@ class Repository
     jgit_tree.commit(comment, actor)
   end
 
+  # Ruby-native git blob add, returns a String of the SHA1 of the blob
   def add_blob_native(content)
     header = "blob #{content.bytesize}\0"
     store = header + content
