@@ -343,7 +343,7 @@ class Repository
     tree_sha1 = self.class.run_command("#{git_command_prefix} write-tree")
 
     # commit tree to repo
-    commit_sha1 = self.class.run_command("#{git_command_prefix} commit-tree #{tree_sha1} -p #{parent_sha1} -m #{Shellwords.escape(comment)}")
+    commit_sha1 = self.class.run_command("#{git_command_prefix} commit-tree -p #{parent_sha1} -m #{Shellwords.escape(comment)} #{tree_sha1}")
 
     # update branch
     self.class.run_command("#{git_command_prefix} update-ref refs/heads/#{Shellwords.escape(branch)} #{commit_sha1} #{parent_sha1}")
