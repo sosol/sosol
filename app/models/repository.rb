@@ -313,7 +313,7 @@ class Repository
       file_id = inserter.insert(org.eclipse.jgit.lib.Constants::OBJ_BLOB,
                                 data.to_java_string.getBytes(java.nio.charset.Charset.forName('UTF-8')))
 
-      last_commit_id = jgit_repo.resolve(branch)
+      last_commit_id = self.get_head(branch)
 
       jgit_tree = JGit::JGitTree.new
       jgit_tree.load_from_repo(jgit_repo, branch)
