@@ -95,7 +95,7 @@ class Repository
       @path = File.join(Sosol::Application.config.repository_root,
                         @master_class_path, "#{master.name.gsub(Repository::BASH_SPECIAL_CHARACTERS_REGEX, '_')}.git")
 
-      # needed so that any call to `git write-tree` has correct author info
+      # needed so that any call to `git commit-tree` has correct author info
       if File.exist?(@path)
         self.class.run_command("#{git_command_prefix} config user.name #{Shellwords.escape(self.owner.human_name)}")
         self.class.run_command("#{git_command_prefix} config user.email #{Shellwords.escape(self.owner.email)}")
@@ -322,11 +322,12 @@ class Repository
     return sha1
   end
 
+  # Returns a String of the SHA1 of the commit
   def commit_content_cgit(file, branch, data, comment, actor)
     if @path == Sosol::Application.config.canonical_repository && file != CollectionIdentifier.new.to_path
       raise 'Cannot commit directly to canonical repository'
     end
-    last_commit_id = self.get_head(branch)
+    parent_sha1 = self.get_head(branch)
 
     # empty the index
     self.class.run_command("#{git_command_prefix} read-tree --empty")
@@ -340,6 +341,13 @@ class Repository
     # create a tree from the index
     tree_sha1 = self.class.run_command("#{git_command_prefix} write-tree")
 
+    # commit tree to repo
+    commit_sha1 = self.class.run_command("#{git_command_prefix} commit-tree #{tree_sha1} -p #{parent_sha1} -m #{Shellwords.escape(comment)}")
+
+    # update branch
+    self.class.run_command("#{git_command_prefix} update-ref refs/heads/#{Shellwords.escape(branch)} #{commit_sha1} #{parent_sha1}")
+
+    return commit_sha1
   end
 
   # Returns a String of the SHA1 of the commit
