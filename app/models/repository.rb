@@ -328,7 +328,7 @@ class Repository
     if @path == Sosol::Application.config.canonical_repository && file != CollectionIdentifier.new.to_path
       raise 'Cannot commit directly to canonical repository'
     end
-    parent_sha1 = self.get_head(branch)
+    parent_sha1 = self.class.run_command("#{git_command_prefix} show-ref -s #{Shellwords.escape(branch)}")
 
     # empty the index
     self.class.run_command("#{git_command_prefix} read-tree --empty")
