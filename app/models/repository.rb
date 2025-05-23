@@ -345,7 +345,7 @@ class Repository
     self.class.run_command("#{git_command_prefix} update-index --add --cacheinfo 100644 #{blob_sha1} #{Shellwords.escape(new_path)}")
 
     # remove the old path from the index
-    self.class.run_command("#{git_command_prefix} update-index --remove --cacheinfo 100644 #{blob_sha1} #{Shellwords.escape(original_path)}")
+    self.class.run_command("#{git_command_prefix} rm --cached #{Shellwords.escape(original_path)}")
 
     # create a tree from the index
     tree_sha1 = self.class.run_command("#{git_command_prefix} write-tree").chomp
