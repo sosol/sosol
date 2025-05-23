@@ -318,6 +318,47 @@ class Repository
     jgit_tree.commit(comment, actor)
   end
 
+  def rename_file_cgit(original_path, new_path, branch, comment, actor)
+    if @path == Sosol::Application.config.canonical_repository
+      raise 'Cannot commit directly to canonical repository'
+    end
+    
+    content = get_file_from_branch(original_path, branch)
+    new_blob = get_file_from_branch(new_path, branch)
+    Rails.logger.info("CGIT RENAME #{original_path} -> #{new_path} = #{new_blob.inspect}")
+
+    if !content
+      raise "Rename error: Original file '#{original_path}' does not exist on branch '#{branch}'"
+    elsif !new_blob.nil?
+      raise "Rename error: Destination file '#{new_path}' already exists on branch '#{branch}'"
+    end
+
+    parent_sha1 = self.class.run_command("#{git_command_prefix} show-ref -s #{Shellwords.escape(branch)}").chomp
+
+    # empty the index
+    self.class.run_command("#{git_command_prefix} read-tree --empty")
+
+    # add the data as a blob
+    blob_sha1 = self.add_blob_native(content)
+
+    # add the blob to the index at the new path
+    self.class.run_command("#{git_command_prefix} update-index --add --cacheinfo 100644 #{blob_sha1} #{Shellwords.escape(new_path)}")
+
+    # remove the old path from the index
+    self.class.run_command("#{git_command_prefix} update-index --remove #{Shellwords.escape(original_path)}")
+
+    # create a tree from the index
+    tree_sha1 = self.class.run_command("#{git_command_prefix} write-tree").chomp
+
+    # commit tree to repo
+    commit_sha1 = self.class.run_command("#{git_command_prefix} commit-tree -p #{parent_sha1} -m #{Shellwords.escape(comment)} #{tree_sha1}").chomp
+
+    # update branch
+    self.class.run_command("#{git_command_prefix} update-ref refs/heads/#{Shellwords.escape(branch)} #{commit_sha1} #{parent_sha1}")
+
+    return commit_sha1
+  end
+
   # Ruby-native git blob add, returns a String of the SHA1 of the blob
   def add_blob_native(content)
     header = "blob #{content.bytesize}\0"

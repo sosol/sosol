@@ -371,7 +371,7 @@ class Identifier < ApplicationRecord
       new_path = to_path
       commit_message = "Rename #{self.class::FRIENDLY_NAME} from '#{original_name}' (#{original_path}) to '#{new_name}' (#{new_path})"
 
-      repository.rename_file(original_path,
+      repository.rename_file_cgit(original_path,
                              new_path,
                              branch,
                              commit_message,
@@ -384,11 +384,11 @@ class Identifier < ApplicationRecord
         relative.save!
 
         # rename the file on the relative
-        relative.repository.rename_file(original_path,
-                                        new_path,
-                                        relative.branch,
-                                        commit_message,
-                                        owner.jgit_actor)
+        relative.repository.rename_file_cgit(original_path,
+                                             new_path,
+                                             relative.branch,
+                                             commit_message,
+                                             owner.jgit_actor)
       end
       after_rename(options)
     end
