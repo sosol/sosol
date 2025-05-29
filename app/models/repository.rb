@@ -7,7 +7,7 @@ require 'zlib'
 class Repository
   attr_reader :master, :path
 
-  @@jgit_repo_cache = java.util.WeakHashMap.new
+  @@jgit_repo_cache = java.util.WeakHashMap.new if RUBY_PLATFORM == 'java'
 
   # Repository#copy_branch_from_repo uses double quotes for the subshell.
   # Thus $ ` \ ! " in a quoted string won't work as expected.
@@ -31,6 +31,8 @@ class Repository
 
   # Returns input string in a form acceptable to  ".git/refs/"
   def self.sanitize_ref(input_ref)
+    raise 'java sanitize_ref called from CRuby' unless RUBY_PLATFORM == 'java'
+
     # convert spaces to underscores and strip accents and terminal dot
     no_accents_or_spaces = java.text.Normalizer.normalize(input_ref.tr(' ', '_'), java.text.Normalizer::Form::NFD).gsub(/\p{M}/, '').sub(
       /\.$/, ''
@@ -108,17 +110,21 @@ class Repository
   end
 
   def jgit_repo
-    result = @@jgit_repo_cache.get(@path)
-    if result.nil? && File.exist?(@path)
-      begin
-        result = org.eclipse.jgit.storage.file.FileRepositoryBuilder.new.setGitDir(java.io.File.new(path)).readEnvironment.findGitDir.build
-        @@jgit_repo_cache.put(@path, result)
-      rescue Java::JavaLang::Exception => e
-        Rails.logger.error("JGIT CorruptObjectException: #{e.inspect}")
-        Rails.logger.debug(e.backtrace.join("\n"))
+    if RUBY_PLATFORM == 'java'
+      result = @@jgit_repo_cache.get(@path)
+      if result.nil? && File.exist?(@path)
+        begin
+          result = org.eclipse.jgit.storage.file.FileRepositoryBuilder.new.setGitDir(java.io.File.new(path)).readEnvironment.findGitDir.build
+          @@jgit_repo_cache.put(@path, result)
+        rescue Java::JavaLang::Exception => e
+          Rails.logger.error("JGIT CorruptObjectException: #{e.inspect}")
+          Rails.logger.debug(e.backtrace.join("\n"))
+        end
       end
+      result
+    else
+      raise 'jgit_repo called from CRuby'
     end
-    result
   end
 
   def owner
@@ -147,8 +153,12 @@ class Repository
     Repository.new.fork_bare(path)
     self.set_git_author_info
     begin
-      @@jgit_repo_cache.put(path,
-                            org.eclipse.jgit.storage.file.FileRepositoryBuilder.new.setGitDir(java.io.File.new(path)).readEnvironment.findGitDir.build)
+      if RUBY_PLATFORM == 'java'
+        @@jgit_repo_cache.put(path,
+                              org.eclipse.jgit.storage.file.FileRepositoryBuilder.new.setGitDir(java.io.File.new(path)).readEnvironment.findGitDir.build)
+      else
+        raise 'CRuby calling @@jgit_repo_cache'
+      end
     rescue Java::JavaLang::Exception => e
       Rails.logger.error("JGIT CorruptObjectException: #{e.inspect}")
       Rails.logger.debug(e.backtrace.join("\n"))
@@ -242,7 +252,11 @@ class Repository
     update_master_from_canonical if source_name == 'master'
 
     begin
-      ref = org.eclipse.jgit.api.Git.new(jgit_repo).branchCreate.setName(name).setStartPoint(source_name).setForce(force).call
+      if RUBY_PLATFORM == 'java'
+        ref = org.eclipse.jgit.api.Git.new(jgit_repo).branchCreate.setName(name).setStartPoint(source_name).setForce(force).call
+      else
+        raise 'jgit create_branch called from CRuby'
+      end
       # Rails.logger.debug("Branched #{ref.getName()} from #{source_name} = #{ref.getObjectId().name()}")
     rescue Java::JavaLang::Exception => e
       Rails.logger.error("create_branch exception: #{e.inspect}")
@@ -251,7 +265,11 @@ class Repository
   end
 
   def delete_branch(name)
-    org.eclipse.jgit.api.Git.new(jgit_repo).branchDelete.setBranchNames("refs/heads/#{name}").setForce(true).call
+    if RUBY_PLATFORM == 'java'
+      org.eclipse.jgit.api.Git.new(jgit_repo).branchDelete.setBranchNames("refs/heads/#{name}").setForce(true).call
+    else
+      raise 'jgit delete_branch called from CRuby'
+    end
   end
 
   # (from_branch, to_branch, from_repo)
@@ -273,6 +291,8 @@ class Repository
   end
 
   def add_remote(other_repo)
+    raise 'jgit add_remote called from CRuby' unless RUBY_PLATFORM == 'java'
+
     remote_configs = org.eclipse.jgit.transport.RemoteConfig.getAllRemoteConfigs(jgit_repo.getConfig).to_a
     unless remote_configs.map(&:getName).include?(other_repo.name)
       remote_config = org.eclipse.jgit.transport.RemoteConfig.new(jgit_repo.getConfig, other_repo.name)
@@ -290,10 +310,14 @@ class Repository
   end
 
   def branches
+    raise 'jgit branches called from CRuby' unless RUBY_PLATFORM == 'java'
+
     org.eclipse.jgit.api.Git.new(jgit_repo).branchList.call.map { |e| e.getName.sub(%r{^refs/heads/}, '') }
   end
 
   def rename_file(original_path, new_path, branch, comment, actor)
+    raise 'jgit rename_file called from CRuby' unless RUBY_PLATFORM == 'java'
+
     content = get_file_from_branch(original_path, branch)
     new_blob = get_blob_from_branch(new_path, branch)
     Rails.logger.info("JGIT RENAME #{original_path} -> #{new_path} = #{new_blob.inspect}")
@@ -402,6 +426,8 @@ class Repository
 
   # Returns a String of the SHA1 of the commit
   def commit_content(file, branch, data, comment, actor)
+    raise 'jgit commit_content called from CRuby' unless RUBY_PLATFORM == 'java'
+
     if @path == Sosol::Application.config.canonical_repository && file != CollectionIdentifier.new.to_path
       raise 'Cannot commit directly to canonical repository'
     end
