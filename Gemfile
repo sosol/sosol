@@ -43,7 +43,7 @@ if RUBY_PLATFORM == 'java'
   gem 'tzinfo-data', platform: :jruby
 else
   gem 'postgresql'
-  gem 'sqlite3'
+  gem 'sqlite3', '~> 1.4'
   gem 'tzinfo-data'
 end
 

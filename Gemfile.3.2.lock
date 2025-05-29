@@ -374,8 +374,8 @@ GEM
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
-    sqlite3 (2.6.0-arm64-darwin)
-    sqlite3 (2.6.0-x86_64-linux-gnu)
+    sqlite3 (1.7.3-arm64-darwin)
+    sqlite3 (1.7.3-x86_64-linux)
     sucker_punch (3.2.0)
       concurrent-ruby (~> 1.0)
     temple (0.10.3)
@@ -461,7 +461,7 @@ DEPENDENCIES
   shoulda-context
   shoulda-matchers
   silencer
-  sqlite3
+  sqlite3 (~> 1.4)
   sucker_punch (~> 3.0)
   therubyrhino
   thwait
