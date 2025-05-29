@@ -54,6 +54,8 @@ jobs:
       run: bundle exec cap local externals:setup
     - name: Clone canonical
       run: bundle exec rake git:db:canonical:clone
+    - name: DB migrate
+      run: bundle exec rake db:migrate
     - name: Run tests
       run: bundle exec rake test:all
       env:
