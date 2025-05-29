@@ -239,6 +239,9 @@ GEM
     parser (3.3.8.0)
       ast (~> 2.4.1)
       racc
+    pg (1.5.9)
+    postgresql (1.0.0)
+      pg
     prism (1.4.0)
     pry (0.15.2)
       coderay (~> 1.1)
@@ -371,6 +374,8 @@ GEM
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
+    sqlite3 (2.6.0-arm64-darwin)
+    sqlite3 (2.6.0-x86_64-linux-gnu)
     sucker_punch (3.2.0)
       concurrent-ruby (~> 1.0)
     temple (0.10.3)
@@ -434,6 +439,7 @@ DEPENDENCIES
   mocha
   omniauth-google-oauth2
   omniauth-rails_csrf_protection
+  postgresql
   pry (~> 0.15.0)
   pry-rails (~> 0.3.9)
   puma (< 7)
@@ -455,6 +461,7 @@ DEPENDENCIES
   shoulda-context
   shoulda-matchers
   silencer
+  sqlite3
   sucker_punch (~> 3.0)
   therubyrhino
   thwait
