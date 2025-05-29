@@ -423,6 +423,7 @@ GEM
       rubyzip (>= 1.0.0)
 
 PLATFORMS
+  universal-java-17
   universal-java-23
 
 DEPENDENCIES
