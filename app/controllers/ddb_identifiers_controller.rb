@@ -37,10 +37,11 @@ class DDBIdentifiersController < IdentifiersController
           original_xml = DDBIdentifier.preprocess(@identifier.xml_content)
 
           # strip xml:id from lb's
-          original_xml = JRubyXML.apply_xsl_transform(
-            JRubyXML.stream_from_string(original_xml),
-            JRubyXML.stream_from_file(File.join(Rails.root,
-                                                %w[data xslt ddb strip_lb_ids.xsl]))
+          original_xml = Epidocinator.apply_xsl_transform(
+            Epidocinator.stream_from_string(original_xml),
+            {
+              'xsl' => 'striplbids'
+            }
           )
 
           # get div type=edition from XML in string format for conversion
@@ -141,7 +142,7 @@ class DDBIdentifiersController < IdentifiersController
         @original_commit_comment = params[:comment]
         @is_editor_view = true
         render template: 'ddb_identifiers/edit'
-      rescue JRubyXML::ParseError => e
+      rescue Epidocinator::ParseError => e
         flash.now[:error] =
           "#{e.to_str}.  This message is because the XML created from Leiden+ below did not pass Relax NG validation.  This file was NOT SAVED. "
         @bad_leiden = true # to keep from trying to parse the L+ as XML when render edit template
@@ -164,15 +165,15 @@ class DDBIdentifiersController < IdentifiersController
 
     begin
       @identifier_html_preview =
-        JRubyXML.apply_xsl_transform(
-          JRubyXML.stream_from_string(
+        Epidocinator.apply_xsl_transform(
+          Epidocinator.stream_from_string(
             DDBIdentifier.preprocess(@identifier.xml_content)
           ),
-          JRubyXML.stream_from_file(File.join(Rails.root,
-                                              %w[data xslt ddb commentary.xsl])),
-          {}
+          {
+            'xsl' => 'commentary'
+          }
         )
-    rescue JRubyXML::ParseError => e
+    rescue Epidocinator::ParseError => e
       flash.now[:error] =
         "#{e.to_str}.  This message is because the XML is unable to be transformed by the line-by-line commentary XSLT."
       @identifier_html_preview = ''
@@ -190,7 +191,7 @@ class DDBIdentifiersController < IdentifiersController
   # - *Returns* :
   #   - to commentary view
   # - *Rescue*  :
-  #   - JRubyXML::ParseError -  if XML does not validate against tei-epidoc.rng file and returns to commentary view with flash error
+  #   - Epidocinator::ParseError -  if XML does not validate against tei-epidoc.rng file and returns to commentary view with flash error
   def update_commentary
     find_identifier
 
@@ -201,7 +202,7 @@ class DDBIdentifiersController < IdentifiersController
 
       redirect_to polymorphic_path([@identifier.publication, @identifier],
                                    action: :commentary)
-    rescue JRubyXML::ParseError => e
+    rescue Epidocinator::ParseError => e
       flash[:error] =
         "#{e.to_str}.  This message is because the XML created from Line By Line Leiden below did not pass Relax NG validation.  This file was NOT SAVED. "
 
@@ -216,7 +217,7 @@ class DDBIdentifiersController < IdentifiersController
   # - *Returns* :
   #   - to commentary view
   # - *Rescue*  :
-  #   - JRubyXML::ParseError -  if XML does not validate against tei-epidoc.rng file and returns to commentary view with flash error
+  #   - Epidocinator::ParseError -  if XML does not validate against tei-epidoc.rng file and returns to commentary view with flash error
   def update_frontmatter_commentary
     find_identifier
 
@@ -227,7 +228,7 @@ class DDBIdentifiersController < IdentifiersController
 
       redirect_to polymorphic_path([@identifier.publication, @identifier],
                                    action: :commentary)
-    rescue JRubyXML::ParseError => e
+    rescue Epidocinator::ParseError => e
       flash[:error] =
         "#{e.to_str}.  This message is because the XML created from Front Matter Leiden below did not pass Relax NG validation.  This file was NOT SAVED. "
 
@@ -279,7 +280,7 @@ class DDBIdentifiersController < IdentifiersController
 
     begin
       @identifier_html_preview = @identifier.preview
-    rescue JRubyXML::ParseError => e
+    rescue Epidocinator::ParseError => e
       flash[:error] = "Error parsing XML for preview. #{e.to_str}"
       redirect_to polymorphic_path([@identifier.publication, @identifier],
                                    action: :editxml)

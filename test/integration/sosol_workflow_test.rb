@@ -294,6 +294,11 @@ class SosolWorkflowTest < ActionDispatch::IntegrationTest
 
         Rails.logger.info('meta_final_identifier')
         Rails.logger.info(meta_final_identifier.inspect)
+
+        # Mock transform
+        Epidocinator.stubs(:apply_xsl_transform).returns('')
+        Epidocinator.stubs(:validate).returns(true)
+
         # do rename
         open_session do |meta_rename_session|
           meta_rename_session.patch "/publications/#{meta_final_publication.id}/hgv_meta_identifiers/#{meta_final_identifier.id}/rename/",

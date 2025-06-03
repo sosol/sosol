@@ -70,10 +70,11 @@ class HGVTransIdentifier < HGVIdentifier
   # - *Args*  :
   #   - +content+ -> Translation XML as string
   def before_commit(content)
-    JRubyXML.apply_xsl_transform(
-      JRubyXML.stream_from_string(content),
-      JRubyXML.stream_from_file(File.join(Rails.root,
-                                          %w[data xslt translation preprocess.xsl]))
+    Epidocinator.apply_xsl_transform(
+      Epidocinator.stream_from_string(content),
+      {
+        'xsl' => 'preprocesstranslation'
+      }
     )
   end
 
@@ -96,21 +97,22 @@ class HGVTransIdentifier < HGVIdentifier
   # - *Args*  :
   #   - +lang+ -> the new language to add (used in 'xml:lang' attribute)
   def stub_text_structure(lang)
-    translation_stub_xsl =
-      JRubyXML.apply_xsl_transform(
-        JRubyXML.stream_from_string(related_text.content),
-        JRubyXML.stream_from_file(File.join(Rails.root,
-                                            %w[data xslt translation ddb_to_translation_xsl.xsl]))
-      )
-
-    rewritten_xml =
-      JRubyXML.apply_xsl_transform(
-        JRubyXML.stream_from_string(content),
-        JRubyXML.stream_from_string(translation_stub_xsl),
-        # :lang => 'en'
-        # assumed that hard coded 'en' is remnant and should be
-        lang: lang
-      )
+    rewritten_xml = Epidocinator.apply_multipart_xsl_transform(
+      [
+        {
+          :content => Epidocinator.stream_from_string(content),
+          'name' => 'translation_content'
+        },
+        {
+          :content => Epidocinator.stream_from_string(related_text.content),
+          'name' => 'template_content'
+        }
+      ],
+      {
+        'xsl' => 'ddbtotranslation',
+        'lang' => lang
+      }
+    )
 
     set_xml_content(rewritten_xml, comment: "Update translation with stub for @xml:lang='#{lang}'")
   end
@@ -126,18 +128,19 @@ class HGVTransIdentifier < HGVIdentifier
         i.to_components.last if i.instance_of?(DDBIdentifier)
       end.compact
       rewritten_xml =
-        JRubyXML.apply_xsl_transform(
-          JRubyXML.stream_from_string(content),
-          JRubyXML.stream_from_file(File.join(Rails.root,
-                                              %w[data xslt translation update_header.xsl])),
-          filename_text: to_components.last,
-          HGV_text: related_hgv.join(' '),
-          DDB_text: related_ddb.join(' '),
-          TM_text: related_hgv.collect { |h| h.gsub(/\D/, '') }.uniq.join(' '),
-          title_text: NumbersRDF::NumbersHelper.identifier_to_title([NumbersRDF::NAMESPACE_IDENTIFIER,
-                                                                     HGVIdentifier::IDENTIFIER_NAMESPACE, to_components.last].join('/')),
-          reprint_from_text: options[:set_dummy_header] ? options[:original].title : '',
-          reprint_ref_attribute: options[:set_dummy_header] ? options[:original].to_components.last : ''
+        Epidocinator.apply_xsl_transform(
+          Epidocinator.stream_from_string(content),
+          {
+            'xsl' => 'updatetranslation',
+            'filename_text' => to_components.last,
+            'HGV_text' => related_hgv.join(' '),
+            'DDB_text' =>  related_ddb.join(' '),
+            'TM_text' =>  related_hgv.collect { |h| h.gsub(/\D/, '') }.uniq.join(' '),
+            'title_text' => NumbersRDF::NumbersHelper.identifier_to_title([NumbersRDF::NAMESPACE_IDENTIFIER,
+                                                                      HGVIdentifier::IDENTIFIER_NAMESPACE, to_components.last].join('/')),
+            'reprint_from_text' => options[:set_dummy_header] ? options[:original].title : '',
+            'reprint_ref_attribute' => options[:set_dummy_header] ? options[:original].to_components.last : ''
+          }
         )
 
       set_xml_content(rewritten_xml, comment: "Update header to reflect new identifier '#{name}'")
@@ -150,13 +153,11 @@ class HGVTransIdentifier < HGVIdentifier
   # - *Returns* :
   #   -  Preview HTML
   def preview
-    parameters = { 'edn-structure' => 'ddbdp',
-                   'css-loc' => '' }
-    JRubyXML.apply_xsl_transform(
-      JRubyXML.stream_from_string(xml_content),
-      JRubyXML.stream_from_file(File.join(Rails.root,
-                                          %w[data xslt translation preview.xsl])),
-      parameters
+    Epidocinator.apply_xsl_transform(
+      Epidocinator.stream_from_string(xml_content),
+      {
+        'xsl' => 'previewtranslation'
+      }
     )
   end
 

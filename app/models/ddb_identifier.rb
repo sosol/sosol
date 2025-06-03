@@ -8,8 +8,6 @@ class DDBIdentifier < Identifier
   IDENTIFIER_NAMESPACE = 'ddbdp'.freeze
   TEMPORARY_COLLECTION = 'sosol'.freeze
 
-  XML_VALIDATOR = JRubyXML::EpiDocP5Validator
-
   BROKE_LEIDEN_MESSAGE = "Broken Leiden+ below saved to come back to later:\n".freeze
 
   # defined in vendor/plugins/rxsugar/lib/jruby_helper.rb
@@ -90,10 +88,11 @@ class DDBIdentifier < Identifier
   # - *Returns* :
   #   - modified 'content'
   def self.preprocess(content)
-    JRubyXML.apply_xsl_transform(
-      JRubyXML.stream_from_string(content),
-      JRubyXML.stream_from_file(File.join(Rails.root,
-                                          %w[data xslt ddb preprocess.xsl]))
+    Epidocinator.apply_xsl_transform(
+      Epidocinator.stream_from_string(content),
+      {
+        'xsl' => 'preprocess'
+      }
     )
   end
 
@@ -109,12 +108,13 @@ class DDBIdentifier < Identifier
     if options[:set_dummy_header] && (options[:set_dummy_header] != 'false')
       dummy_comment_text = "Add dummy header for original identifier '#{original.name}' pointing to new identifier '#{name}'"
       dummy_header =
-        JRubyXML.apply_xsl_transform(
-          JRubyXML.stream_from_string(content),
-          JRubyXML.stream_from_file(File.join(Rails.root,
-                                              %w[data xslt ddb dummyize.xsl])),
-          reprint_in_text: title,
-          ddb_hybrid_ref_attribute: n_attribute
+        Epidocinator.apply_xsl_transform(
+          Epidocinator.stream_from_string(content),
+          {
+            'xsl' =>'dummyize',
+            'reprint_in_text' => title,
+            'ddb_hybrid_ref_attribute' => n_attribute
+          }
         )
 
       original.save!
@@ -143,16 +143,17 @@ class DDBIdentifier < Identifier
 
     if options[:update_header]
       rewritten_xml =
-        JRubyXML.apply_xsl_transform(
-          JRubyXML.stream_from_string(content),
-          JRubyXML.stream_from_file(File.join(Rails.root,
-                                              %w[data xslt ddb update_header.xsl])),
-          title_text: xml_title_text,
-          human_title_text: titleize,
-          filename_text: id_attribute,
-          ddb_hybrid_text: n_attribute,
-          reprint_from_text: options[:set_dummy_header] ? original.title : '',
-          ddb_hybrid_ref_attribute: options[:set_dummy_header] ? original.n_attribute : ''
+        Epidocinator.apply_xsl_transform(
+          Epidocinator.stream_from_string(content),
+          {
+            'xsl' => 'updateheader',
+            'title_text' => xml_title_text,
+            'human_title_text' => titleize,
+            'filename_text' => id_attribute,
+            'ddb_hybrid_text' => n_attribute,
+            'reprint_from_text' => options[:set_dummy_header] ? original.title : '',
+            'ddb_hybrid_ref_attribute' => options[:set_dummy_header] ? original.n_attribute : ''
+          }
         )
 
       set_xml_content(rewritten_xml, comment: "Update header to reflect new identifier '#{name}'")
@@ -174,17 +175,18 @@ class DDBIdentifier < Identifier
   #   - +delete_comment+ -> if set to true, will delete the commentary associated with this line_id
   def update_commentary(line_id, reference, comment_content = '', original_item_id = '', delete_comment = false)
     rewritten_xml =
-      JRubyXML.apply_xsl_transform(
-        JRubyXML.stream_from_string(
+      Epidocinator.apply_xsl_transform(
+        Epidocinator.stream_from_string(
           DDBIdentifier.preprocess(xml_content)
         ),
-        JRubyXML.stream_from_file(File.join(Rails.root,
-                                            %w[data xslt ddb update_commentary.xsl])),
-        line_id: line_id,
-        reference: reference,
-        content: comment_content,
-        original_item_id: original_item_id,
-        delete_comment: (delete_comment ? 'true' : '')
+        {
+          'xsl' => 'updatecommentary',
+          'line_id' => line_id,
+          'reference' => reference,
+          'content' =>comment_content,
+          'original_item_id' => original_item_id,
+          'delete_comment' => (delete_comment ? 'true' : '')
+        }
       )
 
     set_xml_content(rewritten_xml, comment: '')
@@ -200,14 +202,15 @@ class DDBIdentifier < Identifier
   #   - +delete_commentary+ -> if set to true, will delete the front matter commentary for this publication
   def update_frontmatter_commentary(commentary_content, delete_commentary = false)
     rewritten_xml =
-      JRubyXML.apply_xsl_transform(
-        JRubyXML.stream_from_string(
+      Epidocinator.apply_xsl_transform(
+        Epidocinator.stream_from_string(
           DDBIdentifier.preprocess(xml_content)
         ),
-        JRubyXML.stream_from_file(File.join(Rails.root,
-                                            %w[data xslt ddb update_frontmatter_commentary.xsl])),
-        content: commentary_content,
-        delete_commentary: (delete_commentary ? 'true' : '')
+        {
+          'xsl' => 'updatefrontmatter',
+          'content' => commentary_content,
+          'delete_commentary' => (delete_commentary ? 'true' : '')
+        }
       )
 
     set_xml_content(rewritten_xml, comment: '')
@@ -245,10 +248,11 @@ class DDBIdentifier < Identifier
     original_xml = DDBIdentifier.preprocess(xml_content)
 
     # strip xml:id from lb's
-    original_xml = JRubyXML.apply_xsl_transform(
-      JRubyXML.stream_from_string(original_xml),
-      JRubyXML.stream_from_file(File.join(Rails.root,
-                                          %w[data xslt ddb strip_lb_ids.xsl]))
+    original_xml = Epidocinator.apply_xsl_transform(
+      Epidocinator.stream_from_string(original_xml),
+      {
+        'xsl' => 'striplbids'
+      }
     )
 
     original_xml_content = REXML::Document.new(original_xml)
@@ -320,11 +324,20 @@ class DDBIdentifier < Identifier
     # remove namespace from XML returned from XSugar
     nonx2x.sub!(%r{ xmlns:xml="http://www.w3.org/XML/1998/namespace"}, '')
 
-    JRubyXML.apply_xsl_transform(
-      JRubyXML.stream_from_string(xml_content),
-      JRubyXML.stream_from_file(File.join(Rails.root,
-                                          %w[data xslt ddb update_edition.xsl])),
-      new_edition: nonx2x.force_encoding('UTF-8')
+    Epidocinator.apply_multipart_xsl_transform(
+      [
+        {
+          :content => Epidocinator.stream_from_string(xml_content),
+          'name' => 'xml_content'
+        },
+        {
+          :content => nonx2x.force_encoding('UTF-8'),
+          'name' => 'new_edition'
+        }
+      ],
+      {
+        'xsl' => 'updateedition'
+      }
     )
   end
 
@@ -337,12 +350,13 @@ class DDBIdentifier < Identifier
   #   - +commit_comment+ -> the comment from the user to attach to this repository commit and put
   def save_broken_leiden_plus_to_xml(brokeleiden, commit_comment = '')
     modified_xml_content =
-      JRubyXML.apply_xsl_transform(
-        JRubyXML.stream_from_string(xml_content),
-        JRubyXML.stream_from_file(File.join(Rails.root,
-                                            %w[data xslt ddb update_brokeleiden.xsl])),
-        new_brokeleiden: brokeleiden.force_encoding('UTF-8'),
-        brokeleiden_message: BROKE_LEIDEN_MESSAGE
+      Epidocinator.apply_xsl_transform(
+        Epidocinator.stream_from_string(xml_content),
+        {
+          'xsl' => 'updateeditionbrokenleiden',
+          'new_brokeleiden' => brokeleiden.force_encoding('UTF-8'),
+          'brokeleiden_message' => BROKE_LEIDEN_MESSAGE
+        }
       )
 
     Rails.logger.info(modified_xml_content)
@@ -357,17 +371,16 @@ class DDBIdentifier < Identifier
   # - *Returns* :
   #   -  Preview HTML
   def preview(parameters = {}, xsl = nil)
-    parameters.reverse_merge!(
-      'leiden-style' => 'ddbdp',
-      'apparatus-style' => 'ddbdp',
-      'edn-structure' => 'ddbdp',
-      'css-loc' => ''
-    )
-    JRubyXML.apply_xsl_transform(
-      JRubyXML.stream_from_string(xml_content),
-      JRubyXML.stream_from_file(File.join(Rails.root,
-                                          xsl || %w[data xslt ddb preview.xsl])),
-      parameters
+    Epidocinator.apply_xsl_transform(
+      Epidocinator.stream_from_string(xml_content),
+      {
+        'leiden-style' => 'ddbdp',
+        'apparatus-style' => 'ddbdp',
+        'internal-app-style' => 'ddbdp',
+        'edn-structure' => 'ddbdp',
+        'css-loc' => '',
+        'xsl' => 'previewddb'
+      }
     )
   end
 

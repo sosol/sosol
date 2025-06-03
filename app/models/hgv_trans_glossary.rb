@@ -145,10 +145,11 @@ class HGVTransGlossary < HGVTransIdentifier
   end
 
   def to_chooser
-    JRubyXML.apply_xsl_transform(
-      JRubyXML.stream_from_string(xml_content),
-      JRubyXML.stream_from_file(File.join(Rails.root,
-                                          %w[data xslt translation glossary_to_chooser.xsl]))
+    Epidocinator.apply_xsl_transform(
+      Epidocinator.stream_from_string(xml_content),
+      {
+        'xsl' => 'glossarytochooser'
+      }
     )
   end
 end

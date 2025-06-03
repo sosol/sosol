@@ -12,13 +12,13 @@ class HGVMetaIdentifier < HGVIdentifier
   #   - +parameters+ → xsl parameter hash, e.g. +{:leiden-style => 'ddb'}+, defaults to empty hash
   #   - +xsl+ → path to xsl file, relative to +Rails.root+, e.g. +%w{data xslt epidoc my.xsl})+, defaults to +data/xslt/epidoc/start-edition.xsl+
   # - *Returns* :
-  #   - result of transformation operation as provided by +JRubyXML.apply_xsl_transform+
+  #   - result of transformation operation as provided by +Epidocinator.apply_xsl_transform+
   def preview(parameters = {}, xsl = nil)
-    JRubyXML.apply_xsl_transform(
-      JRubyXML.stream_from_string(xml_content),
-      JRubyXML.stream_from_file(File.join(Rails.root,
-                                          xsl || %w[data xslt metadata preview.xsl])),
-      parameters
+    Epidocinator.apply_xsl_transform(
+      Epidocinator.stream_from_string(xml_content),
+      {
+        'xsl' => 'previewmetadata',
+      }
     )
   end
 
@@ -80,10 +80,11 @@ class HGVMetaIdentifier < HGVIdentifier
   # - *Returns* :
   #   - modified 'content'
   def self.preprocess(content)
-    JRubyXML.apply_xsl_transform(
-      JRubyXML.stream_from_string(content),
-      JRubyXML.stream_from_file(File.join(Rails.root,
-                                          %w[data xslt metadata preprocess.xsl]))
+    Epidocinator.apply_xsl_transform(
+      Epidocinator.stream_from_string(content),
+      {
+        'xsl' => 'preprocessmetadata'
+      }
     )
   end
 
@@ -284,14 +285,15 @@ class HGVMetaIdentifier < HGVIdentifier
   def after_rename(options = {})
     if options[:update_header]
       rewritten_xml =
-        JRubyXML.apply_xsl_transform(
-          JRubyXML.stream_from_string(content),
-          JRubyXML.stream_from_file(File.join(Rails.root,
-                                              %w[data xslt metadata update_header.xsl])),
-          filename_text: to_components.last,
-          reprint_from_text: options[:set_dummy_header] ? options[:original].title : '',
-          reprent_ref_attirbute: options[:set_dummy_header] ? options[:original].to_components.last : '',
-          hybrid: options[:new_hybrid] || ''
+        Epidocinator.apply_xsl_transform(
+          Epidocinator.stream_from_string(content),
+          {
+            'xsl' => 'updatemetadata',
+            'filename_text' => to_components.last,
+            'reprint_from_text' => options[:set_dummy_header] ? options[:original].title : '',
+            'reprent_ref_attirbute' => options[:set_dummy_header] ? options[:original].to_components.last : '',
+            'hybrid' => options[:new_hybrid] || ''
+          }
         )
       set_xml_content(rewritten_xml, comment: "Update header to reflect new identifier '#{name}'")
     end

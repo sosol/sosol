@@ -96,9 +96,7 @@ class Identifier < ApplicationRecord
   #   - true/false
   def is_valid_xml?(content = nil)
     content = xml_content if content.nil?
-    self.class::XML_VALIDATOR.instance.validate(
-      JRubyXML.input_source_from_string(content)
-    )
+    Epidocinator.validate(content)
   end
 
   # Put stuff in here you want to do do all identifiers before a commit is done
@@ -431,14 +429,15 @@ class Identifier < ApplicationRecord
   # - *Returns* :
   #   - string of the XML containing the added 'change' tag
   def add_change_desc(text = '', user_info = publication.creator, input_content = nil, timestamp = Time.now.xmlschema)
-    doc = JRubyXML.apply_xsl_transform(
-      JRubyXML.stream_from_string(input_content.nil? ? xml_content : input_content),
-      JRubyXML.stream_from_file(File.join(Rails.root,
-                                          %w[data xslt common add_change.xsl])),
-      who: url_helpers.url_for(host: Sosol::Application.config.site_user_namespace, controller: 'user',
+    doc = Epidocinator.apply_xsl_transform(
+      Epidocinator.stream_from_string(input_content.nil? ? xml_content : input_content),
+      {
+        'xsl' => 'addchange',
+        'who' => url_helpers.url_for(host: Sosol::Application.config.site_user_namespace, controller: 'user',
                                action: 'show', user_name: user_info.name, only_path: false),
-      comment: text,
-      when: timestamp
+        'comment' => text,
+        'when' => timestamp,
+      }
     )
 
     doc.to_s

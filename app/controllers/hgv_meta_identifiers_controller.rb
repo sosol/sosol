@@ -33,8 +33,8 @@ class HGVMetaIdentifiersController < IdentifiersController
       commit_sha = @identifier.set_epidoc(params[:hgv_meta_identifier].to_h, params[:comment].to_s)
       expire_publication_cache
       generate_flash_message
-    rescue JRubyXML::ParseError => e
-      flash[:error] = "Error updating file: #{e.message}. This file was NOT SAVED."
+    rescue Epidocinator::ParseError => e
+      flash[:error] = "Error updating file: #{e.to_str}. This file was NOT SAVED."
       redirect_to polymorphic_path([@identifier.publication, @identifier],
                                    action: :edit)
       return
@@ -52,7 +52,14 @@ class HGVMetaIdentifiersController < IdentifiersController
   # Side effect on +@identifier+
   def preview
     find_identifier
-    @identifier.get_epidoc_attributes
+    
+    begin
+      @identifier_html_preview = @identifier.preview
+    rescue Epidocinator::ParseError => e
+      flash[:error] = "Error parsing XML for preview. #{e.to_str}"
+      redirect_to polymorphic_path([@identifier.publication, @identifier],
+                                   action: :editxml)
+    end
     @is_editor_view = true
   end
 

@@ -166,11 +166,13 @@ class BiblioIdentifier < HGVIdentifier
   # - *Returns* :
   #   - +String+, result of xsl transformation
   def preview(parameters = {}, xsl = nil)
-    JRubyXML.apply_xsl_transform(
-      JRubyXML.stream_from_string(xml_content),
-      JRubyXML.stream_from_file(File.join(Rails.root,
-                                          xsl || %w[data xslt biblio pn-preview.xsl])),
-      parameters
+    # Seems to be missing aparatus?
+    Epidocinator.apply_xsl_transform(
+      Epidocinator.stream_from_string(xml_content),
+      {
+        'xsl' => 'makehtmlfragment',
+        'collection' => IDENTIFIER_NAMESPACE
+      }
     )
   end
 
@@ -191,9 +193,7 @@ class BiblioIdentifier < HGVIdentifier
   #   - true/false
   def is_valid_xml?(content = nil)
     content = xml_content if content.nil?
-    self.class::XML_VALIDATOR.instance.validate(
-      JRubyXML.input_source_from_string(wrap_xml(content))
-    )
+    Epidocinator.validate(wrap_xml(content))
   end
 
   # Wrap biblio xml stub in biblio xml wrapper to make it valid TEI
