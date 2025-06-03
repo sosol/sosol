@@ -22,6 +22,8 @@ module HasRepository
   end
 end
 
-ActiveSupport.on_load(:active_record) do
-  ActiveRecord::Base.include HasRepository
+initializer 'active_record.has_repository' do
+  ActiveSupport.on_load(:active_record) do
+    ActiveRecord::Base.include HasRepository
+  end
 end
