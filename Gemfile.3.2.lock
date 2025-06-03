@@ -437,6 +437,7 @@ DEPENDENCIES
   logger
   lograge
   mocha
+  nokogiri
   omniauth-google-oauth2
   omniauth-rails_csrf_protection
   postgresql
