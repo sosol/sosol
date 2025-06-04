@@ -69,6 +69,6 @@ jobs:
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: logs-${{ matrix.runs-on }}
+        name: logs-${{ matrix.runs-on }}-${{ matrix.ruby }}
         path: log
         retention-days: 1
