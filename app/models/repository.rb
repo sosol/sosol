@@ -116,7 +116,7 @@ class Repository
         begin
           result = org.eclipse.jgit.storage.file.FileRepositoryBuilder.new.setGitDir(java.io.File.new(path)).readEnvironment.findGitDir.build
           @@jgit_repo_cache.put(@path, result)
-        rescue Java::JavaLang::Exception => e
+        rescue ::Java::JavaLang::Exception => e
           Rails.logger.error("JGIT CorruptObjectException: #{e.inspect}")
           Rails.logger.debug(e.backtrace.join("\n"))
         end
@@ -159,7 +159,7 @@ class Repository
       else
         raise 'CRuby calling @@jgit_repo_cache'
       end
-    rescue Java::JavaLang::Exception => e
+    rescue ::Java::JavaLang::Exception => e
       Rails.logger.error("JGIT CorruptObjectException: #{e.inspect}")
       Rails.logger.debug(e.backtrace.join("\n"))
     end
@@ -206,14 +206,14 @@ class Repository
       Rails.logger.debug { "JGIT Blob ID for #{file} on #{branch} = #{tree_walk.getObjectId(0).name}" }
       jgit_blob = org.apache.commons.io.IOUtils.toString(jgit_repo.open(tree_walk.getObjectId(0)).openStream,
                                                          'UTF-8')
-    rescue Java::JavaLang::Exception => e
+    rescue ::Java::JavaLang::Exception => e
       Rails.logger.error("JGIT Blob Exception for #{file} on #{branch} in #{path}: #{e.inspect}")
       Rails.logger.debug(e.backtrace.join("\n"))
       return nil
     end
     Rails.logger.debug { "JGIT BLOB for #{file} on #{branch} in #{path}: #{jgit_blob.force_encoding('UTF-8').length}" }
     jgit_blob
-  rescue Java::JavaLang::Exception => e
+  rescue ::Java::JavaLang::Exception => e
     Rails.logger.error("JGIT Exception in get_blob_from_branch(#{file}, #{branch}) in #{path}: #{e.inspect}")
     Rails.logger.debug(caller.join("\n"))
     Rails.logger.debug(e.backtrace.join("\n"))
@@ -258,7 +258,7 @@ class Repository
         raise 'jgit create_branch called from CRuby'
       end
       # Rails.logger.debug("Branched #{ref.getName()} from #{source_name} = #{ref.getObjectId().name()}")
-    rescue Java::JavaLang::Exception => e
+    rescue ::Java::JavaLang::Exception => e
       Rails.logger.error("create_branch exception: #{e.inspect}")
       Rails.logger.debug(e.backtrace.join("\n"))
     end
@@ -446,7 +446,7 @@ class Repository
       jgit_tree.commit(comment, actor)
       inserter.flush
       inserter.release
-    rescue Java::JavaLang::Exception => e
+    rescue ::Java::JavaLang::Exception => e
       Rails.logger.error("JGIT COMMIT exception #{file} on #{branch} comment #{comment}: #{e.inspect}")
       Rails.logger.debug(e.backtrace.join("\n"))
       raise Exceptions::CommitError, "Commit failed. #{e.message}"
