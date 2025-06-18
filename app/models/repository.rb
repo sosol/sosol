@@ -262,7 +262,7 @@ class Repository
     if RUBY_PLATFORM == 'java'
       org.eclipse.jgit.api.Git.new(jgit_repo).branchDelete.setBranchNames("refs/heads/#{name}").setForce(true).call
     else
-      raise 'jgit delete_branch called from CRuby'
+      self.class.run_command("#{git_command_prefix} branch --delete --force #{Shellwords.escape(name)}")
     end
   end
 
