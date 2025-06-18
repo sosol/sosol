@@ -249,17 +249,17 @@ class Repository
     # We always assume we want to branch from master by default
     update_master_from_canonical if source_name == 'master'
 
-    begin
-      if RUBY_PLATFORM == 'java'
+    if RUBY_PLATFORM == 'java'
+      begin
         ref = org.eclipse.jgit.api.Git.new(jgit_repo).branchCreate.setName(name).setStartPoint(source_name).setForce(force).call
-      else
-        raise 'jgit create_branch called from CRuby'
+      rescue ::Java::JavaLang::Exception => e
+        Rails.logger.error("create_branch exception: #{e.inspect}")
+        Rails.logger.debug(e.backtrace.join("\n"))
       end
-      # Rails.logger.debug("Branched #{ref.getName()} from #{source_name} = #{ref.getObjectId().name()}")
-    rescue ::Java::JavaLang::Exception => e
-      Rails.logger.error("create_branch exception: #{e.inspect}")
-      Rails.logger.debug(e.backtrace.join("\n"))
+    else
+      self.class.run_command("#{git_command_prefix} branch --force #{Shellwords.escape(name)} #{Shellwords.escape(source_name)}")
     end
+    # Rails.logger.debug("Branched #{ref.getName()} from #{source_name} = #{ref.getObjectId().name()}")
   end
 
   def delete_branch(name)
