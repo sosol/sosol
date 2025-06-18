@@ -31,12 +31,8 @@ class Repository
 
   # Returns input string in a form acceptable to  ".git/refs/"
   def self.sanitize_ref(input_ref)
-    raise 'java sanitize_ref called from CRuby' unless RUBY_PLATFORM == 'java'
-
     # convert spaces to underscores and strip accents and terminal dot
-    no_accents_or_spaces = java.text.Normalizer.normalize(input_ref.tr(' ', '_'), java.text.Normalizer::Form::NFD).gsub(/\p{M}/, '').sub(
-      /\.$/, ''
-    )
+    no_accents_or_spaces = input_ref.tr(' ', '_').unicode_normalize(:nfd).gsub(/\p{M}/, '').sub(/\.$/, '')
     # iterate over each path component, replacing invalid characters
     output_refs = no_accents_or_spaces.split('/')
     output_refs.map do |output_ref|
