@@ -304,9 +304,11 @@ class Repository
   end
 
   def branches
-    raise 'jgit branches called from CRuby' unless RUBY_PLATFORM == 'java'
-
-    org.eclipse.jgit.api.Git.new(jgit_repo).branchList.call.map { |e| e.getName.sub(%r{^refs/heads/}, '') }
+    if RUBY_PLATFORM == 'java'
+      org.eclipse.jgit.api.Git.new(jgit_repo).branchList.call.map { |e| e.getName.sub(%r{^refs/heads/}, '') }
+    else
+      self.class.run_command("#{git_command_prefix} for-each-ref --format='%(refname:short)' refs/heads/").split("\n")
+    end
   end
 
   def rename_file(original_path, new_path, branch, comment, actor)
