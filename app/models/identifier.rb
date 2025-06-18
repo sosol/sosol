@@ -327,8 +327,10 @@ class Identifier < ApplicationRecord
   # - *Returns* :
   #   - a String of the SHA1 of the commit
   def set_xml_content(content, options)
-    default_actor = org.eclipse.jgit.lib.PersonIdent.new(Sosol::Application.config.site_full_name,
-                                                         Sosol::Application.config.site_email_from)
+    if RUBY_PLATFORM == 'java'
+      default_actor = org.eclipse.jgit.lib.PersonIdent.new(Sosol::Application.config.site_full_name,
+                                                           Sosol::Application.config.site_email_from)
+    end
     default_actor = owner.jgit_actor unless owner.nil?
 
     options.reverse_merge!(
