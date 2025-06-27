@@ -114,11 +114,11 @@ class Identifier < ApplicationRecord
   #   - a String of the SHA1 of the commit
   def set_content(content, options = {})
     options.reverse_merge! comment: ''
-    commit_sha = repository.commit_content_cgit(to_path,
-                                                branch,
-                                                content,
-                                                options[:comment],
-                                                options[:actor])
+    commit_sha = repository.commit_content(to_path,
+                                           branch,
+                                           content,
+                                           options[:comment],
+                                           options[:actor])
     self.modified = true
     save! unless id.nil?
 

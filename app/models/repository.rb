@@ -422,7 +422,7 @@ class Repository
 
   # Returns a String of the SHA1 of the commit
   def commit_content(file, branch, data, comment, actor)
-    raise 'jgit commit_content called from CRuby' unless RUBY_PLATFORM == 'java'
+    return commit_content_cgit(file, branch, data, comment, actor) unless RUBY_PLATFORM == 'java'
 
     if @path == Sosol::Application.config.canonical_repository && file != CollectionIdentifier.new.to_path
       raise 'Cannot commit directly to canonical repository'
