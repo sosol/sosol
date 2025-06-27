@@ -312,7 +312,7 @@ class Repository
   end
 
   def rename_file(original_path, new_path, branch, comment, actor)
-    raise 'jgit rename_file called from CRuby' unless RUBY_PLATFORM == 'java'
+    return rename_file_cgit(original_path, new_path, branch, comment, actor) unless RUBY_PLATFORM == 'java'
 
     content = get_file_from_branch(original_path, branch)
     new_blob = get_blob_from_branch(new_path, branch)
