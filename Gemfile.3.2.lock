@@ -344,6 +344,7 @@ GEM
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.4.1)
+    rugged (1.9.0)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -457,6 +458,7 @@ DEPENDENCIES
   rubocop-rails
   rubocop-rake
   rubyzip (~> 2)
+  rugged
   sass
   sass-rails (~> 6)
   shoulda-context

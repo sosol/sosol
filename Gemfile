@@ -42,6 +42,7 @@ if RUBY_PLATFORM == 'java'
   gem 'jdbc-sqlite3', '>= 3.7.2', platform: :jruby
   gem 'tzinfo-data', platform: :jruby
 else
+  gem 'rugged'
   gem 'postgresql'
   gem 'sqlite3', '~> 1.4'
   gem 'tzinfo-data'
