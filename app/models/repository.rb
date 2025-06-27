@@ -172,6 +172,7 @@ class Repository
   # returns the blob that represents the given file
   # the given file is the filename + path to the file
   def get_blob_from_branch(file, branch = 'master')
+    return get_file_from_branch(file, branch) unless RUBY_PLATFORM == 'java'
     if jgit_repo.nil?
       # Rails.logger.info("JGIT NIL")
       return nil
