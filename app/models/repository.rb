@@ -5,7 +5,7 @@ require 'shellwords'
 class Repository
   attr_reader :master, :path
 
-  @@jgit_repo_cache = java.util.WeakHashMap.new
+  @@jgit_repo_cache = java.util.WeakHashMap.new if RUBY_PLATFORM == 'java'
 
   # Repository#copy_branch_from_repo uses double quotes for the subshell.
   # Thus $ ` \ ! " in a quoted string won't work as expected.
