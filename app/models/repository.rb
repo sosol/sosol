@@ -133,12 +133,14 @@ class Repository
     # master.update_attribute :has_repository, true
     # create a git repository
     Repository.new.fork_bare(path)
-    begin
-      @@jgit_repo_cache.put(path,
-                            org.eclipse.jgit.storage.file.FileRepositoryBuilder.new.setGitDir(java.io.File.new(path)).readEnvironment.findGitDir.build)
-    rescue Java::JavaLang::Exception => e
-      Rails.logger.error("JGIT CorruptObjectException: #{e.inspect}")
-      Rails.logger.debug(e.backtrace.join("\n"))
+    if RUBY_PLATFORM == 'java'
+      begin
+        @@jgit_repo_cache.put(path,
+                              org.eclipse.jgit.storage.file.FileRepositoryBuilder.new.setGitDir(java.io.File.new(path)).readEnvironment.findGitDir.build)
+      rescue Java::JavaLang::Exception => e
+        Rails.logger.error("JGIT CorruptObjectException: #{e.inspect}")
+        Rails.logger.debug(e.backtrace.join("\n"))
+      end
     end
   end
 
