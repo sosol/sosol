@@ -204,7 +204,11 @@ class Repository
   end
 
   def get_file_from_branch(file, branch = 'master')
-    self.class.run_command("#{git_command_prefix} show #{Shellwords.escape(branch)}:#{Shellwords.escape(file)} 2> /dev/null").chomp
+    if RUBY_PLATFORM == 'java'
+      get_blob_from_branch(file, branch)
+    else
+      self.class.run_command("#{git_command_prefix} show #{Shellwords.escape(branch)}:#{Shellwords.escape(file)} 2> /dev/null").chomp
+    end
   end
 
   def get_log_for_file_from_branch(file, branch = 'master', limit = 1)
