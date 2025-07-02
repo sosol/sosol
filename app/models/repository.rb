@@ -281,7 +281,7 @@ class Repository
     if RUBY_PLATFORM == 'java'
       org.eclipse.jgit.api.Git.new(jgit_repo).branchList.call.map { |e| e.getName.sub(%r{^refs/heads/}, '') }
     else
-      cgit_repo.branches
+      cgit_repo.branches.each_name().sort
     end
   end
 
