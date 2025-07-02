@@ -44,7 +44,7 @@ class Board < ApplicationRecord
   end
 
   def jgit_actor
-    org.eclipse.jgit.lib.PersonIdent.new(title, Sosol::Application.config.site_email_from)
+    org.eclipse.jgit.lib.PersonIdent.new(title, Sosol::Application.config.site_email_from) if RUBY_PLATFORM == 'java'
   end
 
   after_create do |board|
