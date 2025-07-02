@@ -159,6 +159,8 @@ class Repository
   # returns the blob that represents the given file
   # the given file is the filename + path to the file
   def get_blob_from_branch(file, branch = 'master')
+    return get_file_from_branch(file, branch) unless RUBY_PLATFORM == 'java'
+
     if jgit_repo.nil?
       # Rails.logger.info("JGIT NIL")
       return nil
@@ -202,7 +204,7 @@ class Repository
   end
 
   def get_file_from_branch(file, branch = 'master')
-    get_blob_from_branch(file, branch)
+    self.class.run_command("#{git_command_prefix} show #{Shellwords.escape(branch)}:#{Shellwords.escape(file)} 2> /dev/null").chomp
   end
 
   def get_log_for_file_from_branch(file, branch = 'master', limit = 1)
