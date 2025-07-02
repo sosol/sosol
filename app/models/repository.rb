@@ -249,7 +249,11 @@ class Repository
   end
 
   def delete_branch(name)
-    org.eclipse.jgit.api.Git.new(jgit_repo).branchDelete.setBranchNames("refs/heads/#{name}").setForce(true).call
+    if RUBY_PLATFORM == 'java'
+      org.eclipse.jgit.api.Git.new(jgit_repo).branchDelete.setBranchNames("refs/heads/#{name}").setForce(true).call
+    else
+      self.class.run_command("#{git_command_prefix} branch --delete --force #{Shellwords.escape(name)}")
+    end
   end
 
   # (from_branch, to_branch, from_repo)
