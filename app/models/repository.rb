@@ -107,6 +107,10 @@ class Repository
     result
   end
 
+  def cgit_repo
+    Rugged::Repository.new(@path) if File.exist?(@path) && RUBY_PLATFORM != 'java'
+  end
+
   def owner
     @master
   end
@@ -274,7 +278,11 @@ class Repository
   end
 
   def branches
-    org.eclipse.jgit.api.Git.new(jgit_repo).branchList.call.map { |e| e.getName.sub(%r{^refs/heads/}, '') }
+    if RUBY_PLATFORM == 'java'
+      org.eclipse.jgit.api.Git.new(jgit_repo).branchList.call.map { |e| e.getName.sub(%r{^refs/heads/}, '') }
+    else
+      cgit_repo.branches
+    end
   end
 
   def rename_file(original_path, new_path, branch, comment, actor)
