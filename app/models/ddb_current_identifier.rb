@@ -327,7 +327,7 @@ class DDBCurrentIdentifier < DDBIdentifier
         'css-loc' => '',
         'xsl' => 'previewddb'
       }
-    )
+    ).gsub('<div id="edition"','<div id="editor-edition"')
   end
 
   # - Mass substitute alternate keyboard characters for Leiden+ grammar characters
