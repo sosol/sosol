@@ -74,10 +74,12 @@
       <% end %>
     </ul>
   <% end %>
-  <%= link_to "Add an OpenID to your account", rpx_associate_url, :class => 'rpxnow', :onclick => "return false;" %>
+  <% unless @rpx.nil? %><%= link_to "Add an OpenID to your account", rpx_associate_url, :class => 'rpxnow', :onclick => "return false;" %><% end %>
 </div>
+<% unless @rpx.nil? %>
 <script <%= tag_options({:src => rpx_widget_url, :type => "text/javascript"}, false) %>></script>
 <script>
   RPXNOW.overlay = true;
   RPXNOW.language_preference = 'en';
 </script>
+<% end %>
