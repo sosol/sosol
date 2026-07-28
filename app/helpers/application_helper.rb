@@ -6,7 +6,7 @@ module ApplicationHelper
            else
              url_for controller: :rpx, action: :login_return, only_path: false
            end
-    @rpx.signin_url(dest, signin_method)
+    @rpx&.signin_url(dest, signin_method)
   end
 
   def rpx_associate_url(signin_method = 'signin')
@@ -15,11 +15,11 @@ module ApplicationHelper
            else
              url_for controller: :rpx, action: :associate_return, only_path: false
            end
-    @rpx.signin_url(dest, signin_method)
+    @rpx&.signin_url(dest, signin_method)
   end
 
   def rpx_widget_url
-    "#{@rpx.base_url}/openid/v2/widget"
+    "#{@rpx&.base_url}/openid/v2/widget"
   end
 
   def clippy(textarea_id)
