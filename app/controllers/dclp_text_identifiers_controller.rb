@@ -8,6 +8,6 @@ class DCLPTextIdentifiersController < DDBIdentifiersController
   # - *Params*  :
   #   - +id+ -> id from identifier table of the DCLP Text
   def find_identifier
-    @identifier = DCLPCurrentTextIdentifier.find(params[:id].to_s)
+    @identifier = DCLPTextIdentifier.find(params[:id].to_s)
   end
 end
