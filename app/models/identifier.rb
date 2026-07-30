@@ -177,8 +177,12 @@ class Identifier < ApplicationRecord
       if instance_of?(DDBIdentifier) || (name =~ /#{self.class::TEMPORARY_COLLECTION}/)
         collection_name, volume_number, document_number =
           to_components.last.split(';')
-        collection_name =
-          self.class.collection_names_hash[collection_name]
+        begin
+          collection_name =
+            self.class.collection_names_hash[collection_name]
+        rescue NumbersRDF::Timeout
+          Rails.logger.error("Identifier#titleize error constructing collection names hash for: #{self.inspect}")
+        end
 
         # strip leading zeros
         document_number.sub!(/^0*/, '')
