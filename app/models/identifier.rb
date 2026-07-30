@@ -168,7 +168,8 @@ class Identifier < ApplicationRecord
       )
     elsif instance_of?(APISIdentifier)
       title = name.split('/').last
-    elsif instance_of?(DCLPMetaIdentifier) || instance_of?(DCLPTextIdentifier)
+    elsif instance_of?(DCLPMetaIdentifier) || instance_of?(DCLPTextIdentifier) ||
+          instance_of?(DCLPCurrentMetaIdentifier) || instance_of?(DCLPCurrentTextIdentifier)
       title = name.split('/').last unless /#{self.class::TEMPORARY_COLLECTION}/.match?(name)
     end
 
