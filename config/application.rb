@@ -49,7 +49,7 @@ module Sosol
 
     # Configure custom application parameters
     config.site_layout = 'pn'
-    config.site_identifiers = 'DDBIdentifier,DDBCurrentIdentifier,HGVMetaIdentifier,DCLPMetaIdentifier,DCLPCurrentMetaIdentifier,DCLPTextIdentifier,DCLPCurrentTextIdentifier,HGVTransIdentifer,TranslationIdentifier,BiblioIdentifier,APISIdentifier'
+    config.site_identifiers = 'DDBIdentifier,DDBCurrentIdentifier,HGVMetaIdentifier,DCLPMetaIdentifier,DCLPCurrentMetaIdentifier,DCLPTextIdentifier,DCLPCurrentTextIdentifier,HGVTransIdentifier,TranslationIdentifier,BiblioIdentifier,APISIdentifier'
     config.repository_root = File.join(::Rails.root.to_s, 'db', 'git')
     config.canonical_repository = File.join(config.repository_root, 'canonical.git')
     config.rpx_base_url = 'https://rpxnow.com'
