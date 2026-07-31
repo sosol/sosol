@@ -40,7 +40,7 @@ class DCLPCurrentTextIdentifier < DCLPTextIdentifier
         'internal-app-style' => 'ddbdp',
         'leiden-style' => 'ddbdp'
       }
-    )
+    ).gsub('<div id="edition"','<div id="editor-edition"')
   end
 
   after_initialize :post_initialization_configuration
