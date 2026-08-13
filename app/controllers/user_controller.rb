@@ -316,15 +316,17 @@ class UserController < ApplicationController
 
     # get publications for the member to finalize
     @board_final_pubs = Publication.where(owner_id: @current_user.id, owner_type: 'User',
-                                          status: 'finalizing').includes(identifiers: [:votes]).order(updated_at: :desc)
-    @finalizing_publications = @board_final_pubs.collect do |p|
-      !p.parent.nil? && p.parent.owner == @board ? p : nil
-    end.compact
+                                          status: 'finalizing').includes(:parent, identifiers: [:votes]).order(updated_at: :desc)
+    @finalizing_publications = @board_final_pubs.select do |p|
+      !p.parent.nil? && p.parent.owner_id == @board.id && p.parent.owner_type == 'Board'
+    end
 
     # get publications that have been approved
     # @approved_publications = @board.publications.collect{|p| p.status == "approved" ? p : nil}.compact
     @approved_publications = Publication.where(owner_id: @board.id, owner_type: 'Board',
-                                               status: 'approved').includes(identifiers: [:votes]).order(updated_at: :desc).to_a
+                                               status: 'approved')
+                                        .includes(:creator, { finalizer_publication: :owner }, :children, identifiers: [:votes])
+                                        .order(updated_at: :desc).to_a
 
     # remove approved publications if in the finalizer list
     @finalizing_publications.each do |fp|
