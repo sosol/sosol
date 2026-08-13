@@ -30,6 +30,7 @@ class Publication < ApplicationRecord
   belongs_to :community
 
   has_many :children, class_name: 'Publication', foreign_key: 'parent_id'
+  has_one :finalizer_publication, -> { where(status: 'finalizing') }, class_name: 'Publication', foreign_key: 'parent_id'
   belongs_to :parent, class_name: 'Publication'
 
   has_many :identifiers, dependent: :destroy
@@ -1103,15 +1104,17 @@ class Publication < ApplicationRecord
 
   # *Returns* the +user+ who is finalizing this publication or +nil+ if no one finalizing this publication.
   def find_finalizer_user
-    return find_finalizer_publication.owner if find_finalizer_publication
-
-    nil
+    find_finalizer_publication&.owner
   end
 
   # *Returns* the finalizer's +publication+ or +nil+ if there is no finalizer.
   def find_finalizer_publication
-    # returns the finalizer's publication or nil if finalizer does not exist
-    Publication.where(parent_id: id, status: 'finalizing').limit(1).first
+    # use preloaded association when available
+    if association(:finalizer_publication).loaded?
+      finalizer_publication
+    else
+      Publication.where(parent_id: id, status: 'finalizing').limit(1).first
+    end
   end
 
   def head
