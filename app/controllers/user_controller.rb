@@ -329,16 +329,10 @@ class UserController < ApplicationController
                                         .order(updated_at: :desc).to_a
 
     # remove approved publications if in the finalizer list
-    @finalizing_publications.each do |fp|
-      # remove it from the list of approved publications
-      @approved_publications.reject! do |ap|
-        fp.origin == ap.origin
-      rescue ActiveRecord::RecordNotFound => e
-        Rails.logger.debug do
-          "UserController#board_dashboard ActiveRecord::RecordNotFound while removing approved publications: #{e.inspect}"
-        end
-        false
-      end
+    finalizing_origin_ids = @finalizing_publications.map { |p| p.origin.id }.to_set
+
+    @approved_publications.reject! do |ap|
+      finalizing_origin_ids.include?(ap.origin.id)
     end
 
     # biblio voting stacked up and created huge problems (e.g. running out of heap), so
