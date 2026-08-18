@@ -658,7 +658,11 @@ class Publication < ApplicationRecord
   end
 
   def branch_exists?
-    owner.repository.exists? && owner.repository.branch_exists?(branch)
+    if RUBY_PLATFORM == 'java'
+      owner.repository.exists? && owner.repository.branches.include?(branch)
+    else
+      owner.repository.exists? && owner.repository.branch_exists?(branch)
+    end
   end
 
   def change_status(new_status)
