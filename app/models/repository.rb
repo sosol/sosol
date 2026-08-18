@@ -342,6 +342,16 @@ class Repository
     end
   end
 
+  def branch_exists?(branch)
+    begin
+      cgit_repo.rev_parse(branch).oid
+      true
+    rescue StandardError => e
+      Rails.logger.debug("Branch #{branch} does not exist in repo #{path}: #{e.inspect}")
+      false
+    end
+  end
+
   def get_blob_oid_for_file_path_on_branch(file_path, branch)
     cgit_repo.rev_parse("#{branch}:#{file_path}").oid
   end
