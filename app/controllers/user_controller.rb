@@ -315,31 +315,22 @@ class UserController < ApplicationController
     @board = Board.find_by(id: params[:board_id])
 
     # get publications for the member to finalize
-    @board_final_pubs = Publication.where(owner_id: @current_user.id, owner_type: 'User',
-                                          status: 'finalizing').includes(:parent, identifiers: [:votes]).order(updated_at: :desc)
-    @finalizing_publications = @board_final_pubs.select do |p|
-      !p.parent.nil? && p.parent.owner_id == @board.id && p.parent.owner_type == 'Board'
-    end
+    @board_final_pubs = Publication.joins(:parent)
+                                   .where(owner_id: @current_user.id, owner_type: 'User', status: 'finalizing')
+                                   .where(parents_publications: { owner_id: @board.id, owner_type: 'Board' })
+                                   .includes(:parent, identifiers: [:votes])
+                                   .order(updated_at: :desc)
+    @finalizing_publications = @board_final_pubs.to_a
 
     # get publications that have been approved
-    # @approved_publications = @board.publications.collect{|p| p.status == "approved" ? p : nil}.compact
     @approved_publications = Publication.where(owner_id: @board.id, owner_type: 'Board',
                                                status: 'approved')
                                         .includes(:creator, { finalizer_publication: :owner }, :children, identifiers: [:votes])
                                         .order(updated_at: :desc).to_a
 
-    # remove approved publications if in the finalizer list
-    @finalizing_publications.each do |fp|
-      # remove it from the list of approved publications
-      @approved_publications.reject! do |ap|
-        fp.origin == ap.origin
-      rescue ActiveRecord::RecordNotFound => e
-        Rails.logger.debug do
-          "UserController#board_dashboard ActiveRecord::RecordNotFound while removing approved publications: #{e.inspect}"
-        end
-        false
-      end
-    end
+    # fp.parent_id is the board-owned approved pub; avoids origin traversal N+1
+    finalizing_parent_ids = @finalizing_publications.map(&:parent_id).to_set
+    @approved_publications.reject! { |ap| finalizing_parent_ids.include?(ap.id) }
 
     # biblio voting stacked up and created huge problems (e.g. running out of heap), so
     # we now paginate voting items 50 at a time.
