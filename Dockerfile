@@ -1,4 +1,4 @@
-FROM debian:bullseye
+FROM debian:trixie
 LABEL org.opencontainers.image.authors="Ryan Baumann <ryan.baumann@gmail.com>"
 
 # Install the Ubuntu packages.
@@ -11,7 +11,7 @@ ENV HOME=/root
 RUN apt-get update && \
   apt-get install -y git wget subversion curl \
   autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev locales \
-  openjdk-11-jre cmake libgit2-dev pkg-config libpq-dev sendmail rsync
+  openjdk-21-jre cmake libgit2-dev pkg-config libpq-dev sendmail rsync libgit2-fixtures libz3-dev libzstd-dev pkgconf
 
 # Set the locale.
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && locale-gen
