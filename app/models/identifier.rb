@@ -72,7 +72,7 @@ class Identifier < ApplicationRecord
   # - *Returns* :
   #   - the repository for the owner of this identifier
   def repository
-    publication.nil? ? Repository.new : publication.owner.repository
+    publication.nil? ? Repository.new : publication.owner&.repository
   end
 
   # - *Returns* :
@@ -84,7 +84,7 @@ class Identifier < ApplicationRecord
   # - *Returns* :
   #   - the cotent of the file containing this identifier from the repository
   def content
-    repository.get_file_from_branch(
+    repository&.get_file_from_branch(
       to_path, branch
     )
   end
