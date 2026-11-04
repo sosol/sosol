@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 if RUBY_PLATFORM == 'java'
-  ruby '3.2.11', engine: 'jruby', engine_version: '10.0.6.0'
+  ruby '3.4.5', engine: 'jruby', engine_version: '10.0.6.0'
 else
   ruby '3.2.11'
 end
@@ -33,10 +33,10 @@ group :development, :test do
 end
 
 if RUBY_PLATFORM == 'java'
-  gem 'activerecord-jdbc-adapter', '>= 61.3', '~> 70', platform: :jruby
-  gem 'activerecord-jdbcmysql-adapter', '>= 61.3', '~> 70', platform: :jruby
-  gem 'activerecord-jdbcpostgresql-adapter', '>= 61.3', '~> 70', platform: :jruby
-  gem 'activerecord-jdbcsqlite3-adapter', '>= 61.3', '~> 70', platform: :jruby
+  gem 'activerecord-jdbc-adapter', '>= 80.0.pre1', '< 81', platform: :jruby
+  gem 'activerecord-jdbcmysql-adapter', '>= 80.0.pre1', '< 81', platform: :jruby
+  gem 'activerecord-jdbcpostgresql-adapter', '>= 80.0.pre1', '< 81', platform: :jruby
+  gem 'activerecord-jdbcsqlite3-adapter', '>= 80.0.pre1', '< 81', platform: :jruby
   gem 'jruby-jars', JRUBY_VERSION
   gem 'jdbc-mysql', require: false
   gem 'jdbc-sqlite3', '>= 3.7.2', platform: :jruby
