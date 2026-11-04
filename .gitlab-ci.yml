@@ -39,14 +39,14 @@ build-cruby:
   variables:
     build_tag: "$CI_REGISTRY_IMAGE/builds/cruby:$CI_COMMIT_SHORT_SHA"
     BUNDLE_GEMFILE: "Gemfile.3.2"
-    RBENV_VERSION: "3.2.9"
+    RBENV_VERSION: "3.2.11"
 
 test-cruby:
   extends: .test
   variables:
     build_tag: "$CI_REGISTRY_IMAGE/builds/cruby:$CI_COMMIT_SHORT_SHA"
     BUNDLE_GEMFILE: "Gemfile.3.2"
-    RBENV_VERSION: "3.2.9"
+    RBENV_VERSION: "3.2.11"
 
 release-cruby:
   extends: .release
