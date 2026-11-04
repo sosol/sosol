@@ -37,7 +37,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Install dependencies
-      run: sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev git libgit2-dev libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev pkg-config libpq-dev sendmail rsync libgit2-fixtures libz3-dev libzstd-dev pkgconf cmake
+      run: sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev git libgit2-dev libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev pkg-config libpq-dev sendmail rsync libgit2-fixtures libz3-dev libzstd-dev pkgconf cmake build-essential
     - name: Configure sysctl limits
       run: |
         sudo swapoff -a
