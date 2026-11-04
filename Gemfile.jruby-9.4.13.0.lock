@@ -426,6 +426,7 @@ PLATFORMS
   universal-java-17
   universal-java-23
   universal-java-24
+  universal-java-27
 
 DEPENDENCIES
   actionpack-page_caching
