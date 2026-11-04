@@ -44,7 +44,7 @@ if RUBY_PLATFORM == 'java'
 else
   gem 'rugged'
   gem 'postgresql'
-  gem 'sqlite3', '~> 1.4'
+  gem 'sqlite3', '~> 2.1'
   gem 'tzinfo-data'
 end
 
