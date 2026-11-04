@@ -6,7 +6,7 @@ else
   ruby '3.2.11'
 end
 
-gem 'rails', '~> 7.0', '< 7.1'
+gem 'rails', '~> 8.0', '< 8.1'
 
 # Needed for the new asset pipeline
 gem 'coffee-rails'
