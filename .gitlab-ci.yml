@@ -11,8 +11,8 @@ variables:
   COMMIT_MESSAGE: "Update submodule to latest commit"
   DOWNSTREAM_PROJECT: "papyri/papyri-docker"
   DOWNSTREAM_BRANCH: "master"
-  BUNDLE_GEMFILE: "Gemfile.jruby-9.4.13.0"
-  RBENV_VERSION: "jruby-9.4.13.0"
+  BUNDLE_GEMFILE: "Gemfile.3.2"
+  RBENV_VERSION: "3.2.11"
 
 stages:
   - build
