@@ -487,9 +487,8 @@ GEM
       base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    with_advisory_lock (7.5.0)
+    with_advisory_lock (7.6.0)
       activerecord (>= 7.2)
-      zeitwerk (>= 2.7)
     zeitwerk (2.8.3)
     zip-zip (0.3)
       rubyzip (>= 1.0.0)
@@ -560,7 +559,7 @@ DEPENDENCIES
   tzinfo-data
   uglifier (>= 1.0.3)
   webrick
-  with_advisory_lock (< 7.6)
+  with_advisory_lock
   zip-zip
 
 RUBY VERSION
