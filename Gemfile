@@ -55,7 +55,12 @@ gem 'sass'
 gem 'actionpack-page_caching'
 gem 'activerecord-session_store'
 gem 'airbrake'
-gem 'airbrake-ruby', '6.2.0'
+if RUBY_PLATFORM == 'java'
+  gem 'airbrake-ruby', git: 'https://github.com/airbrake/airbrake-ruby.git',
+                       ref: '6b896d2c09ad5a73abf777cbf31f0af13a71eab5'
+else
+  gem 'airbrake-ruby', '6.2.0'
+end
 gem 'capistrano', '~> 2.15.0'
 gem 'devise', '~> 4.8'
 gem 'dotenv-rails'
