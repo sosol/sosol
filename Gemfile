@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 if RUBY_PLATFORM == 'java'
   ruby '3.4.5', engine: 'jruby', engine_version: '10.0.6.0'
 else
-  ruby '3.2.11'
+  ruby '3.4.12'
 end
 
 gem 'rails', '~> 8.0', '< 8.1'
