@@ -61,6 +61,8 @@ jobs:
     - name: Run tests
       run: bundle exec rake test:all
       env:
+        DATABASE_URL: postgresql://sosol_test@localhost:5432/sosol_test?pool=16
+        PGPASSWORD: sosol_test
         DATABASE_ADAPTER: postgresql
         DATABASE_NAME: sosol_test
         DATABASE_USERNAME: sosol_test
