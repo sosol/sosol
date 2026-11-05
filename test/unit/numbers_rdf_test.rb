@@ -14,5 +14,12 @@ class NumbersRDFTest < ActiveSupport::TestCase
     #     response = NumbersRDF::NumbersHelper::path_to_numbers_server_response('/')
     #   end
     # end
+    #     end
+  end
+
+  should 'return nil when the Numbers Server response cannot be parsed' do
+    Epidocinator.stubs(:apply_xpath).raises(Nokogiri::XML::SyntaxError.new('invalid XML'))
+
+    assert_nil NumbersRDF::NumbersHelper.process_numbers_server_response_body('', '')
   end
 end

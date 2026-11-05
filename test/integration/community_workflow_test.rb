@@ -202,6 +202,7 @@ class CommunityWorkflowTest < ActionDispatch::IntegrationTest
 
       should 'user creates and submits publication to community' do
         Rails.logger.debug 'BEGIN TEST: user creates and submits publication to community'
+        NumbersRDF::NumbersHelper.stubs(:identifier_to_title).returns(nil)
 
         Rails.logger.debug '---Meta board controlls: '
         @meta_board.identifier_classes.each do |mic|

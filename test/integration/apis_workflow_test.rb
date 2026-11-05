@@ -157,6 +157,9 @@ class APISWorkflowTest < ActionDispatch::IntegrationTest
 
       should 'user creates and submits publication to sosol' do
         Rails.logger.debug 'BEGIN TEST: user creates and submits publication to sosol'
+        NumbersRDF::NumbersHelper.stubs(:identifier_to_identifiers)
+                                  .with('papyri.info/apis/nyu.apis.4782')
+                                  .returns(['papyri.info/apis/nyu.apis.4782'])
 
         assert_not_equal nil, @meta_board, 'Meta board not created'
         assert_not_equal nil, @text_board, 'Text board not created'
