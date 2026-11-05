@@ -40,6 +40,7 @@ if RUBY_PLATFORM == 'java'
   gem 'jruby-jars', JRUBY_VERSION
   gem 'jdbc-mysql', require: false
   gem 'jdbc-sqlite3', '>= 3.7.2', platform: :jruby
+  gem 'rinda'
   gem 'tzinfo-data', platform: :jruby
 else
   gem 'rugged'
