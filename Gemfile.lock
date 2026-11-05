@@ -516,7 +516,7 @@ DEPENDENCIES
   tzinfo-data
   uglifier (>= 1.0.3)
   webrick
-  with_advisory_lock
+  with_advisory_lock (< 7.6)
   zip-zip
 
 RUBY VERSION
