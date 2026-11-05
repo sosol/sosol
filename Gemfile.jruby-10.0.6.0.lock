@@ -93,8 +93,6 @@ GEM
       uri (>= 0.13.1)
     airbrake (13.0.5)
       airbrake-ruby (~> 6.0)
-    airbrake-ruby (6.2.0)
-      rbtree3 (~> 0.5)
     airbrake-ruby (6.2.0-java)
       rbtree-jruby (~> 0.2)
     ast (2.4.3)
@@ -158,7 +156,6 @@ GEM
       logger
     faraday-net_http (3.4.1)
       net-http (>= 0.5.0)
-    ffi (1.17.2-arm64-darwin)
     ffi (1.17.2-java)
     globalid (1.4.0)
       activesupport (>= 6.1)
@@ -249,8 +246,6 @@ GEM
       net-ssh (>= 4.0.0)
     nio4r (2.7.5)
     nio4r (2.7.5-java)
-    nokogiri (1.19.7-arm64-darwin)
-      racc (~> 1.4)
     nokogiri (1.19.7-java)
       racc (~> 1.4)
     oauth2 (2.0.15)
@@ -367,7 +362,6 @@ GEM
       prism (>= 1.6.0)
       tsort
     rbtree-jruby (0.2.1)
-    rbtree3 (0.7.1)
     rdoc (8.1.0)
       erb
       prism (>= 1.6.0)
@@ -491,7 +485,6 @@ GEM
       rubyzip (>= 1.0.0)
 
 PLATFORMS
-  arm64-darwin-24
   universal-java-17
   universal-java-23
   universal-java-24
