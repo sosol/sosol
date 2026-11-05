@@ -95,7 +95,7 @@ GEM
     base64 (0.3.0)
     bcrypt (3.1.20)
     benchmark (0.5.0)
-    bigdecimal (3.2.3)
+    bigdecimal (3.3.1)
     builder (3.3.0)
     capistrano (2.15.11)
       highline
@@ -440,7 +440,7 @@ GEM
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)
     unicode-emoji (4.1.0)
-    uri (1.0.3)
+    uri (1.1.2)
     useragent (0.16.11)
     version_gem (1.1.9)
     warden (1.2.9)
