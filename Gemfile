@@ -80,5 +80,9 @@ gem 'silencer'
 gem 'sucker_punch', '~> 3.0'
 gem 'thwait'
 gem 'webrick'
-gem 'with_advisory_lock'
+if RUBY_PLATFORM == 'java' && JRUBY_VERSION.start_with?('10.')
+  gem 'with_advisory_lock', '>= 7.6'
+else
+  gem 'with_advisory_lock'
+end
 gem 'zip-zip'
