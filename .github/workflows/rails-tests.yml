@@ -14,12 +14,8 @@ jobs:
     env:
       RAILS_ENV: test
       BUNDLE_GEMFILE: Gemfile.${{ matrix.ruby }}
-      DATABASE_ADAPTER: postgresql
-      DATABASE_NAME: sosol_test
-      DATABASE_USERNAME: sosol_test
-      DATABASE_PASSWORD: sosol_test
-      DATABASE_HOSTNAME: localhost
-      DATABASE_POOL: 16
+      DATABASE_URL: postgresql://sosol_test@localhost:5432/sosol_test?pool=16
+      PGPASSWORD: sosol_test
     runs-on: ubuntu-latest
     timeout-minutes: 20
     services:
