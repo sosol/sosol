@@ -18,6 +18,12 @@ class PublicationsControllerTest < ActionController::TestCase
   end
 
   def test_should_create_new_batch
+    if ENV['GITHUB_ACTIONS']
+      response = Struct.new(:code, :body).new('200', '<rdf:Description/>')
+      NumbersRDF::NumbersHelper.stubs(:identifier_to_numbers_server_response).returns(response)
+      NumbersRDF::NumbersHelper.stubs(:identifier_to_title).returns(nil)
+    end
+
     assert_difference('Publication.count') do
       post :create_from_list,
            params: { pn_id_list: 'papyri.info/hgv/3147   papyri.info/hgv/3148' }
