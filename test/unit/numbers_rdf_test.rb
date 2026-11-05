@@ -14,7 +14,6 @@ class NumbersRDFTest < ActiveSupport::TestCase
     #     response = NumbersRDF::NumbersHelper::path_to_numbers_server_response('/')
     #   end
     # end
-    #     end
   end
 
   should 'return nil when the Numbers Server response cannot be parsed' do
