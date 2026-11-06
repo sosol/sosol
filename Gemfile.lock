@@ -417,8 +417,8 @@ GEM
       tilt
     securerandom (0.4.1)
     shoulda-context (2.0.0)
-    shoulda-matchers (6.5.0)
-      activesupport (>= 5.2.0)
+    shoulda-matchers (8.0.1)
+      activesupport (>= 7.2)
     silencer (2.0.0)
     snaky_hash (2.0.9)
       hashie (>= 0.1.0, < 6)
