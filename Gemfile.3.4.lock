@@ -283,7 +283,7 @@ GEM
       reline (>= 0.6.0)
     pry-rails (0.3.11)
       pry (>= 0.13.0)
-    puma (6.6.1)
+    puma (7.2.1)
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (2.2.25)
@@ -503,7 +503,7 @@ DEPENDENCIES
   postgresql
   pry
   pry-rails (~> 0.3.9)
-  puma (< 7)
+  puma (< 8)
   rack (>= 1.1.0, < 3)
   rack-attack (~> 6.0)
   rails (~> 8.0, < 8.1)
