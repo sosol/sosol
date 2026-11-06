@@ -398,7 +398,7 @@ GEM
       rubocop (>= 1.72.1)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
-    rubyzip (2.4.1)
+    rubyzip (3.7.0)
     rugged (1.9.6)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
@@ -517,7 +517,7 @@ DEPENDENCIES
   rubocop-performance
   rubocop-rails
   rubocop-rake
-  rubyzip (~> 2)
+  rubyzip (~> 3)
   rugged
   sass
   sass-rails (~> 6)
