@@ -145,11 +145,12 @@ GEM
     forwardable (1.4.0)
     globalid (1.4.0)
       activesupport (>= 6.1)
-    haml (6.3.0)
+    haml (7.5.2)
+      prism (>= 1.1.0)
       temple (>= 0.8.2)
       thor
       tilt
-    haml-rails (2.1.0)
+    haml-rails (3.1.0)
       actionpack (>= 5.1)
       activesupport (>= 5.1)
       haml (>= 4.0.6)
@@ -423,14 +424,14 @@ GEM
     sqlite3 (2.10.2-x86_64-linux-gnu)
     sucker_punch (3.3.0)
       concurrent-ruby (~> 1.0)
-    temple (0.10.4)
+    temple (0.10.7)
     therubyrhino (2.1.2)
       therubyrhino_jar (>= 1.7.4, < 1.7.9)
     therubyrhino_jar (1.7.8)
     thor (1.5.0)
     thwait (0.2.0)
       e2mmap
-    tilt (2.6.1)
+    tilt (2.9.0)
     timeout (0.6.1)
     tsort (0.2.0)
     tzinfo (2.0.6)
@@ -475,7 +476,7 @@ DEPENDENCIES
   dotenv-rails
   dynamic_form
   factory_bot_rails
-  haml-rails (~> 2.0)
+  haml-rails
   handle_invalid_percent_encoding_requests
   httpclient
   i18n

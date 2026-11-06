@@ -49,7 +49,7 @@ else
   gem 'tzinfo-data'
 end
 
-gem 'haml-rails', '~> 2.0'
+gem 'haml-rails'
 gem 'jquery-rails'
 gem 'logger'
 gem 'sass'
