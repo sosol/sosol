@@ -6,7 +6,7 @@
         <h3><%= user.affiliation %></h3>
       <% end %>
       <br>
-      <%= "Member since #{user.created_at.to_date.to_s(:long_ordinal)}" %>
+      <%= "Member since #{user.created_at.to_date.to_s}" %>
       <% if user.boards.length > 0 %>
         <br><%= "Member of: #{user.boards.collect{|b| b.friendly_name}.join(', ')}" %></br>
       <% end %>
