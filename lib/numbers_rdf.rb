@@ -177,7 +177,7 @@ module NumbersRDF
       # Applies XPath to an XML response body
       def process_numbers_server_response_body(rdf_xml, xpath)
         Epidocinator.apply_xpath(rdf_xml, xpath, true).pluck(:value)
-      rescue NativeException
+      rescue Nokogiri::XML::SyntaxError
         nil
       end
     end

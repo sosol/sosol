@@ -60,7 +60,7 @@ module Sosol
     config.gitweb_base_url = 'http://127.0.0.1:1234/?p='
     config.site_user_namespace = 'papyri.info'
 
-    config.legacy_connection_handling = false
+    # config.legacy_connection_handling = false
 
     # Configure XSugar
     # These can be overridden in config/environments/*_secret.rb

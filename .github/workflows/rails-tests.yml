@@ -14,6 +14,8 @@ jobs:
     env:
       RAILS_ENV: test
       BUNDLE_GEMFILE: Gemfile.${{ matrix.ruby }}
+      DATABASE_URL: postgresql://sosol_test@localhost:5432/sosol_test?pool=16
+      PGPASSWORD: sosol_test
     runs-on: ubuntu-latest
     timeout-minutes: 20
     services:
@@ -33,11 +35,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ['3.2', 'jruby-9.4.13.0']
+        ruby: ['3.4', 'jruby-10.0.6.0']
     steps:
     - uses: actions/checkout@v3
     - name: Install dependencies
-      run: sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev git
+      run: sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev git libgit2-dev libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev pkg-config libpq-dev sendmail rsync libgit2-fixtures libz3-dev libzstd-dev pkgconf cmake build-essential libssh2-1-dev
     - name: Configure sysctl limits
       run: |
         sudo swapoff -a
@@ -54,21 +56,23 @@ jobs:
       run: bundle exec cap local externals:setup
     - name: Clone canonical
       run: bundle exec rake git:db:canonical:clone
+    - name: DB reset
+      run: bundle exec rake db:reset
     - name: DB migrate
       run: bundle exec rake db:migrate
     - name: Run tests
       run: bundle exec rake test:all
-      env:
-        DATABASE_ADAPTER: postgresql
-        DATABASE_NAME: sosol_test
-        DATABASE_USERNAME: sosol_test
-        DATABASE_PASSWORD: sosol_test
-        DATABASE_HOSTNAME: localhost
-        DATABASE_POOL: 16
     - name: Upload test logs
       uses: actions/upload-artifact@v4
       if: always()
       with:
         name: logs-${{ matrix.runs-on }}-${{ matrix.ruby }}
         path: log
+        retention-days: 1
+    - name: Upload rugged build logs
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: rugged-logs-${{ matrix.runs-on }}-${{ matrix.ruby }}
+        path: /home/runner/work/sosol/sosol/vendor/bundle/ruby/3.2.0/extensions/x86_64-linux/3.2.0/rugged-1.9.0
         retention-days: 1

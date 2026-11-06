@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
 
 if RUBY_PLATFORM == 'java'
-  ruby '3.1.4', engine: 'jruby', engine_version: '9.4.13.0'
+  ruby '3.4.5', engine: 'jruby', engine_version: '10.0.6.0'
 else
-  ruby '3.2.9'
+  ruby '3.4.12'
 end
 
-gem 'rails', '~> 7.0', '< 7.1'
+gem 'rails', '~> 8.0', '< 8.1'
 
 # Needed for the new asset pipeline
 gem 'coffee-rails'
@@ -33,18 +33,19 @@ group :development, :test do
 end
 
 if RUBY_PLATFORM == 'java'
-  gem 'activerecord-jdbc-adapter', '>= 61.3', '~> 70', platform: :jruby
-  gem 'activerecord-jdbcmysql-adapter', '>= 61.3', '~> 70', platform: :jruby
-  gem 'activerecord-jdbcpostgresql-adapter', '>= 61.3', '~> 70', platform: :jruby
-  gem 'activerecord-jdbcsqlite3-adapter', '>= 61.3', '~> 70', platform: :jruby
+  gem 'activerecord-jdbc-adapter', '>= 80.0.pre1', '< 81', platform: :jruby
+  gem 'activerecord-jdbcmysql-adapter', '>= 80.0.pre1', '< 81', platform: :jruby
+  gem 'activerecord-jdbcpostgresql-adapter', '>= 80.0.pre1', '< 81', platform: :jruby
+  gem 'activerecord-jdbcsqlite3-adapter', '>= 80.0.pre1', '< 81', platform: :jruby
   gem 'jruby-jars', JRUBY_VERSION
   gem 'jdbc-mysql', require: false
   gem 'jdbc-sqlite3', '>= 3.7.2', platform: :jruby
+  gem 'rinda'
   gem 'tzinfo-data', platform: :jruby
 else
   gem 'rugged'
   gem 'postgresql'
-  gem 'sqlite3', '~> 1.4'
+  gem 'sqlite3', '~> 2.1'
   gem 'tzinfo-data'
 end
 
@@ -55,7 +56,7 @@ gem 'sass'
 gem 'actionpack-page_caching'
 gem 'activerecord-session_store'
 gem 'airbrake'
-gem 'airbrake-ruby', '6.2.0'
+gem 'airbrake-ruby', git: 'https://github.com/airbrake/airbrake-ruby.git', ref: '6b896d2c09ad5a73abf777cbf31f0af13a71eab5'
 gem 'capistrano', '~> 2.15.0'
 gem 'devise', '~> 4.8'
 gem 'dotenv-rails'
@@ -65,6 +66,7 @@ gem 'httpclient'
 gem 'i18n'
 gem 'json', '>=1.6.6'
 gem 'lograge'
+gem 'minitest', '< 6'
 gem 'nokogiri'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-rails_csrf_protection'
@@ -75,6 +77,7 @@ gem 'rack', '>= 1.1.0'
 gem 'rack-attack', '~> 6.0'
 gem 'rapporteur'
 gem 'rexml'
+gem 'rinda'
 gem 'rubyzip', '~> 2'
 gem 'silencer'
 gem 'sucker_punch', '~> 3.0'
