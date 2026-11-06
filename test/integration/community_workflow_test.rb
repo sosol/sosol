@@ -217,6 +217,7 @@ class CommunityWorkflowTest < ActionDispatch::IntegrationTest
           Rails.logger.debug '---Create A New Trash Publication---'
           trash_publication_session.post '/publications/create_from_templates',
                                          params: { test_user_id: @trash_user.id.to_s }
+          assert_match %r{/publications/\d+\z}, trash_publication_session.response.location
           Rails.logger.debug { "--flash is: #{trash_publication_session.flash.inspect}" }
           @trash_publication = @trash_user.publications.first
           @trash_publication.log_info
@@ -227,6 +228,7 @@ class CommunityWorkflowTest < ActionDispatch::IntegrationTest
           Rails.logger.debug '---Create A New Publication---'
           publication_session.post '/publications/create_from_templates',
                                    params: { test_user_id: @creator_user.id.to_s }
+          assert_match %r{/publications/\d+\z}, publication_session.response.location
           Rails.logger.debug { "--flash is: #{publication_session.flash.inspect}" }
           @publication = @creator_user.publications.first
           @publication.log_info
