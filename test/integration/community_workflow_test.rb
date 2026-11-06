@@ -215,8 +215,8 @@ class CommunityWorkflowTest < ActionDispatch::IntegrationTest
         # for testing create a publication so the next one will be another number create a publication with a session
         open_session do |trash_publication_session|
           Rails.logger.debug '---Create A New Trash Publication---'
-          trash_publication_session.post '/publications/create_from_templates',
-                                         params: { test_user_id: @trash_user.id.to_s }
+          trash_publication_session.post "/publications/create_from_templates?test_user_id=#{@trash_user.id}"
+          assert_match %r{/publications/\d+\z}, trash_publication_session.response.location
           Rails.logger.debug { "--flash is: #{trash_publication_session.flash.inspect}" }
           @trash_publication = @trash_user.publications.first
           @trash_publication.log_info
