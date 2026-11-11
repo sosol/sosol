@@ -37,7 +37,7 @@ jobs:
       matrix:
         ruby: ['3.4']
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v7
     - name: Install dependencies
       run: sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev git libgit2-dev libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev pkg-config libpq-dev sendmail rsync libgit2-fixtures libz3-dev libzstd-dev pkgconf cmake build-essential libssh2-1-dev
     - name: Configure sysctl limits
@@ -63,14 +63,14 @@ jobs:
     - name: Run tests
       run: bundle exec rake test:all
     - name: Upload test logs
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       if: always()
       with:
         name: logs-${{ matrix.runs-on }}-${{ matrix.ruby }}
         path: log
         retention-days: 1
     - name: Upload rugged build logs
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       if: always()
       with:
         name: rugged-logs-${{ matrix.runs-on }}-${{ matrix.ruby }}
