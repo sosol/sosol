@@ -418,7 +418,7 @@ GEM
       sprockets-rails
       tilt
     securerandom (0.4.1)
-    shoulda-context (2.0.0)
+    shoulda-context (3.0.0.rc1)
     shoulda-matchers (8.0.1)
       activesupport (>= 7.2)
     silencer (2.0.0)
@@ -523,7 +523,7 @@ DEPENDENCIES
   rugged
   sass
   sass-rails (~> 6)
-  shoulda-context
+  shoulda-context (~> 3.0.0.rc1)
   shoulda-matchers
   silencer
   sqlite3 (~> 2.1)

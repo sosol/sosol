@@ -20,7 +20,7 @@ group :test do
   gem 'mocha'
   gem 'rails-controller-testing'
   gem 'rake'
-  gem 'shoulda-context'
+  gem 'shoulda-context', '~> 3.0.0.rc1'
   gem 'shoulda-matchers'
 end
 
