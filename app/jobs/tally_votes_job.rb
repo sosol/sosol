@@ -7,9 +7,15 @@ class TallyVotesJob
     end
     Rails.logger.flush if Rails.logger.respond_to? :flush
     publication = Publication.find(publication_id)
-    publication.with_advisory_lock("tally_votes_#{publication_id}") do
+    if Rails.env.test? && (ActiveRecord::Base.connection.adapter_name == 'SQLite3')
       publication.transaction do
         publication.tally_votes(related_votes)
+      end
+    else
+      publication.with_advisory_lock("tally_votes_#{publication_id}") do
+        publication.transaction do
+          publication.tally_votes(related_votes)
+        end
       end
     end
   ensure
