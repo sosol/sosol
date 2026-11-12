@@ -1,3 +1,12 @@
+GIT
+  remote: https://github.com/airbrake/airbrake-ruby.git
+  revision: 6b896d2c09ad5a73abf777cbf31f0af13a71eab5
+  ref: 6b896d2c09ad5a73abf777cbf31f0af13a71eab5
+  specs:
+    airbrake-ruby (6.3.0)
+      base64
+      logger
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -82,8 +91,6 @@ GEM
       uri (>= 0.13.1)
     airbrake (13.0.5)
       airbrake-ruby (~> 6.0)
-    airbrake-ruby (6.2.2)
-      rbtree3 (~> 0.6)
     anonymous_loader (0.1.5)
       version_gem (~> 1.1, >= 1.1.17)
     ast (2.4.3)
@@ -346,7 +353,6 @@ GEM
       logger
       prism (>= 1.6.0)
       tsort
-    rbtree3 (0.7.1)
     rdoc (8.1.0)
       erb
       prism (>= 1.6.0)
@@ -479,7 +485,7 @@ DEPENDENCIES
   actionpack-page_caching
   activerecord-session_store
   airbrake
-  airbrake-ruby
+  airbrake-ruby!
   capistrano (~> 2.15.0)
   coffee-rails
   database_cleaner-active_record
